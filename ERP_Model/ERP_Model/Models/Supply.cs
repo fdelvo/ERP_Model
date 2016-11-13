@@ -14,4 +14,10 @@ namespace ERP_Model.Models
         public virtual ApplicationUser SupplyPerson { get; set; }
         public virtual ApplicationUser Supplier { get; set; }
     }
+
+    public class SupplyItem
+    {
+        [Key]
+        public Guid SupplyItem { get; set; }
+    }
 }
