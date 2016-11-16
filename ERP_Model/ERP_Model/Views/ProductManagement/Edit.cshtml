@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="content-box" ng-controller="AngularProductsController" ng-init="ProductDetails(GetValueAtIndex(5))">
+    <form ng-submit="EditProduct()">
+        <label>Product Name</label>
+        <br />
+        <input type="text" ng-model="product.ProductName" />
+        <br />
+        <label>Product Description</label>
+        <br />
+        <input type="text" ng-model="product.ProductDescription" />
+        <br />
+        <label>Product Price</label>
+        <br />
+        <input type="number" ng-model="product.ProductPrice" />
+        <br />
+        <input type="submit" value="Save Product" />
+    </form>
+</div>
+

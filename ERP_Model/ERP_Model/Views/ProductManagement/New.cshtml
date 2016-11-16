@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "New";
+}
+
+<div class="content-box" ng-controller="AngularProductsController">
+    <form ng-submit="CreateProduct()">
+        <label>Product Name</label>
+        <br/>
+        <input type="text" ng-model="newProduct.ProductName"/>
+        <br/>
+        <label>Product Description</label>
+        <br />
+        <input type="text" ng-model="newProduct.ProductDescription" />
+        <br/>
+        <label>Product Price</label>
+        <br />
+        <input type="number" ng-model="newProduct.ProductPrice" />
+        <br/>
+        <input type="submit" value="Create Product"/>
+    </form>
+</div>
+

@@ -1,15 +1,16 @@
-﻿<div class="content-box">
-    <form>
-        <label>Username:</label>
+﻿<div class="content-box" ng-controller="AngularLoginController">
+    <h1>Login</h1>
+    <form ng-submit="LogIn()">
+        <label>Email:</label>
         <br/>
-        <input type="text"/>
+        <input ng-model="loginData.username"/>
         <br/>
         <label>Password:</label>
-        <br />
-        <input type="password"/>
+        <br/>
+        <input type="password" ng-model="loginData.password"/>
         <br/>
         <input type="submit" value="Login"/>
         <br/>
-        <a>Register</a>
+        <a href="/Home/Register">Register</a>
     </form>
 </div>

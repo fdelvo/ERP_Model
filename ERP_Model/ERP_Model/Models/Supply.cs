@@ -18,6 +18,9 @@ namespace ERP_Model.Models
     public class SupplyItem
     {
         [Key]
-        public Guid SupplyItem { get; set; }
+        public Guid SupplyItemGuid { get; set; }
+        public virtual Product SupplyItemProduct { get; set; }
+        public virtual Supply SupplyItemSupply { get; set; }
+        public int SupplyQuantity { get; set; }
     }
 }

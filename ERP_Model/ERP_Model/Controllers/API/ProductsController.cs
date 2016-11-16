@@ -13,6 +13,7 @@ using ERP_Model.Models;
 
 namespace ERP_Model.Controllers.API
 {
+    [Authorize]
     public class ProductsController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -79,6 +80,8 @@ namespace ERP_Model.Controllers.API
             {
                 return BadRequest(ModelState);
             }
+
+            product.ProductGuid = Guid.NewGuid();
 
             db.Products.Add(product);
 

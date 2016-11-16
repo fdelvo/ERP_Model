@@ -7,13 +7,13 @@ namespace ERP_Model.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class initial : IMigrationMetadata
+    public sealed partial class additional_models : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(additional_models));
         
         string IMigrationMetadata.Id
         {
-            get { return "201611091512253_initial"; }
+            get { return "201611160649345_additional_models"; }
         }
         
         string IMigrationMetadata.Source

@@ -215,9 +215,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201611091512253_initial.cs" />
-    <Compile Include="Migrations\201611091512253_initial.Designer.cs">
-      <DependentUpon>201611091512253_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201611160649345_additional_models.cs" />
+    <Compile Include="Migrations\201611160649345_additional_models.Designer.cs">
+      <DependentUpon>201611160649345_additional_models.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611160816509_identity_mode_updated.cs" />
+    <Compile Include="Migrations\201611160816509_identity_mode_updated.Designer.cs">
+      <DependentUpon>201611160816509_identity_mode_updated.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -300,6 +304,9 @@
     <Content Include="Scripts\Angular_Core\angular-cookies.min.js.map" />
     <Content Include="Scripts\Angular_Core\angular-aria.min.js.map" />
     <Content Include="Scripts\Angular_Core\angular-animate.min.js.map" />
+    <Content Include="Scripts\Controllers\AngularLoginController.js" />
+    <Content Include="Scripts\Controllers\AngularProductsController.js" />
+    <Content Include="Scripts\ERPModelApp.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-et.js" />
@@ -1047,6 +1054,7 @@
     <Content Include="Scripts\Angular_Core\modernizr-2.6.2.js" />
     <Content Include="Scripts\Angular_Core\respond.js" />
     <Content Include="Scripts\Angular_Core\respond.min.js" />
+    <Content Include="Scripts\Services\AngularProductsService.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1070,16 +1078,20 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Scripts\Controllers\" />
-    <Folder Include="Scripts\Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+    <Content Include="Views\ProductManagement\New.cshtml" />
+    <Content Include="Views\ProductManagement\Edit.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201611091512253_initial.resx">
-      <DependentUpon>201611091512253_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201611160649345_additional_models.resx">
+      <DependentUpon>201611160649345_additional_models.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611160816509_identity_mode_updated.resx">
+      <DependentUpon>201611160816509_identity_mode_updated.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

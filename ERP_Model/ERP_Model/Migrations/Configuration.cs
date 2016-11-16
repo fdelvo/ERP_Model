@@ -1,3 +1,5 @@
+using ERP_Model.Models;
+
 namespace ERP_Model.Migrations
 {
     using System;
@@ -14,18 +16,10 @@ namespace ERP_Model.Migrations
 
         protected override void Seed(ERP_Model.Models.ApplicationDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            context.Products.AddOrUpdate(
+                p => p.ProductGuid,
+                new Product { ProductGuid = Guid.NewGuid(), ProductDescription = "TestProductDescription", ProductName = "TestProduct", ProductPrice = 20.00F}
+            );
         }
     }
 }

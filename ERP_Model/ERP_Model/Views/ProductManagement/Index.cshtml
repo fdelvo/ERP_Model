@@ -3,5 +3,31 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div ng-controller="AngularProductsController" ng-init="ProductList()" class="content-box">
+    <h1>Products</h1>
+    <a href="/ProductManagement/New">New Product</a>
+    <table>
+        <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Product Description</th>
+            <th>Product Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="p in products track by p.ProductGuid">
+            <td>{{p.ProductName}}</td>
+            <td>{{p.ProductDescription}}</td>
+            <td>{{p.ProductPrice}}</td>
+            <td><a href="/ProductManagement/Edit/{{p.ProductGuid}}">Edit</a></td>
+            <td><a href="" ng-click="RemoveProduct(p.ProductGuid)">Delete</a></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="5">Pagination</th>
+        </tr>
+        </tfoot>
+    </table>
+</div>
 

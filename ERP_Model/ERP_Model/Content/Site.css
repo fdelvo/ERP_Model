@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css?family=Roboto');
+﻿@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
 
 html {
     font-family: 'Roboto', sans-serif !important;
@@ -108,4 +108,17 @@ input[type=submit] {
     box-sizing: border-box;
     padding: 2rem;
     width: 100%;
+}
+
+table {
+    width: 100%;
+}
+
+thead {
+    text-align: left;
+}
+
+th {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }

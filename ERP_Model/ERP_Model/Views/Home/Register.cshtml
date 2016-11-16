@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+}
+
+<div class="content-box" ng-controller="AngularLoginController">
+    <h1>Register</h1>
+    <form ng-submit="Register()">
+        <label>Email</label>
+        <br/>
+        <input type="email" ng-model="model.Email" placeholder="Email"/>
+        <br/>
+        <label>Alias</label>
+        <br/>
+        <input type="text" ng-model="model.Alias" placeholder="Alias"/>
+        <br/>
+        <label>Password</label>
+        <br/>
+        <input type="password" ng-model="model.Password" placeholder="Password"/>
+        <br/>
+        <label>Confirm Password</label>
+        <br/>
+        <input type="password" ng-model="model.ConfirmPassword" placeholder="Confirm Password"/>
+        <br/>
+        <input type="submit" value="Register"/>
+    </form>
+</div>
+
