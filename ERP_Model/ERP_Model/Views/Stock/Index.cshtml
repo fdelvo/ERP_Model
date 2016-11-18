@@ -3,5 +3,40 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="content-box" ng-controller="AngularStocksController">
+    <h1>Stocks</h1>
+    <div class="nav-bar">
+        <a href="/Stock/New" class="button">New Stock</a>
+    </div>
+    <table ng-init="StockList()">
+        <thead>
+        <tr>
+            <th>Stock Name</th>
+            <th>Stock Address</th>
+            <th>Stock Mehthod</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="s in stocks track by s.StockGuid">
+            <td><a href="/Stock/StockItems/{{s.StockGuid}}">{{s.StockName}}</a></td>
+            <td>
+                <ul>
+                    <li>{{s.StockAddress.AddressCompany}}</li>
+                    <li>{{s.StockAddress.AddressStreet}}</li>
+                    <li>{{s.StockAddress.AddressZipCode}} | {{s.StockAddress.AddressCity}}</li>
+                    <li>{{s.StockAddress.AddressCountry}}</li>
+                </ul>
+            </td>
+            <td>{{s.StockMethod}}</td>
+            <td><a href="/Stock/Edit/{{s.StockGuid}}">Edit</a></td>
+            <td><a href="" ng-click="RemoveStock(s.StockGuid)">Delete</a></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="6">Pagination</th>
+        </tr>
+        </tfoot>
+    </table>
+</div>
 

@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="content-box" ng-controller="AngularStocksController" ng-init="StockDetails(GetValueAtIndex(5)); AddressList();">
+    <form ng-submit="EditStock()">
+        <label>Stock Name</label>
+        <br />
+        <input type="text" ng-model="stock.StockName" />
+        <br />
+        <label>Stock Address</label>
+        <br />
+        <select ng-model="stock.StockAddress.AddressGuid">
+            <option ng-repeat="a in addresses track by a.AddressGuid" value="{{a.AddressGuid}}">{{a.AddressCompany}}</option>
+        </select>
+        <br />
+        <label>Stock Method</label>
+        <br />
+        <input type="text" ng-model="stock.StockMethod" />
+        <br />
+        <input type="submit" value="Save Stock" />
+    </form>
+</div>
+

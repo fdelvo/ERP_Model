@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ERP_Model.Models;
+using ERP_Model.ViewModels;
 
 namespace ERP_Model.Controllers.API
 {
@@ -17,10 +18,16 @@ namespace ERP_Model.Controllers.API
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/Stocks
-        public IQueryable<Stock> GetStock()
+        public IQueryable<Address> GetAddresses()
         {
-            return db.Stock;
+            return db.Addresses;
+        }
+
+        // GET: api/Stocks
+        public IQueryable<Stock> GetStocks()
+        {
+            return db.Stock
+                .Include(a => a.StockAddress);
         }
 
         // GET: api/Stocks/5
@@ -34,6 +41,39 @@ namespace ERP_Model.Controllers.API
             }
 
             return Ok(stock);
+        }
+
+        public async Task<IHttpActionResult> GetStockItems(Guid id)
+        {
+            var stockItems = await db.StockItems
+                .Include(s => s.StockItemStock)
+                .Include(p => p.StockItemProduct)
+                .Where(s => s.StockItemStock.StockGuid == id)
+                .ToListAsync();
+
+            var stockItemsViewList = new List<StockItemViewModel>();
+
+            stockItemsViewList.AddRange(stockItems.Select(stockItem => new StockItemViewModel
+            {
+                StockItemStock = stockItem.StockItemStock,
+                StockItemGuid = stockItem.StockItemGuid,
+                StockItemMaximumQuantity = stockItem.StockItemMaximumQuantity,
+                StockItemMinimumQuantity = stockItem.StockItemMinimumQuantity,
+                StockItemProduct = stockItem.StockItemProduct,
+                StockItemQuantity =  GetStockItemQuantity(stockItem.StockItemGuid)
+            }));
+
+            return Ok(stockItemsViewList);
+        }
+
+        private int GetStockItemQuantity(Guid id)
+        {
+            var stockItemQuantity = db.StockTransactions
+                .Include(si => si.StockTransactionItem)
+                .Where(si => si.StockTransactionItem.StockItemGuid == id)
+                .Sum(q => q.StockTransactionQuantity);
+
+            return stockItemQuantity;
         }
 
         // PUT: api/Stocks/5
@@ -79,6 +119,9 @@ namespace ERP_Model.Controllers.API
             {
                 return BadRequest(ModelState);
             }
+
+            stock.StockGuid = Guid.NewGuid();
+            stock.StockAddress = await db.Addresses.FirstOrDefaultAsync(a => a.AddressGuid == stock.StockAddress.AddressGuid);
 
             db.Stock.Add(stock);
 

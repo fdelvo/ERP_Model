@@ -14,6 +14,21 @@ namespace ERP_Model.Controllers
             return View();
         }
 
+        public ActionResult StockItems()
+        {
+            return View();
+        }
+
+        public ActionResult Edit()
+        {
+            return View();
+        }
+
+        public ActionResult New()
+        {
+            return View();
+        }
+
         public ActionResult Orders()
         {
             return View();

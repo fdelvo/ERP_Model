@@ -62,6 +62,11 @@ nav {
     display: inline-block;
 }
 
+.nav-bar {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
 main {
     margin-top: 1rem;
     width: 80%;
@@ -73,7 +78,7 @@ form {
     text-align: center;
 }
 
-input {
+input, select {
     margin-bottom: 1rem;
     margin-top: 1rem;
     padding: 1rem;
@@ -98,6 +103,23 @@ input[type=submit] {
     cursor: pointer;
 }
 
+.button {
+    background-color: lightgrey;
+    width: 100%;
+    font-family: 'Roboto', sans-serif !important;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    border: 0.1rem solid lightgrey;
+}
+
+.button:hover {
+    border: 0.1rem solid grey;
+}
+
 .content-box {
     -ms-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
     -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
@@ -108,6 +130,10 @@ input[type=submit] {
     box-sizing: border-box;
     padding: 2rem;
     width: 100%;
+}
+
+ul {
+    margin: 0;
 }
 
 table {
@@ -121,4 +147,17 @@ thead {
 th {
     padding-top: 1rem;
     padding-bottom: 1rem;
+}
+
+td {
+    vertical-align: top;
+}
+
+tbody tr td {
+    border-bottom: 0.1rem solid lightgrey;
+    padding-top: 1rem;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
 }

@@ -13,8 +13,10 @@ namespace ERP_Model
                         "~/Scripts/Angular_Core/angular-resource.js",
                         "~/Scripts/ERPModelApp.js",
                         "~/Scripts/Services/AngularProductsService.js",
+                        "~/Scripts/Services/AngularStocksService.js",
                         "~/Scripts/Controllers/AngularProductsController.js",
-                        "~/Scripts/Controllers/AngularLoginController.js"));
+                        "~/Scripts/Controllers/AngularLoginController.js",
+                        "~/Scripts/Controllers/AngularStocksController.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.

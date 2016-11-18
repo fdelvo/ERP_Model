@@ -1,0 +1,18 @@
+namespace ERP_Model.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class address_mode_update : DbMigration
+    {
+        public override void Up()
+        {
+            AddColumn("dbo.Addresses", "AddressCity", c => c.String());
+        }
+        
+        public override void Down()
+        {
+            DropColumn("dbo.Addresses", "AddressCity");
+        }
+    }
+}

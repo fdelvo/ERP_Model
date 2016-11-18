@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "StockItems";
+}
+
+<div class="content-box" ng-controller="AngularStocksController" ng-init="StockDetails(GetValueAtIndex(5)); StockItemList(GetValueAtIndex(5))">
+    <h1>{{stock.StockName}}</h1>
+    <div class="nav-bar">
+        <a href="" class="button">Add Stock Item</a>
+        <a href="" class="button">Show Stock Transactions</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Stock Item Product</th>
+                <th>Stock Item Product Price</th>
+                <th>Quantity</th>
+                <th>Maximum Quantity</th>
+                <th>Minimum Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="si in stockItems track by si.StockItemGuid">
+                <td><a href="/ProductManagement/ProductDetails/{{si.StockItemProduct.ProductGuid}}">{{si.StockItemProduct.ProductName}}</a></td>
+                <td>{{si.StockItemProduct.ProductPrice}}</td>
+                <td>{{si.StockItemQuantity}}</td>
+                <td>{{si.StockItemMaximumQuantity}}</td>
+                <td>{{si.StockItemMinimumQuantity}}</td>
+                <td><a href="/ProductManagement/Edit/{{p.ProductGuid}}">Add</a></td>
+                <td><a href="" ng-click="RemoveProduct(p.ProductGuid)">Remove</a></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="5">Pagination</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+

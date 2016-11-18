@@ -223,6 +223,14 @@
     <Compile Include="Migrations\201611160816509_identity_mode_updated.Designer.cs">
       <DependentUpon>201611160816509_identity_mode_updated.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611181504561_seeding.cs" />
+    <Compile Include="Migrations\201611181504561_seeding.Designer.cs">
+      <DependentUpon>201611181504561_seeding.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611181605240_address_mode_update.cs" />
+    <Compile Include="Migrations\201611181605240_address_mode_update.Designer.cs">
+      <DependentUpon>201611181605240_address_mode_update.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -240,6 +248,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\StockViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -306,6 +315,7 @@
     <Content Include="Scripts\Angular_Core\angular-animate.min.js.map" />
     <Content Include="Scripts\Controllers\AngularLoginController.js" />
     <Content Include="Scripts\Controllers\AngularProductsController.js" />
+    <Content Include="Scripts\Controllers\AngularStocksController.js" />
     <Content Include="Scripts\ERPModelApp.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
@@ -1055,6 +1065,7 @@
     <Content Include="Scripts\Angular_Core\respond.js" />
     <Content Include="Scripts\Angular_Core\respond.min.js" />
     <Content Include="Scripts\Services\AngularProductsService.js" />
+    <Content Include="Scripts\Services\AngularStocksService.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1085,6 +1096,9 @@
     <Content Include="Views\ProductManagement\New.cshtml" />
     <Content Include="Views\ProductManagement\Edit.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Stock\StockItems.cshtml" />
+    <Content Include="Views\Stock\Edit.cshtml" />
+    <Content Include="Views\Stock\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201611160649345_additional_models.resx">
@@ -1092,6 +1106,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611160816509_identity_mode_updated.resx">
       <DependentUpon>201611160816509_identity_mode_updated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611181504561_seeding.resx">
+      <DependentUpon>201611181504561_seeding.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611181605240_address_mode_update.resx">
+      <DependentUpon>201611181605240_address_mode_update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
