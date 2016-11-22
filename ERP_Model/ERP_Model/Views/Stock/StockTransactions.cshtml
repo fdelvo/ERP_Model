@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "StockTransactions";
+}
+
+
+@{
+    ViewBag.Title = "StockItems";
+}
+
+<div class="content-box" ng-controller="AngularStocksController" ng-init="StockDetails(GetValueAtIndex(5)); StockTransactionList(GetValueAtIndex(5))">
+    <h1>{{stock.StockName}} - Transactions</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Stock Item Product</th>
+                <th>Stock Item Product Price</th>
+                <th>Quantity</th>
+                <th>User</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="st in stockTransactions track by st.StockTransactionGuid">
+                <td><a href="/ProductManagement/ProductDetails/{{st.StockTransactionItem.StockItemProduct.ProductGuid}}">{{st.StockTransactionItem.StockItemProduct.ProductName}}</a></td>
+                <td>{{st.StockTransactionItem.StockItemProduct.ProductPrice}}</td>
+                <td>{{st.StockTransactionQuantity}}</td>
+                <td>{{st.StockTransactionUser.Email}}</td>
+                <td>{{st.StockTransactionDate}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="5">Pagination</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
+

@@ -14,6 +14,7 @@
             <th>Stock Name</th>
             <th>Stock Address</th>
             <th>Stock Mehthod</th>
+            <th>Stock Value</th>
         </tr>
         </thead>
         <tbody>
@@ -28,13 +29,14 @@
                 </ul>
             </td>
             <td>{{s.StockMethod}}</td>
+            <td>{{s.StockValue}}</td>
             <td><a href="/Stock/Edit/{{s.StockGuid}}">Edit</a></td>
             <td><a href="" ng-click="RemoveStock(s.StockGuid)">Delete</a></td>
         </tr>
         </tbody>
         <tfoot>
         <tr>
-            <th colspan="6">Pagination</th>
+            <th colspan="7">Pagination</th>
         </tr>
         </tfoot>
     </table>

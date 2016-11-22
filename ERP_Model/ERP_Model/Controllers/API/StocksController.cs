@@ -24,10 +24,24 @@ namespace ERP_Model.Controllers.API
         }
 
         // GET: api/Stocks
-        public IQueryable<Stock> GetStocks()
+        public async Task<IHttpActionResult> GetStocks()
         {
-            return db.Stock
-                .Include(a => a.StockAddress);
+            var stock = await db.Stock
+                .Include(a => a.StockAddress)
+                .ToListAsync();
+
+            var stockViewModelList = new List<StockViewModel>();
+
+            stockViewModelList.AddRange(stock.Select(s => new StockViewModel
+            {
+                StockGuid = s.StockGuid,
+                StockAddress = s.StockAddress,
+                StockMethod = s.StockMethod,
+                StockName = s.StockName,
+                StockValue = GetStockValue(s.StockGuid)
+            }));
+
+            return Ok(stockViewModelList);
         }
 
         // GET: api/Stocks/5
@@ -41,6 +55,15 @@ namespace ERP_Model.Controllers.API
             }
 
             return Ok(stock);
+        }
+
+        private float GetStockValue(Guid id)
+        {
+            var stockValue = db.StockTransactions
+                .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id)
+                .Sum(p => p.StockTransactionItem.StockItemProduct.ProductPrice * p.StockTransactionQuantity);
+
+            return stockValue;
         }
 
         public async Task<IHttpActionResult> GetStockItems(Guid id)
@@ -74,6 +97,17 @@ namespace ERP_Model.Controllers.API
                 .Sum(q => q.StockTransactionQuantity);
 
             return stockItemQuantity;
+        }
+
+        public async Task<IHttpActionResult> GetStockTransactions(Guid id)
+        {
+            var stockTransactions = await db.StockTransactions
+                .Include(p => p.StockTransactionItem.StockItemProduct)
+                .Include(u => u.StockTransactionUser)
+                .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id)
+                .ToListAsync();
+
+            return Ok(stockTransactions);
         }
 
         // PUT: api/Stocks/5

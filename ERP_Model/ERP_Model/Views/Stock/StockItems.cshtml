@@ -6,8 +6,7 @@
 <div class="content-box" ng-controller="AngularStocksController" ng-init="StockDetails(GetValueAtIndex(5)); StockItemList(GetValueAtIndex(5))">
     <h1>{{stock.StockName}}</h1>
     <div class="nav-bar">
-        <a href="" class="button">Add Stock Item</a>
-        <a href="" class="button">Show Stock Transactions</a>
+        <a href="/Stock/StockTransactions/{{stock.StockGuid}}" class="button">Show Stock Transactions</a>
     </div>
     <table>
         <thead>
@@ -26,8 +25,6 @@
                 <td>{{si.StockItemQuantity}}</td>
                 <td>{{si.StockItemMaximumQuantity}}</td>
                 <td>{{si.StockItemMinimumQuantity}}</td>
-                <td><a href="/ProductManagement/Edit/{{p.ProductGuid}}">Add</a></td>
-                <td><a href="" ng-click="RemoveProduct(p.ProductGuid)">Remove</a></td>
             </tr>
         </tbody>
         <tfoot>

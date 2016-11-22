@@ -29,6 +29,12 @@ function AngularStocksService($resource) {
                 isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
+            GetStockTransactions: {
+                method: "GET",
+                url: "/api/stocks/getstocktransactions",
+                isArray: true,
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
             PostStock: {
                 method: "POST",
                 url: "/api/stocks/poststock",

@@ -1099,6 +1099,7 @@
     <Content Include="Views\Stock\StockItems.cshtml" />
     <Content Include="Views\Stock\Edit.cshtml" />
     <Content Include="Views\Stock\New.cshtml" />
+    <Content Include="Views\Stock\StockTransactions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201611160649345_additional_models.resx">

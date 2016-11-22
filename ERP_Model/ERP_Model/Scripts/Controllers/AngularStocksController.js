@@ -43,6 +43,15 @@ function AngularStocksController($scope, AngularStocksService, $rootScope) {
             });
     };
 
+    $scope.StockTransactionList = function (guid) {
+        $scope.stockTransactions = AngularStocksService.GetStockTransactions({
+            id: guid
+        },
+            function () {
+                console.log($scope.stockTransactions);
+            });
+    };
+
     $scope.CreateStock = function () {
         $scope.newStock.$PostStock(
             function (response) {
