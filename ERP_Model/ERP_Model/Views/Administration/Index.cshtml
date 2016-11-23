@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="content-box" ng-controller="AngularAdminController" ng-init="AddressList()">
+    <h1>Administration</h1>
+<div class="nav-bar">
+    <a class="button" href="">Addresses</a>
+    <a class="button" href="">Users</a>
+    <a class="button" href="">Customers</a>
+    <a class="button" href="">Suppliers</a>
+</div>
+<div>
+    <div class="nav-bar">
+        <a class="button" href="/Administration/NewAddress">New Address</a>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Address Description</th>
+            <th>Address Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="address in addresses track by address.AddressGuid">
+            <td>{{address.AddressDescription}}</td>
+            <td>
+                <ul>
+                    <li>Company: {{address.AddressCompany}}</li>
+                    <li>Forename: {{address.AddressForName}}</li>
+                    <li>Lastname: {{address.AddressLastName}}</li>
+                    <li>Street: {{address.AddressStreet}}</li>
+                    <li>Zipcode | City: {{address.AddressZipCode}} | {{address.AddressCity}}</li>
+                    <li>Country: {{address.AddressCountry}}</li>
+                </ul>
+            </td>
+            <td><a href="/Administration/EditAddress/{{address.AddressGuid}}">Edit</a></td>
+            <td><a href="" ng-click="RemoveAddress(address.AddressGuid)">Remove</a></td>
+        </tr>
+        </tbody>
+        <tfoot></tfoot>
+    </table>
+</div>
+
+
