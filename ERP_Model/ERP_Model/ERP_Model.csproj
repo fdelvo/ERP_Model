@@ -206,6 +206,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdministrationController.cs" />
+    <Compile Include="Controllers\API\AdminController.cs" />
     <Compile Include="Controllers\API\ProductsController.cs" />
     <Compile Include="Controllers\API\StocksController.cs" />
     <Compile Include="Controllers\ProductManagementController.cs" />
@@ -230,6 +232,18 @@
     <Compile Include="Migrations\201611181605240_address_mode_update.cs" />
     <Compile Include="Migrations\201611181605240_address_mode_update.Designer.cs">
       <DependentUpon>201611181605240_address_mode_update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611231538429_address_changes.cs" />
+    <Compile Include="Migrations\201611231538429_address_changes.Designer.cs">
+      <DependentUpon>201611231538429_address_changes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611231617584_address_changes_2.cs" />
+    <Compile Include="Migrations\201611231617584_address_changes_2.Designer.cs">
+      <DependentUpon>201611231617584_address_changes_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611231619257_address_changes_21.cs" />
+    <Compile Include="Migrations\201611231619257_address_changes_21.Designer.cs">
+      <DependentUpon>201611231619257_address_changes_21.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -313,6 +327,7 @@
     <Content Include="Scripts\Angular_Core\angular-cookies.min.js.map" />
     <Content Include="Scripts\Angular_Core\angular-aria.min.js.map" />
     <Content Include="Scripts\Angular_Core\angular-animate.min.js.map" />
+    <Content Include="Scripts\Controllers\AngularAdminController.js" />
     <Content Include="Scripts\Controllers\AngularLoginController.js" />
     <Content Include="Scripts\Controllers\AngularProductsController.js" />
     <Content Include="Scripts\Controllers\AngularStocksController.js" />
@@ -1064,6 +1079,7 @@
     <Content Include="Scripts\Angular_Core\modernizr-2.6.2.js" />
     <Content Include="Scripts\Angular_Core\respond.js" />
     <Content Include="Scripts\Angular_Core\respond.min.js" />
+    <Content Include="Scripts\Services\AngularAdminService.js" />
     <Content Include="Scripts\Services\AngularProductsService.js" />
     <Content Include="Scripts\Services\AngularStocksService.js" />
     <Content Include="Web.config" />
@@ -1100,6 +1116,10 @@
     <Content Include="Views\Stock\Edit.cshtml" />
     <Content Include="Views\Stock\New.cshtml" />
     <Content Include="Views\Stock\StockTransactions.cshtml" />
+    <Content Include="Views\ProductManagement\ProductDetails.cshtml" />
+    <Content Include="Views\Administration\Index.cshtml" />
+    <Content Include="Views\Administration\NewAddress.cshtml" />
+    <Content Include="Views\Administration\EditAddress.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201611160649345_additional_models.resx">
@@ -1113,6 +1133,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611181605240_address_mode_update.resx">
       <DependentUpon>201611181605240_address_mode_update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611231538429_address_changes.resx">
+      <DependentUpon>201611231538429_address_changes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611231617584_address_changes_2.resx">
+      <DependentUpon>201611231617584_address_changes_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611231619257_address_changes_21.resx">
+      <DependentUpon>201611231619257_address_changes_21.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -7,7 +7,7 @@ html {
 body {
     margin: 0;
     bottom: 0;
-    background-color: #f5f8fa;
+    background-color: #F2EFEA;
 }
 
 
@@ -19,8 +19,8 @@ textarea {
 }
 
 nav {
-    background-color: #D91E18;
-    color: white;
+    background-color: #BF0603;
+    color: #F2EFEA;
     -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
     -ms-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
@@ -47,11 +47,11 @@ nav {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    border-bottom: 0.25rem solid #D91E18;
+    border-bottom: 0.25rem solid #BF0603;
 }
 
 .nav-ul li:hover {
-    border-bottom: 0.25rem solid white;
+    border-bottom: 0.25rem solid #F7E0AC;
 }
 
 .nav-ul li a {
@@ -63,8 +63,8 @@ nav {
 }
 
 .nav-bar {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 main {
@@ -93,7 +93,7 @@ input, select {
 }
 
 input[type=submit]:hover {
-    border-color: grey;
+    opacity: 0.8;
 }
 
 input[type=submit] {
@@ -101,23 +101,24 @@ input[type=submit] {
     width: 100%;
     font-family: 'Roboto', sans-serif !important;
     cursor: pointer;
+    background-color: #708D81;
+    color: #F2EFEA;
 }
 
 .button {
-    background-color: lightgrey;
+    background-color: #708D81;
     width: 100%;
     font-family: 'Roboto', sans-serif !important;
     cursor: pointer;
     text-decoration: none;
-    color: black;
+    color: #F2EFEA;
     padding: 0.5rem 1rem 0.5rem 1rem;
     -ms-border-radius: 3px;
     border-radius: 3px;
-    border: 0.1rem solid lightgrey;
 }
 
 .button:hover {
-    border: 0.1rem solid grey;
+    opacity: 0.8;
 }
 
 .content-box {

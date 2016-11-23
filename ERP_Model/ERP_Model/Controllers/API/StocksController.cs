@@ -18,21 +18,16 @@ namespace ERP_Model.Controllers.API
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public IQueryable<Address> GetAddresses()
-        {
-            return db.Addresses;
-        }
-
         // GET: api/Stocks
         public async Task<IHttpActionResult> GetStocks()
         {
-            var stock = await db.Stock
+            var stocks = await db.Stock
                 .Include(a => a.StockAddress)
-                .ToListAsync();
+                .ToListAsync();           
 
             var stockViewModelList = new List<StockViewModel>();
 
-            stockViewModelList.AddRange(stock.Select(s => new StockViewModel
+            stockViewModelList.AddRange(stocks.Select(s => new StockViewModel
             {
                 StockGuid = s.StockGuid,
                 StockAddress = s.StockAddress,
@@ -59,9 +54,15 @@ namespace ERP_Model.Controllers.API
 
         private float GetStockValue(Guid id)
         {
-            var stockValue = db.StockTransactions
-                .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id)
-                .Sum(p => p.StockTransactionItem.StockItemProduct.ProductPrice * p.StockTransactionQuantity);
+            var stockValue = 0.0F;
+
+            if(db.StockTransactions.Any(s => s.StockTransactionItem.StockItemStock.StockGuid == id))
+            { 
+                stockValue = db.StockTransactions
+                    .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id)
+                    .Sum(p => p.StockTransactionItem.StockItemProduct.ProductPrice * p.StockTransactionQuantity);
+            }
+
 
             return stockValue;
         }
@@ -123,6 +124,8 @@ namespace ERP_Model.Controllers.API
             {
                 return BadRequest();
             }
+
+            stock.StockAddress = await db.Addresses.FindAsync(stock.StockAddress.AddressGuid);
 
             db.Entry(stock).State = EntityState.Modified;
 

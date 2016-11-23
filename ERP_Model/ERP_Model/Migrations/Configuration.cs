@@ -23,7 +23,7 @@ namespace ERP_Model.Migrations
 
             context.Addresses.AddOrUpdate(
                 a => a.AddressGuid,
-                new Address { AddressGuid = new Guid("fd9c3bff-0c2e-4bc4-9a65-479f9681cb3e"), AddressCompany = "Test", AddressCountry = "Germany", AddressEmail = "test@test.de", AddressForName = "Test", AddressLastName = "Test", AddressPhone = 0000, AddressStreet = "Test", AddressZipCode = "0000"}
+                new Address { AddressGuid = new Guid("fd9c3bff-0c2e-4bc4-9a65-479f9681cb3e"), AddressCompany = "Test", AddressCountry = "Germany", AddressEmail = "test@test.de", AddressForName = "Test", AddressLastName = "Test", AddressPhone = 017680789240, AddressStreet = "Test", AddressZipCode = "0000"}
                 );
 
             context.Stock.AddOrUpdate(

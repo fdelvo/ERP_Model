@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="content-box" ng-controller="AngularProductsController" ng-init="ProductDetails(GetValueAtIndex(5))">
+    <h1>{{product.ProductName}}</h1>
+    <table>
+        <tr>
+            <td><b>Price:</b></td>
+            <td>{{product.ProductPrice}}</td>
+        </tr>
+        <tr>
+            <td><b>Description:</b></td>
+            <td>{{product.ProductDescription}}</td>
+        </tr>
+    </table>
+</div>
+

@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewBag.Title = "EditAddress";
+}
+
+
+@{
+    ViewBag.Title = "address";
+}
+
+<div class="content-box" ng-controller="AngularAdminController" ng-init="AddressDetails(GetValueAtIndex(5))">
+    <form ng-submit="EditAddress()">
+        <label>Address Description</label>
+        <br />
+        <input type="text" ng-model="address.AddressDescription" />
+        <br />
+        <label>Forname</label>
+        <br />
+        <input type="text" ng-model="address.AddressForName" />
+        <br />
+        <label>Lastname</label>
+        <br />
+        <input type="text" ng-model="address.AddressLastName" />
+        <br />
+        <label>Company</label>
+        <br />
+        <input type="text" ng-model="address.AddressCompany" />
+        <br />
+        <label>Phone</label>
+        <br />
+        <input type="text" ng-model="address.AddressPhone" />
+        <br />
+        <label>Email</label>
+        <br />
+        <input type="text" ng-model="address.AddressEmail" />
+        <br />
+        <label>Street</label>
+        <br />
+        <input type="text" ng-model="address.AddressStreet" />
+        <br />
+        <label>Zipcode</label>
+        <br />
+        <input type="text" ng-model="address.AddressZipCode" />
+        <br />
+        <label>City</label>
+        <br />
+        <input type="text" ng-model="address.AddressCity" />
+        <br />
+        <label>Country</label>
+        <br />
+        <input type="text" ng-model="address.AddressCountry" />
+        <br />
+        <input type="submit" value="Save Address" />
+    </form>
+</div>
+
+
+

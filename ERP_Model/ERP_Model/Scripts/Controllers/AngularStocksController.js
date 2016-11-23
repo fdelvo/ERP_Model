@@ -1,23 +1,23 @@
 ﻿angular.module("ERPModelApp").controller("AngularStocksController", AngularStocksController);
 
 AngularStocksController.$inject = [
-    "$scope", "AngularStocksService", "$rootScope"
+    "$scope", "AngularStocksService", "AngularAdminService", "$rootScope"
 ];
 
-function AngularStocksController($scope, AngularStocksService, $rootScope) {
+function AngularStocksController($scope, AngularStocksService, AngularAdminService, $rootScope) {
     if (localStorage.getItem("tokenKey") === null) {
         location.href = "/Home/Index";
     }
 
-    $scope.newStock = new AngularStocksService();
-
     $scope.AddressList = function () {
-        $scope.addresses = AngularStocksService.GetAddresses({
+        $scope.addresses = AngularAdminService.GetAddresses({
         },
             function () {
                 console.log($scope.addresses);
             });
     };
+
+    $scope.newStock = new AngularStocksService();
 
     $scope.StockList = function() {
         $scope.stocks = AngularStocksService.GetStocks({

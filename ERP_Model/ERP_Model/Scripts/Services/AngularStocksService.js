@@ -6,12 +6,6 @@ function AngularStocksService($resource) {
     return $resource("/api/stocks/",
         null,
         {
-            GetAddresses: {
-                method: "GET",
-                url: "/api/stocks/getaddresses",
-                isArray: true,
-                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
-            },
             GetStocks: {
                 method: "GET",
                 url: "/api/stocks/getstocks",

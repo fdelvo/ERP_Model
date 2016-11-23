@@ -26,7 +26,7 @@
                 <td>{{st.StockTransactionItem.StockItemProduct.ProductPrice}}</td>
                 <td>{{st.StockTransactionQuantity}}</td>
                 <td>{{st.StockTransactionUser.Email}}</td>
-                <td>{{st.StockTransactionDate}}</td>
+                <td>{{st.StockTransactionDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
             </tr>
         </tbody>
         <tfoot>

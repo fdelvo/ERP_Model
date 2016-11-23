@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "NewAddress";
+}
+
+<div class="content-box" ng-controller="AngularAdminController">
+    <form ng-submit="CreateAddress()">
+        <label>Address Description</label>
+        <br />
+        <input type="text" ng-model="newAddress.AddressDescription" />
+        <br />
+        <label>Forname</label>
+        <br />
+        <input type="text" ng-model="newAddress.AddressForName" />
+        <br />
+        <label>Lastname</label>
+        <br />
+        <input type="text" ng-model="newAddress.AddressLastName" />
+        <br/>
+        <label>Company</label>
+        <br />
+        <input type="text" ng-model="newAddress.AddressCompany" />
+        <br/>
+        <label>Phone</label>
+        <br />
+        <input type="number" ng-model="newAddress.AddressPhone" />
+        <br/>
+        <label>Email</label>
+        <br />
+        <input type="text" ng-model="newAddress.AddressEmail" />
+        <br/>
+        <label>Street</label>
+        <br />
+        <input type="text" ng-model="newAddress.AddressStreet" />
+        <br />
+        <label>Zipcode</label>
+        <br />
+        <input type="text" ng-model="newAddress.AddressZipCode" />
+        <br/>
+        <label>City</label>
+        <br />
+        <input type="text" ng-model="newAddress.AddressCity" />
+        <br/>
+        <label>Country</label>
+        <br />
+        <input type="text" ng-model="newAddress.AddressCountry" />
+        <br />
+        <input type="submit" value="Create Address" />
+    </form>
+</div>
+

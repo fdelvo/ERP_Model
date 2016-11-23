@@ -6,25 +6,20 @@ using System.Web.Mvc;
 
 namespace ERP_Model.Controllers
 {
-    public class ProductManagementController : Controller
+    public class AdministrationController : Controller
     {
-        // GET: GoodsManagement
+        // GET: Administration
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult New()
+        public ActionResult NewAddress()
         {
             return View();
         }
 
-        public ActionResult Edit()
-        {
-            return View();
-        }
-
-        public ActionResult ProductDetails()
+        public ActionResult EditAddress()
         {
             return View();
         }

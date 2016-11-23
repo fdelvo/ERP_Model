@@ -22,10 +22,12 @@
             <td><a href="/Stock/StockItems/{{s.StockGuid}}">{{s.StockName}}</a></td>
             <td>
                 <ul>
-                    <li>{{s.StockAddress.AddressCompany}}</li>
-                    <li>{{s.StockAddress.AddressStreet}}</li>
-                    <li>{{s.StockAddress.AddressZipCode}} | {{s.StockAddress.AddressCity}}</li>
-                    <li>{{s.StockAddress.AddressCountry}}</li>
+                    <li>Company: {{s.StockAddress.AddressCompany}}</li>
+                    <li>Forename: {{s.StockAddress.AddressForName}}</li>
+                    <li>Lastname: {{s.StockAddress.AddressLastName}}</li>
+                    <li>Street: {{s.StockAddress.AddressStreet}}</li>
+                    <li>Zipcode | City: {{s.StockAddress.AddressZipCode}} | {{s.StockAddress.AddressCity}}</li>
+                    <li>Country: {{s.StockAddress.AddressCountry}}</li>
                 </ul>
             </td>
             <td>{{s.StockMethod}}</td>
