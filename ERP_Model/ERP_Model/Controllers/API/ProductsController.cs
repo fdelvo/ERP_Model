@@ -11,24 +11,32 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ERP_Model.Models;
 
+/*
+api controller to handle products
+*/
+
 namespace ERP_Model.Controllers.API
 {
     [Authorize]
     public class ProductsController : ApiController
     {
+        //db context
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/Products
+        //returns all products
         public IQueryable<Product> GetProducts()
         {
             return db.Products;
         }
 
-        // GET: api/Products/5
+        //returns a product
         [ResponseType(typeof(Product))]
         public async Task<IHttpActionResult> GetProduct(Guid id)
         {
+            //get the product from db.context
             Product product = await db.Products.FindAsync(id);
+
+            //check if porduct exists
             if (product == null)
             {
                 return NotFound();
@@ -37,10 +45,11 @@ namespace ERP_Model.Controllers.API
             return Ok(product);
         }
 
-        // PUT: api/Products/5
+        //updates a product
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutProduct(Guid id, Product product)
         {
+            //verify data
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -53,6 +62,7 @@ namespace ERP_Model.Controllers.API
 
             db.Entry(product).State = EntityState.Modified;
 
+            //save data
             try
             {
                 await db.SaveChangesAsync();
@@ -72,19 +82,23 @@ namespace ERP_Model.Controllers.API
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Products
+        //create new product
         [ResponseType(typeof(Product))]
         public async Task<IHttpActionResult> PostProduct(Product product)
         {
+            //verify data
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            //generate new guid for the product
             product.ProductGuid = Guid.NewGuid();
 
+            //add product to db context
             db.Products.Add(product);
 
+            //save changes to db
             try
             {
                 await db.SaveChangesAsync();
@@ -104,17 +118,23 @@ namespace ERP_Model.Controllers.API
             return CreatedAtRoute("DefaultApi", new { id = product.ProductGuid }, product);
         }
 
-        // DELETE: api/Products/5
+        //deletes a product
         [ResponseType(typeof(Product))]
         public async Task<IHttpActionResult> DeleteProduct(Guid id)
         {
+            //get the product
             Product product = await db.Products.FindAsync(id);
+
+            //check if product exists
             if (product == null)
             {
                 return NotFound();
             }
 
+            //remove product from db context
             db.Products.Remove(product);
+
+            //save changes to db
             await db.SaveChangesAsync();
 
             return Ok(product);

@@ -12,38 +12,50 @@ using System.Web.Http.Description;
 using ERP_Model.Models;
 using ERP_Model.ViewModels;
 
+/*
+api controller to handle stocks
+*/
+
 namespace ERP_Model.Controllers.API
 {
     public class StocksController : ApiController
     {
+        //db context
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/Stocks
+        //returns all stocks
         public async Task<IHttpActionResult> GetStocks()
         {
+            //get stocks including the stock addresses
             var stocks = await db.Stock
                 .Include(a => a.StockAddress)
                 .ToListAsync();           
 
+            //create a viewmodel list which will contain the final data
             var stockViewModelList = new List<StockViewModel>();
 
+            //add the stocks to the viewmodel list, converts stocks to stock viewmodels
             stockViewModelList.AddRange(stocks.Select(s => new StockViewModel
             {
                 StockGuid = s.StockGuid,
                 StockAddress = s.StockAddress,
                 StockMethod = s.StockMethod,
                 StockName = s.StockName,
+                //determine the value of the stock
                 StockValue = GetStockValue(s.StockGuid)
             }));
 
             return Ok(stockViewModelList);
         }
 
-        // GET: api/Stocks/5
+        //returns a stock
         [ResponseType(typeof(Stock))]
         public async Task<IHttpActionResult> GetStock(Guid id)
         {
+            //get stock
             Stock stock = await db.Stock.FindAsync(id);
+
+            //check if stock exists
             if (stock == null)
             {
                 return NotFound();
@@ -52,12 +64,16 @@ namespace ERP_Model.Controllers.API
             return Ok(stock);
         }
 
+        //determin value of a stock
         private float GetStockValue(Guid id)
         {
+            //initiate float variable which is returned if there are no items in a stock
             var stockValue = 0.0F;
 
+            //check if there are items/transactions in a stock
             if(db.StockTransactions.Any(s => s.StockTransactionItem.StockItemStock.StockGuid == id))
             { 
+                //get all stock transactions and sum the prices
                 stockValue = db.StockTransactions
                     .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id)
                     .Sum(p => p.StockTransactionItem.StockItemProduct.ProductPrice * p.StockTransactionQuantity);
@@ -67,16 +83,20 @@ namespace ERP_Model.Controllers.API
             return stockValue;
         }
 
+        //returns all items in a astock
         public async Task<IHttpActionResult> GetStockItems(Guid id)
         {
+            //get all stock items of a stock
             var stockItems = await db.StockItems
                 .Include(s => s.StockItemStock)
                 .Include(p => p.StockItemProduct)
                 .Where(s => s.StockItemStock.StockGuid == id)
                 .ToListAsync();
 
+            //initiate a viewmodel list to contain the stock items
             var stockItemsViewList = new List<StockItemViewModel>();
 
+            //add the stock items to the viewmodel list and convert them to stock item viewmodels
             stockItemsViewList.AddRange(stockItems.Select(stockItem => new StockItemViewModel
             {
                 StockItemStock = stockItem.StockItemStock,
@@ -84,14 +104,17 @@ namespace ERP_Model.Controllers.API
                 StockItemMaximumQuantity = stockItem.StockItemMaximumQuantity,
                 StockItemMinimumQuantity = stockItem.StockItemMinimumQuantity,
                 StockItemProduct = stockItem.StockItemProduct,
+                //determine the quantity of the stock items
                 StockItemQuantity =  GetStockItemQuantity(stockItem.StockItemGuid)
             }));
 
             return Ok(stockItemsViewList);
         }
 
+        //returns the quantity of a stock item
         private int GetStockItemQuantity(Guid id)
         {
+            //sums the quantities of stock transaction of a single stock item
             var stockItemQuantity = db.StockTransactions
                 .Include(si => si.StockTransactionItem)
                 .Where(si => si.StockTransactionItem.StockItemGuid == id)
@@ -100,6 +123,7 @@ namespace ERP_Model.Controllers.API
             return stockItemQuantity;
         }
 
+        //returns all transactions of a stock
         public async Task<IHttpActionResult> GetStockTransactions(Guid id)
         {
             var stockTransactions = await db.StockTransactions
@@ -111,10 +135,11 @@ namespace ERP_Model.Controllers.API
             return Ok(stockTransactions);
         }
 
-        // PUT: api/Stocks/5
+        //update a stock
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutStock(Guid id, Stock stock)
         {
+            //verify data
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -125,10 +150,12 @@ namespace ERP_Model.Controllers.API
                 return BadRequest();
             }
 
+            //get the stock address, as just the address guid is submitted, not the object itself
             stock.StockAddress = await db.Addresses.FindAsync(stock.StockAddress.AddressGuid);
 
             db.Entry(stock).State = EntityState.Modified;
 
+            //save changes
             try
             {
                 await db.SaveChangesAsync();
@@ -148,20 +175,25 @@ namespace ERP_Model.Controllers.API
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Stocks
+        //create a new stock
         [ResponseType(typeof(Stock))]
         public async Task<IHttpActionResult> PostStock(Stock stock)
         {
+            //verify data
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            //generate new guid
             stock.StockGuid = Guid.NewGuid();
+            //get the stock address, as just the address guid is submitted, not the object itself
             stock.StockAddress = await db.Addresses.FirstOrDefaultAsync(a => a.AddressGuid == stock.StockAddress.AddressGuid);
 
+            //add the stock to db context
             db.Stock.Add(stock);
 
+            //save changes to db
             try
             {
                 await db.SaveChangesAsync();
@@ -181,17 +213,23 @@ namespace ERP_Model.Controllers.API
             return CreatedAtRoute("DefaultApi", new { id = stock.StockGuid }, stock);
         }
 
-        // DELETE: api/Stocks/5
+        //deletes a stock
         [ResponseType(typeof(Stock))]
         public async Task<IHttpActionResult> DeleteStock(Guid id)
         {
+            //get the stock
             Stock stock = await db.Stock.FindAsync(id);
+
+            //check if stock exists
             if (stock == null)
             {
                 return NotFound();
             }
 
+            //remove stock from db context
             db.Stock.Remove(stock);
+
+            //save changes to db
             await db.SaveChangesAsync();
 
             return Ok(stock);

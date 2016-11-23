@@ -10,18 +10,24 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ERP_Model.Models;
 
+/*
+api controller to handle administration (addresses, users, customers, suppliers)
+*/
+
 namespace ERP_Model.Controllers.API
 {
     public class AdminController : ApiController
     {
+        //get database context
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        //returns all addresses
         public IQueryable<Address> GetAddresses()
         {
             return db.Addresses;
         }
 
-        // GET: api/Stocks/5
+        //returns an address
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> GetAddress(Guid id)
         {
@@ -34,10 +40,11 @@ namespace ERP_Model.Controllers.API
             return Ok(address);
         }
 
-        // PUT: api/Stocks/5
+        //updates an address
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutAddress(Guid id, Address address)
         {
+            //check if data sent from form matches the format of the data in database
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -50,6 +57,7 @@ namespace ERP_Model.Controllers.API
 
             db.Entry(address).State = EntityState.Modified;
 
+            //save changes to the address
             try
             {
                 await db.SaveChangesAsync();
@@ -69,19 +77,23 @@ namespace ERP_Model.Controllers.API
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Stocks
+        //creates a new address
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> PostAddress(Address address)
         {
+            //check if data sent from form matches the format of the data in database
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            //generate new guid for the address
             address.AddressGuid = Guid.NewGuid();
 
+            //add address to db context
             db.Addresses.Add(address);
 
+            //save changes
             try
             {
                 await db.SaveChangesAsync();
@@ -101,17 +113,23 @@ namespace ERP_Model.Controllers.API
             return CreatedAtRoute("DefaultApi", new { id = address.AddressGuid }, address);
         }
 
-        // DELETE: api/Stocks/5
+        //deletes an address
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> DeleteAddress(Guid id)
         {
+            //get the address
             Address address = await db.Addresses.FindAsync(id);
+
+            //check if address exists
             if (address == null)
             {
                 return NotFound();
             }
 
+            //remove address from db context
             db.Addresses.Remove(address);
+
+            //save changes to db
             await db.SaveChangesAsync();
 
             return Ok(address);
