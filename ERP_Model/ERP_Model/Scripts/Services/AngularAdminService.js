@@ -32,6 +32,38 @@ function AngularAdminService($resource) {
                 method: "DELETE",
                 url: "/api/admin/deleteaddress/:id",
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
+            GetUsers: {
+                method: "GET",
+                url: "/api/admin/getusers",
+                isArray: true,
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
+            GetUser: {
+                method: "GET",
+                url: "/api/admin/getuser",
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
+            PostUser: {
+                method: "POST",
+                url: "/api/admin/postuser",
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
+            PutUser: {
+                method: "PUT",
+                url: "/api/admin/putuser",
+                isArray: true,
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
+            DeleteUser: {
+                method: "DELETE",
+                url: "/api/admin/deleteuser/:id",
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
+            ChangePasswordForUser: {
+                method: "POST",
+                url: "/api/admin/changepasswordforuser",
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             }
         });
 }

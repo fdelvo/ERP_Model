@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ERP_Model.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 
 /*
 api controller to handle administration (addresses, users, customers, suppliers)
@@ -20,11 +22,26 @@ namespace ERP_Model.Controllers.API
     {
         //get database context
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
 
         //returns all addresses
-        public IQueryable<Address> GetAddresses()
+        public async Task<IHttpActionResult> GetAddresses()
         {
-            return db.Addresses;
+            var addresses = await db.Addresses.ToListAsync();
+
+            return Ok(addresses);
         }
 
         //returns an address
@@ -135,6 +152,116 @@ namespace ERP_Model.Controllers.API
             return Ok(address);
         }
 
+        //returns all users
+        public async Task<IHttpActionResult> GetUsers()
+        {
+            var users = await db.Users.ToListAsync();
+            return Ok(users);
+        }
+
+        //returns a user
+        public async Task<IHttpActionResult> GetUser(Guid id)
+        {
+            var user = await db.Users.FirstOrDefaultAsync(i => i.Id == id.ToString());
+
+            return Ok(user);
+        }
+
+        //creates an user
+        public async Task<IHttpActionResult> PostUser(RegisterBindingModel model)
+        {
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, Alias = model.Alias };
+
+            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok();
+        }
+
+
+        //updates an user
+        public async Task<IHttpActionResult> PutUser(Guid id, ApplicationUser user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id.ToString() != user.Id)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(user).State = EntityState.Modified;
+
+            //save changes to user
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        public async Task<IHttpActionResult> ChangePasswordForUser(ResetPasswordBindingModel model, Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!UserExists(id))
+            {
+                return Conflict();
+            }
+
+            await UserManager.RemovePasswordAsync(id.ToString());
+
+            IdentityResult result = await UserManager.AddPasswordAsync(id.ToString(), model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok();
+        }
+
+        public async Task<IHttpActionResult> DeleteUser(Guid id)
+        {
+            //get the user
+            ApplicationUser user = await db.Users.FirstOrDefaultAsync(i => i.Id == id.ToString());
+
+            //check if user exists
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            //remove user from db context
+            db.Users.Remove(user);
+
+            //save changes to db
+            await db.SaveChangesAsync();
+
+            return Ok(user);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -144,9 +271,45 @@ namespace ERP_Model.Controllers.API
             base.Dispose(disposing);
         }
 
+        //check if address exists
         private bool AddressExists(Guid id)
         {
             return db.Addresses.Count(e => e.AddressGuid == id) > 0;
+        }
+
+        //check if user exists
+        private bool UserExists(Guid id)
+        {
+            return db.Users.Count(e => e.Id == id.ToString()) > 0;
+        }
+
+        private IHttpActionResult GetErrorResult(IdentityResult result)
+        {
+            if (result == null)
+            {
+                return InternalServerError();
+            }
+
+            if (!result.Succeeded)
+            {
+                if (result.Errors != null)
+                {
+                    foreach (string error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                }
+
+                if (ModelState.IsValid)
+                {
+                    // No ModelState errors are available to send, so just return an empty BadRequest.
+                    return BadRequest();
+                }
+
+                return BadRequest(ModelState);
+            }
+
+            return null;
         }
     }
 }

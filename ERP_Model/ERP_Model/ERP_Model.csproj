@@ -1120,6 +1120,8 @@
     <Content Include="Views\Administration\Index.cshtml" />
     <Content Include="Views\Administration\NewAddress.cshtml" />
     <Content Include="Views\Administration\EditAddress.cshtml" />
+    <Content Include="Views\Administration\NewUser.cshtml" />
+    <Content Include="Views\Administration\EditUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201611160649345_additional_models.resx">

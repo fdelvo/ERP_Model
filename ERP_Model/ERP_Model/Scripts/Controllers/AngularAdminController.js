@@ -10,6 +10,7 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
     }
 
     $scope.newAddress = new AngularAdminService();
+    $scope.model = new AngularAdminService();
 
     $scope.AddressList = function () {
         $scope.addresses = AngularAdminService.GetAddresses({
@@ -47,6 +48,62 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
 
     $scope.RemoveAddress = function (guid) {
         AngularAdminService.DeleteAddress({ id: guid },
+            function (response) {
+                console.log("Success");
+                location.href = "/Administration/Index";
+            },
+            function (error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.UserList = function () {
+        $scope.users = AngularAdminService.GetUsers({
+        },
+            function () {
+                console.log($scope.users);
+            });
+    };
+
+    $scope.UserDetails = function (guid) {
+        $scope.user = AngularAdminService.GetUser({ id: guid });
+    };
+
+    $scope.CreateUser = function () {
+        $scope.model.$PostUser(
+            function (response) {
+                console.log("Success");
+                location.href = "/Administration/Index";
+            },
+            function (error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.EditUser = function () {
+        $scope.user.$PutUser({ id: $scope.user.Id },
+            function (response) {
+                console.log("Success");
+                location.href = "/Administration/Index";
+            },
+            function (error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.ChangeUserPassword = function(guid) {
+        $scope.model.$ChangePasswordForUser({ id: guid },
+            function(response) {
+                console.log("Success");
+                location.href = "/Administration/Index";
+            },
+            function(error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.RemoveUser = function (guid) {
+        AngularAdminService.DeleteUser({ id: guid },
             function (response) {
                 console.log("Success");
                 location.href = "/Administration/Index";

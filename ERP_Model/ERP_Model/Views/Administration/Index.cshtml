@@ -3,7 +3,7 @@
     ViewBag.Title = "Index";
 }
 
-<div class="content-box" ng-controller="AngularAdminController" ng-init="AddressList()">
+<div class="content-box" ng-controller="AngularAdminController" ng-init="AddressList(); UserList()">
     <h1>Administration</h1>
 <div class="nav-bar">
     <a class="button" href="">Addresses</a>
@@ -11,7 +11,7 @@
     <a class="button" href="">Customers</a>
     <a class="button" href="">Suppliers</a>
 </div>
-<div>
+<div ng-show="addresses">
     <div class="nav-bar">
         <a class="button" href="/Administration/NewAddress">New Address</a>
     </div>
@@ -41,6 +41,32 @@
         </tbody>
         <tfoot></tfoot>
     </table>
+    <div ng-show="users">
+        <div class="nav-bar">
+            <a class="button" href="/Administration/NewUser">New User</a>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="u in users track by u.Id">
+                <td>{{u.Alias}}</td>
+                <td>{{u.Email}}</td>
+                <td><a href="/Administration/EditUser/{{u.Id}}">Edit</a></td>
+                <td><a href="" ng-click="RemoveUser(u.Id)">Remove</a></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="4">Pagination</td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
 </div>
-
+</div>
 

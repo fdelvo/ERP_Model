@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "EditUser";
+}
+
+<div class="content-box" ng-controller="AngularAdminController" ng-init="UserDetails(GetValueAtIndex(5))">
+    <h1>{{user.Alias}}</h1>
+    <form ng-submit="EditUser()">
+        <label>Email</label>
+        <br/>
+        <input type="email" ng-model="user.Email" placeholder="Email"/>
+        <br/>
+        <label>Alias</label>
+        <br/>
+        <input type="text" ng-model="user.Alias" placeholder="Alias"/>
+        <br/>
+        <input type="submit" value="Save User"/>
+    </form>
+    <form ng-submit="ChangeUserPassword(GetValueAtIndex(5));">
+        <label>New Password</label>
+        <br/>
+        <input type="password" ng-model="model.NewPassword"/>
+        <br/>
+        <label>Confirm Password</label>
+        <br/>
+        <input type="password" ng-model="model.ConfirmPassword"/>
+        <br/>
+        <input type="submit" value="Change Password"/>
+    </form>
+</div>
+
