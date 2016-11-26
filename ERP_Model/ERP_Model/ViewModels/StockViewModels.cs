@@ -24,4 +24,12 @@ namespace ERP_Model.ViewModels
         public string StockMethod { get; set; }
         public float StockValue { get; set; }
     }
+
+    public class EditStockViewModel
+    {
+        public Guid StockGuid { get; set; }
+        public string StockName { get; set; }
+        public Guid StockAddress { get; set; }
+        public string StockMethod { get; set; }
+    }
 }

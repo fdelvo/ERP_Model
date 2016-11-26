@@ -137,7 +137,7 @@ namespace ERP_Model.Controllers.API
 
         //update a stock
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutStock(Guid id, Stock stock)
+        public async Task<IHttpActionResult> PutStock(Guid id, StockViewModel stockVm)
         {
             //verify data
             if (!ModelState.IsValid)
@@ -145,14 +145,16 @@ namespace ERP_Model.Controllers.API
                 return BadRequest(ModelState);
             }
 
-            if (id != stock.StockGuid)
+            if (id != stockVm.StockGuid)
             {
                 return BadRequest();
             }
 
-            //get the stock address, as just the address guid is submitted, not the object itself
-            stock.StockAddress = await db.Addresses.FindAsync(stock.StockAddress.AddressGuid);
-
+            var stock = await db.Stock.FindAsync(stockVm.StockGuid);
+            stock.StockMethod = stockVm.StockMethod;
+            stock.StockName = stockVm.StockName;
+            stock.StockAddress = await db.Addresses.FindAsync(stockVm.StockAddress.AddressGuid);
+            
             db.Entry(stock).State = EntityState.Modified;
 
             //save changes
