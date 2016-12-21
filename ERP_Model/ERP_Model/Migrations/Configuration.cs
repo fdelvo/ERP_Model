@@ -41,6 +41,17 @@ namespace ERP_Model.Migrations
                 new StockTransaction { StockTransactionGuid = new Guid("c5e87a18-628f-4656-9b14-f575a414119d"), StockTransactionItem = context.StockItems.FirstOrDefault(g => g.StockItemGuid == new Guid("3424f0b3-6032-4717-95ba-6835d0a8fd44")), StockTransactionQuantity = +5, StockTransactionDate = DateTime.Now, StockTransactionUser = null},
                 new StockTransaction { StockTransactionGuid = new Guid("4082036a-10bd-48d8-bf6b-77e2a75c3ea3"), StockTransactionItem = context.StockItems.FirstOrDefault(g => g.StockItemGuid == new Guid("3424f0b3-6032-4717-95ba-6835d0a8fd44")), StockTransactionQuantity = -2, StockTransactionDate = DateTime.Now, StockTransactionUser = null }
                 );
+
+            context.Orders.AddOrUpdate(
+                o => o.OrderGuid,
+                new Order { OrderGuid = new Guid("5b5c4a40-77d4-41d0-994c-1b8b9f4567f6"), OrderCustomer = context.Users.FirstOrDefault(g => g.Id == "82cfb04c-3c02-4659-8bb0-511c29cb17b6"), OrderDate = DateTime.Now, OrderDeliveryDate = DateTime.Now }
+                );
+
+            context.OrderItems.AddOrUpdate(
+                o => o.OrderItemGuid,
+                new OrderItem { OrderItemGuid = new Guid("a7b6cbc2-8a94-4774-962a-3969c9a2b4ff"), OrderItemOrder = context.Orders.FirstOrDefault(g => g.OrderGuid == new Guid("5b5c4a40-77d4-41d0-994c-1b8b9f4567f6")), OrderItemProduct = context.Products.FirstOrDefault(g => g.ProductGuid == new Guid("3124f3b1-f6b1-4d20-9a5c-63fcad2d0d67")), OrderQuantity = 5 },
+                new OrderItem { OrderItemGuid = new Guid("b38b29a6-33b5-452e-bc53-6932b8e53f2b"), OrderItemOrder = context.Orders.FirstOrDefault(g => g.OrderGuid == new Guid("5b5c4a40-77d4-41d0-994c-1b8b9f4567f6")), OrderItemProduct = context.Products.FirstOrDefault(g => g.ProductGuid == new Guid("30daf65a-af79-4a3c-be50-acc145aa1a94")), OrderQuantity = 5 }
+                );
         }
     }
 }

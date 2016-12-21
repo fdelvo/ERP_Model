@@ -208,8 +208,10 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\API\AdminController.cs" />
+    <Compile Include="Controllers\API\OrdersController.cs" />
     <Compile Include="Controllers\API\ProductsController.cs" />
     <Compile Include="Controllers\API\StocksController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductManagementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StockController.cs" />
@@ -262,6 +264,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\OrderViewModels.cs" />
     <Compile Include="ViewModels\StockViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -329,6 +332,7 @@
     <Content Include="Scripts\Angular_Core\angular-animate.min.js.map" />
     <Content Include="Scripts\Controllers\AngularAdminController.js" />
     <Content Include="Scripts\Controllers\AngularLoginController.js" />
+    <Content Include="Scripts\Controllers\AngularOrdersController.js" />
     <Content Include="Scripts\Controllers\AngularProductsController.js" />
     <Content Include="Scripts\Controllers\AngularStocksController.js" />
     <Content Include="Scripts\ERPModelApp.js" />
@@ -1080,6 +1084,7 @@
     <Content Include="Scripts\Angular_Core\respond.js" />
     <Content Include="Scripts\Angular_Core\respond.min.js" />
     <Content Include="Scripts\Services\AngularAdminService.js" />
+    <Content Include="Scripts\Services\AngularOrdersService.js" />
     <Content Include="Scripts\Services\AngularProductsService.js" />
     <Content Include="Scripts\Services\AngularStocksService.js" />
     <Content Include="Web.config" />
@@ -1122,6 +1127,9 @@
     <Content Include="Views\Administration\EditAddress.cshtml" />
     <Content Include="Views\Administration\NewUser.cshtml" />
     <Content Include="Views\Administration\EditUser.cshtml" />
+    <Content Include="Views\Orders\Index.cshtml" />
+    <Content Include="Views\Orders\OrderItems.cshtml" />
+    <Content Include="Views\Orders\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201611160649345_additional_models.resx">

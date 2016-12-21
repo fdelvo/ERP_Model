@@ -31,6 +31,7 @@ namespace ERP_Model.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            Database.SetInitializer<ApplicationDbContext>(new CreateDatabaseIfNotExists<ApplicationDbContext>());
         }
         
         public DbSet<Product> Products { get; set; }
@@ -38,7 +39,7 @@ namespace ERP_Model.Models
         public DbSet<StockItem> StockItems { get; set; }
         public DbSet<StockTransaction> StockTransactions { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrtderItems { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Supply> Supplies { get; set; }
         public DbSet<SupplyItem> SupplyItems { get; set; }

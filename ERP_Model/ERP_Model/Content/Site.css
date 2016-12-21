@@ -21,6 +21,9 @@ textarea {
 nav {
     background-color: #BF0603;
     color: #F2EFEA;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
     -ms-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
@@ -76,6 +79,10 @@ main {
 
 form {
     text-align: center;
+}
+
+label {
+    display: inline-block;
 }
 
 input, select {
