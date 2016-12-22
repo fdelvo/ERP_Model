@@ -6,20 +6,23 @@
 <div class="content-box" ng-controller="AngularAdminController" ng-init="UserDetails(GetValueAtIndex(5))">
     <h1>{{user.Alias}}</h1>
     <form ng-submit="EditUser()">
-        <label>Email</label>
+        <label>Email:</label>
         <input type="email" ng-model="user.Email" placeholder="Email"/>
         <br/>
-        <label>Alias</label>
+        <label>Alias:</label>
         <input type="text" ng-model="user.Alias" placeholder="Alias"/>
+        <br/>
+        <label></label>
         <input type="submit" value="Save User"/>
     </form>
     <form ng-submit="ChangeUserPassword(GetValueAtIndex(5));">
-        <label>New Password</label>
+        <label>New Password:</label>
         <input type="password" ng-model="model.NewPassword"/>
         <br/>
-        <label>Confirm Password</label>
+        <label>Confirm Password:</label>
         <input type="password" ng-model="model.ConfirmPassword"/>
         <br/>
+        <label></label>
         <input type="submit" value="Change Password"/>
     </form>
 </div>

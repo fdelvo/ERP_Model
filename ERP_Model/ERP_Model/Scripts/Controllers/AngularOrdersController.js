@@ -1,15 +1,19 @@
 ﻿angular.module("ERPModelApp").controller("AngularOrdersController", AngularOrdersController);
 
 AngularOrdersController.$inject = [
-    "$scope", "AngularOrdersService", "$rootScope"
+    "$scope", "AngularOrdersService", "AngularProductsService", "AngularAdminService", "$rootScope"
 ];
 
-function AngularOrdersController($scope, AngularOrdersService, $rootScope) {
+function AngularOrdersController($scope, AngularOrdersService, AngularProductsService, AngularAdminService, $rootScope) {
     if (localStorage.getItem("tokenKey") === null) {
         location.href = "/Home/Index";
     }
 
-    $scope.newStock = new AngularOrdersService();
+    $scope.orderItems = [];
+    $scope.orderQuantity = {
+        value: 0
+    };
+    $scope.newOrder = new AngularOrdersService();
 
     $scope.OrdersList = function () {
         $scope.orders = AngularOrdersService.GetOrders({
@@ -28,15 +32,23 @@ function AngularOrdersController($scope, AngularOrdersService, $rootScope) {
             });
     };
 
-    $scope.CreateStock = function () {
-        $scope.newStock.$PostStock(
+    $scope.CreateOrder = function () {
+        $scope.newOrder.OrderItems = $scope.orderItems;
+        $scope.newOrder.OrderDeliveryDate = new Date($scope.newOrder.OrderDeliveryDate);
+        $scope.newOrder.$PostOrder(
             function (response) {
                 console.log("Success");
-                location.href = "/Stock/Index";
+                location.href = "/Orders/Index";
             },
             function (error) {
                 console.log("Fail");
             });
+    };
+
+    $scope.AddProductToOrderItems = function (p) {
+        p.OrderQuantity = $scope.orderQuantity.value;
+        $scope.orderItems.push(p);
+        console.log($scope.orderItems);
     };
 
     $scope.EditStock = function () {
@@ -58,6 +70,22 @@ function AngularOrdersController($scope, AngularOrdersService, $rootScope) {
             },
             function (error) {
                 console.log("Fail");
+            });
+    };
+
+    $scope.ProductList = function () {
+        $scope.products = AngularProductsService.GetProducts({
+        },
+            function () {
+                console.log($scope.products);
+            });
+    };
+
+    $scope.UserList = function () {
+        $scope.users = AngularAdminService.GetUsers({
+        },
+            function () {
+                console.log($scope.users);
             });
     };
 

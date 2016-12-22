@@ -11,12 +11,27 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ERP_Model.Models;
 using ERP_Model.ViewModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace ERP_Model.Controllers.API
 {
     public class OrdersController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
 
         // GET: api/Orders
         public async Task<IHttpActionResult> GetOrders()
@@ -120,14 +135,52 @@ namespace ERP_Model.Controllers.API
 
         // POST: api/Orders
         [ResponseType(typeof(Order))]
-        public async Task<IHttpActionResult> PostOrder(Order order)
+        public async Task<IHttpActionResult> PostOrder(NewOrderViewModel orderVm)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+                  
+
+            var order = new Order
+            {
+                OrderGuid = Guid.NewGuid(),
+                OrderCustomer = db.Users.FirstOrDefault(g => g.Id == orderVm.OrderCustomer.Id),
+                OrderDate = DateTime.Now,
+                OrderDeliveryDate = orderVm.OrderDeliveryDate
+            };
+
             db.Orders.Add(order);
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (OrderExists(order.OrderGuid))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            //create the orderitems and link them to the order
+            foreach (var p in orderVm.OrderItems)
+            {
+                var orderItem = new OrderItem
+                {
+                    OrderItemGuid = Guid.NewGuid(),
+                    OrderItemOrder = db.Orders.FirstOrDefault(g => g.OrderGuid == order.OrderGuid),
+                    OrderItemProduct = db.Products.FirstOrDefault(g => g.ProductGuid == p.ProductGuid)
+                };
+                db.OrderItems.Add(orderItem);
+            }
 
             try
             {

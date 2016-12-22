@@ -33,15 +33,5 @@ namespace ERP_Model.Controllers
         {
             return View();
         }
-
-        public ActionResult Orders()
-        {
-            return View();
-        }
-
-        public ActionResult Supplies()
-        {
-            return View();
-        }
     }
 }

@@ -5,18 +5,16 @@
 
 <div class="content-box" ng-controller="AngularProductsController" ng-init="ProductDetails(GetValueAtIndex(5))">
     <form ng-submit="EditProduct()">
-        <label>Product Name</label>
-        <br />
+        <label>Product Name:</label>
         <input type="text" ng-model="product.ProductName" />
         <br />
-        <label>Product Description</label>
-        <br />
+        <label>Product Description:</label>
         <input type="text" ng-model="product.ProductDescription" />
         <br />
-        <label>Product Price</label>
-        <br />
+        <label>Product Price:</label>
         <input type="number" ng-model="product.ProductPrice" />
-        <br />
+        <br/>
+        <label></label>
         <input type="submit" value="Save Product" />
     </form>
 </div>

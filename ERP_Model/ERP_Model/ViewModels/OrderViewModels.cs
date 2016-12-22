@@ -16,4 +16,14 @@ namespace ERP_Model.ViewModels
         public DateTime OrderDeliveryDate { get; set; }
         public float OrderValue { get; set; }
     }
+
+    public class NewOrderViewModel
+    {
+        [Key]
+        public Guid OrderGuid { get; set; }
+        public virtual ApplicationUser OrderCustomer { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DateTime OrderDeliveryDate { get; set; }
+        public List<Product> OrderItems { get; set; }
+    }
 }

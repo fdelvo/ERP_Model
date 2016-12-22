@@ -1104,8 +1104,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\ProductManagement\Index.cshtml" />
     <Content Include="Views\Stock\Index.cshtml" />
-    <Content Include="Views\Stock\Orders.cshtml" />
-    <Content Include="Views\Stock\Supplies.cshtml" />
     <Content Include="Scripts\Angular_Core\version.json" />
   </ItemGroup>
   <ItemGroup>
@@ -1130,6 +1128,7 @@
     <Content Include="Views\Orders\Index.cshtml" />
     <Content Include="Views\Orders\OrderItems.cshtml" />
     <Content Include="Views\Orders\Edit.cshtml" />
+    <Content Include="Views\Orders\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201611160649345_additional_models.resx">

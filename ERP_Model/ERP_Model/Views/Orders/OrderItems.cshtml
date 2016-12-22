@@ -4,7 +4,11 @@
 }
 
 <div class="content-box" ng-controller="AngularOrdersController" ng-init="OrderItemsList(GetValueAtIndex(5))">
-    <h1>Order: {{orderItems.OrderGuid}}</h1>
+    <h1>Order: {{GetValueAtIndex(5)}}</h1>
+    <div class="nav-bar">
+        <a class="button" href="/Orders/OrderItem/{{orderItems.OrderItemGuid}}">Edit</a>
+        <a class="button" href="" ng-click="RemoveOrderItem(orderItems.OrderItemGuid)">Delete</a>
+    </div>
     <table>
         <thead>
         <tr>
@@ -21,14 +25,12 @@
                 <td><a href="/ProductManagement/ProductDetails/{{orderItems.OrderItemProduct.ProductGuid}}">{{orderItems.OrderItemProduct.ProductName}}</a></td>
                 <td>{{orderItems.OrderItemProduct.ProductPrice}}</td>
                 <td>{{orderItems.OrderQuantity}}</td>
-                <td>{{orderItems.OrderQuantity * orderItems.OrderItemProduct.ProductPrice}}</td>
-                <td><a href="/Orders/OrderItem/{{orderItems.OrderItemGuid}}">Edit</a></td>
-                <td><a href="" ng-click="RemoveOrderItem(orderItems.OrderItemGuid)">Delete</a></td>
+                <td>{{orderItems.OrderQuantity * orderItems.OrderItemProduct.ProductPrice}}</td>               
             </tr>
         </tbody>
         <tfoot>
             <tr>
-                <th colspan="7">Pagination</th>
+                <th colspan="5">Pagination</th>
             </tr>
         </tfoot>
     </table>

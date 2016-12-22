@@ -19,6 +19,11 @@ namespace ERP_Model.Controllers
             return View();
         }
 
+        public ActionResult New()
+        {
+            return View();
+        }
+
         public ActionResult Edit()
         {
             return View();

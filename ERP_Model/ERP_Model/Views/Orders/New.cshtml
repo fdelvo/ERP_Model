@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "New";
+}
+
+<div class="content-box" ng-controller="AngularOrdersController">
+    <form ng-init="UserList(); ProductList();" ng-submit="CreateOrder()">
+        <label>Customer:</label>
+        <select ng-options="user.Alias for user in users track by user.Id" ng-model="newOrder.OrderCustomer"></select>
+        <br />
+        <label>Delivery Date:</label>
+        <input type="text" ng-model="newOrder.OrderDeliveryDate" />
+        <br />
+        <label>Products:</label>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="oI in orderItems track by oI.ProductGuid">
+                    <td>{{oI.ProductName}}</td>
+                    <td>{{oI.ProductPrice}}</td>
+                    <td>{{oI.OrderQuantity}}</td>
+                    <td><a ng-click="" href="/ProductManagement/Edit/{{p.ProductGuid}}">Add</a></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="4">Pagination</th>
+                </tr>
+            </tfoot>
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="p in products track by p.ProductGuid">
+                    <td>{{p.ProductName}}</td>
+                    <td>{{p.ProductPrice}}</td>
+                    <td><input ng-model="orderQuantity.value" type="number"/></td>
+                    <td><a ng-click="AddProductToOrderItems(p)" href="">Add</a></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="4">Pagination</th>
+                </tr>
+            </tfoot>
+        </table>
+        <br />
+        <label></label>
+        <input type="submit" value="Create Product" />
+    </form>
+</div>
+

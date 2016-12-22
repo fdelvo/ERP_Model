@@ -5,18 +5,16 @@
 
 <div class="content-box" ng-controller="AngularProductsController">
     <form ng-submit="CreateProduct()">
-        <label>Product Name</label>
-        <br/>
+        <label>Product Name:</label>
         <input type="text" ng-model="newProduct.ProductName"/>
         <br/>
-        <label>Product Description</label>
-        <br />
+        <label>Product Description:</label>
         <input type="text" ng-model="newProduct.ProductDescription" />
         <br/>
-        <label>Product Price</label>
-        <br />
+        <label>Product Price:</label>
         <input type="number" ng-model="newProduct.ProductPrice" />
         <br/>
+        <label></label>
         <input type="submit" value="Create Product"/>
     </form>
 </div>

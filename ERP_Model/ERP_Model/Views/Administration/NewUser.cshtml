@@ -5,18 +5,19 @@
 
 <div class="content-box" ng-controller="AngularAdminController">
     <form ng-submit="CreateUser()">
-        <label>Email</label>
+        <label>Email:</label>
         <input type="email" ng-model="model.Email" placeholder="Email" />
         <br />
-        <label>Alias</label>
+        <label>Alias:</label>
         <input type="text" ng-model="model.Alias" placeholder="Alias" />
         <br />
-        <label>Password</label>
+        <label>Password:</label>
         <input type="password" ng-model="model.Password" placeholder="Password" />
         <br />
-        <label>Confirm Password</label>
+        <label>Confirm Password:</label>
         <input type="password" ng-model="model.ConfirmPassword" placeholder="Confirm Password" />
-        <br />
+        <br/>
+        <label></label>
         <input type="submit" value="Create User" />
     </form>
 </div>
