@@ -170,14 +170,28 @@ namespace ERP_Model.Controllers.API
                 }
             }
 
+            await PostOrderItems(orderVm.OrderItems, order.OrderGuid);
+
+            return CreatedAtRoute("DefaultApi", new { id = order.OrderGuid }, order);
+        }
+
+        [ResponseType(typeof(Order))]
+        public async Task<IHttpActionResult> PostOrderItems(List<OrderItemProductViewModel> orderItems, Guid orderGuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             //create the orderitems and link them to the order
-            foreach (var p in orderVm.OrderItems)
+            foreach (var p in orderItems)
             {
                 var orderItem = new OrderItem
                 {
                     OrderItemGuid = Guid.NewGuid(),
-                    OrderItemOrder = db.Orders.FirstOrDefault(g => g.OrderGuid == order.OrderGuid),
-                    OrderItemProduct = db.Products.FirstOrDefault(g => g.ProductGuid == p.ProductGuid)
+                    OrderItemOrder = db.Orders.FirstOrDefault(g => g.OrderGuid == orderGuid),
+                    OrderItemProduct = db.Products.FirstOrDefault(g => g.ProductGuid == p.ProductGuid),
+                    OrderQuantity = p.OrderQuantity
                 };
                 db.OrderItems.Add(orderItem);
             }
@@ -188,17 +202,9 @@ namespace ERP_Model.Controllers.API
             }
             catch (DbUpdateException)
             {
-                if (OrderExists(order.OrderGuid))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = order.OrderGuid }, order);
+            return CreatedAtRoute("DefaultApi", new { id = orderItems }, orderItems);
         }
 
         // DELETE: api/Orders/5

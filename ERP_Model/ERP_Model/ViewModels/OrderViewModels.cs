@@ -24,6 +24,16 @@ namespace ERP_Model.ViewModels
         public virtual ApplicationUser OrderCustomer { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime OrderDeliveryDate { get; set; }
-        public List<Product> OrderItems { get; set; }
+        public List<OrderItemProductViewModel> OrderItems { get; set; }
+    }
+
+    public class OrderItemProductViewModel
+    {
+        [Key]
+        public Guid ProductGuid { get; set; }
+        public string ProductName { get; set; }
+        public float ProductPrice { get; set; }
+        public string ProductDescription { get; set; }
+        public int OrderQuantity { get; set; }
     }
 }
