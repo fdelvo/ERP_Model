@@ -208,9 +208,11 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\API\AdminController.cs" />
+    <Compile Include="Controllers\API\DeliveryNotesController.cs" />
     <Compile Include="Controllers\API\OrdersController.cs" />
     <Compile Include="Controllers\API\ProductsController.cs" />
     <Compile Include="Controllers\API\StocksController.cs" />
+    <Compile Include="Controllers\DeliveryNotesController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductManagementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1129,6 +1131,9 @@
     <Content Include="Views\Orders\OrderItems.cshtml" />
     <Content Include="Views\Orders\Edit.cshtml" />
     <Content Include="Views\Orders\New.cshtml" />
+    <Content Include="Views\DeliveryNotes\Index.cshtml" />
+    <Content Include="Views\DeliveryNotes\New.cshtml" />
+    <Content Include="Views\DeliveryNotes\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201611160649345_additional_models.resx">
