@@ -61,19 +61,19 @@ namespace ERP_Model.Controllers.API
 
         // PUT: api/Orders/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutDeliveryNote(Guid id, Order order)
+        public async Task<IHttpActionResult> PutDeliveryNote(Guid id, Delivery deliveryNote)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != order.OrderGuid)
+            if (id != deliveryNote.DeliveryGuid)
             {
                 return BadRequest();
             }
 
-            db.Entry(order).State = EntityState.Modified;
+            db.Entry(deliveryNote).State = EntityState.Modified;
 
             try
             {
@@ -81,7 +81,7 @@ namespace ERP_Model.Controllers.API
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!OrderExists(id))
+                if (!DeliveryExists(id))
                 {
                     return NotFound();
                 }
@@ -95,8 +95,8 @@ namespace ERP_Model.Controllers.API
         }
 
         // POST: api/Orders
-        [ResponseType(typeof(Order))]
-        public async Task<IHttpActionResult> PostOrder(NewOrderViewModel orderVm)
+        [ResponseType(typeof(Delivery))]
+        public async Task<IHttpActionResult> PostDeliveryNote(DeliveryViewModel deliveryNoteVM)
         {
             if (!ModelState.IsValid)
             {
@@ -105,15 +105,13 @@ namespace ERP_Model.Controllers.API
 
 
 
-            var order = new Order
+            var deliveryNote = new Delivery
             {
-                OrderGuid = Guid.NewGuid(),
-                OrderCustomer = db.Users.FirstOrDefault(g => g.Id == orderVm.OrderCustomer.Id),
-                OrderDate = DateTime.Now,
-                OrderDeliveryDate = orderVm.OrderDeliveryDate
+                DeliveryGuid = Guid.NewGuid(),
+                DeliveryOrder = await db.Orders.FirstOrDefaultAsync(o => o.OrderGuid == deliveryNoteVM.DeliveryOrder)
             };
 
-            db.Orders.Add(order);
+            db.Deliveries.Add(deliveryNote);
 
             try
             {
@@ -121,7 +119,7 @@ namespace ERP_Model.Controllers.API
             }
             catch (DbUpdateException)
             {
-                if (OrderExists(order.OrderGuid))
+                if (DeliveryExists(deliveryNote.DeliveryGuid))
                 {
                     return Conflict();
                 }
@@ -131,13 +129,13 @@ namespace ERP_Model.Controllers.API
                 }
             }
 
-            await PostOrderItems(orderVm.OrderItems, order.OrderGuid);
+            await PostDeliveryItems(deliveryNoteVM.DeliveryItems, deliveryNote.DeliveryGuid);
 
-            return CreatedAtRoute("DefaultApi", new { id = order.OrderGuid }, order);
+            return CreatedAtRoute("DefaultApi", new { id = deliveryNote.DeliveryGuid }, deliveryNote);
         }
 
         [ResponseType(typeof(Order))]
-        public async Task<IHttpActionResult> PostOrderItems(List<OrderItemProductViewModel> orderItems, Guid orderGuid)
+        public async Task<IHttpActionResult> PostDeliveryItems(List<DeliveryItemViewModel> deliveryItems, Guid deliveryGuid)
         {
             if (!ModelState.IsValid)
             {
@@ -145,16 +143,17 @@ namespace ERP_Model.Controllers.API
             }
 
             //create the orderitems and link them to the order
-            foreach (var p in orderItems)
+            foreach (var p in deliveryItems)
             {
-                var orderItem = new OrderItem
+                var deliveryItem = new DeliveryItem
                 {
-                    OrderItemGuid = Guid.NewGuid(),
-                    OrderItemOrder = db.Orders.FirstOrDefault(g => g.OrderGuid == orderGuid),
-                    OrderItemProduct = db.Products.FirstOrDefault(g => g.ProductGuid == p.ProductGuid),
-                    OrderQuantity = p.OrderQuantity
+                    DeliveryItemDelivery = await db.Deliveries.FirstOrDefaultAsync(d => d.DeliveryGuid == p.DeliveryItemDelivery),
+                    DeliveryItemGuid = Guid.NewGuid(),
+                    DeliveryItemOrderItem = await db.OrderItems.FirstOrDefaultAsync(oi => oi.OrderItemGuid == p.DeliveryItemOrderItem),
+                    DeliveryItemQuantity = p.DeliveryItemQuantity
+
                 };
-                db.OrderItems.Add(orderItem);
+                db.DeliveryItems.Add(deliveryItem);
             }
 
             try
@@ -165,23 +164,29 @@ namespace ERP_Model.Controllers.API
             {
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = orderItems }, orderItems);
+            return CreatedAtRoute("DefaultApi", new { id = deliveryItems }, deliveryItems);
         }
 
         // DELETE: api/Orders/5
-        [ResponseType(typeof(Order))]
-        public async Task<IHttpActionResult> DeleteOrder(Guid id)
+        [ResponseType(typeof(Delivery))]
+        public async Task<IHttpActionResult> DeleteDelivery(Guid id)
         {
-            Order order = await db.Orders.FindAsync(id);
-            if (order == null)
+            Delivery deliveryNote = await db.Deliveries.FindAsync(id);
+            if (deliveryNote == null)
             {
                 return NotFound();
             }
 
-            db.Orders.Remove(order);
+            var deliveryItems = await db.DeliveryItems
+                .Where(d => d.DeliveryItemDelivery.DeliveryGuid == id)
+                .ToListAsync();
+
+            db.DeliveryItems.RemoveRange(deliveryItems);
+
+            db.Deliveries.Remove(deliveryNote);
             await db.SaveChangesAsync();
 
-            return Ok(order);
+            return Ok(deliveryNote);
         }
 
         protected override void Dispose(bool disposing)
@@ -193,9 +198,9 @@ namespace ERP_Model.Controllers.API
             base.Dispose(disposing);
         }
 
-        private bool OrderExists(Guid id)
+        private bool DeliveryExists(Guid id)
         {
-            return db.Orders.Count(e => e.OrderGuid == id) > 0;
+            return db.Deliveries.Count(e => e.DeliveryGuid == id) > 0;
         }
     }
 }
