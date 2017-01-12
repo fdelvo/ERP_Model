@@ -3,5 +3,30 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="content-box" ng-controller="AngularOrdersController">
+    <h1>Delivery Notes</h1>
+    <div class="nav-bar">
+    </div>
+    <table ng-init="DeliveryNotesList()">
+        <thead>
+            <tr>
+                <th>Delivery Note ID</th>
+                <th>Order ID</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="d in deliveryNotes track by d.DeliveryGuid">
+            <td><a href="/DeliveryNotes/DeliveryNoteItems/{{d.DeliveryGuid}}">{{d.DeliveryGuid}}</a></td>
+            <td><a href="/Orders/OrderItems/{{d.DeliveryOrder.OrderGuid}}">{{d.DeliveryOrder.OrderGuid}}</a></td>
+        </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="2">Pagination</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
 

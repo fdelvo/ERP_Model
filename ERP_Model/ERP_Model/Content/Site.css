@@ -91,7 +91,6 @@ label {
 input, select {
     width: 90%;
     margin-bottom: 1rem;
-    margin-top: 1rem;
     padding: 1rem;
     -ms-border-radius: 3px;
     border-radius: 3px;
@@ -164,6 +163,7 @@ th {
 
 td {
     vertical-align: top;
+    text-align: left;
 }
 
 tbody tr td {

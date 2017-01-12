@@ -26,6 +26,7 @@
                 <td>{{o.OrderDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
                 <td>{{o.OrderDeliveryDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
                 <td>{{o.OrderValue}}</td>
+                <td><a href="/DeliveryNotes/New/{{o.OrderGuid}}">Create Delivery Note</a></td>
                 <td><a href="/Orders/Edit/{{o.OrderGuid}}">Edit</a></td>
                 <td><a href="" ng-click="RemoveOrder(o.OrderGuid)">Delete</a></td>
             </tr>

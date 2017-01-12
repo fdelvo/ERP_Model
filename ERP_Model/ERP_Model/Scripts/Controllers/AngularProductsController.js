@@ -1,15 +1,23 @@
 ﻿angular.module("ERPModelApp").controller("AngularProductsController", AngularProductsController);
 
 AngularProductsController.$inject = [
-    "$scope", "AngularProductsService", "$rootScope"
+    "$scope", "AngularProductsService", "AngularStocksService", "$rootScope"
 ];
 
-function AngularProductsController($scope, AngularProductsService, $rootScope) {
+function AngularProductsController($scope, AngularProductsService, AngularStocksService, $rootScope) {
     if (localStorage.getItem("tokenKey") === null) {
         location.href = "/Home/Index";
     }
 
     $scope.newProduct = new AngularProductsService();
+
+    $scope.StockList = function () {
+        $scope.stocks = AngularStocksService.GetStocks({
+        },
+            function () {
+                console.log($scope.stocks);
+            });
+    };
 
     $scope.ProductList = function() {
         $scope.products = AngularProductsService.GetProducts({
@@ -24,7 +32,7 @@ function AngularProductsController($scope, AngularProductsService, $rootScope) {
     }; 
 
     $scope.CreateProduct = function() {
-        $scope.newProduct.$PostProduct(
+        $scope.newProduct.$PostProduct({stockGuid: $scope.stock.StockGuid, maxQuantity: $scope.maxQuantity, minQuantity: $scope.minQuantity},
             function (response) {
                 console.log("Success");
                 location.href = "/ProductManagement/Index";

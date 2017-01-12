@@ -1087,6 +1087,7 @@
     <Content Include="Scripts\Angular_Core\respond.js" />
     <Content Include="Scripts\Angular_Core\respond.min.js" />
     <Content Include="Scripts\Services\AngularAdminService.js" />
+    <Content Include="Scripts\Services\AngularDeliveryNotesService.js" />
     <Content Include="Scripts\Services\AngularOrdersService.js" />
     <Content Include="Scripts\Services\AngularProductsService.js" />
     <Content Include="Scripts\Services\AngularStocksService.js" />

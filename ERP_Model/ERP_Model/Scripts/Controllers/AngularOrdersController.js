@@ -1,19 +1,21 @@
 ﻿angular.module("ERPModelApp").controller("AngularOrdersController", AngularOrdersController);
 
 AngularOrdersController.$inject = [
-    "$scope", "AngularOrdersService", "AngularProductsService", "AngularAdminService", "$rootScope"
+    "$scope", "AngularOrdersService", "AngularProductsService", "AngularAdminService", "AngularDeliveryNotesService", "$rootScope"
 ];
 
-function AngularOrdersController($scope, AngularOrdersService, AngularProductsService, AngularAdminService, $rootScope) {
+function AngularOrdersController($scope, AngularOrdersService, AngularProductsService, AngularAdminService, AngularDeliveryNotesService, $rootScope) {
     if (localStorage.getItem("tokenKey") === null) {
         location.href = "/Home/Index";
     }
 
     $scope.orderItems = [];
+    $scope.deliveryItems = [];
     $scope.orderQuantity = {
         value: 0
     };
     $scope.newOrder = new AngularOrdersService();
+    $scope.newDeliveryNote = new AngularDeliveryNotesService();
 
     $scope.OrdersList = function () {
         $scope.orders = AngularOrdersService.GetOrders({
@@ -23,12 +25,29 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
             });
     };
 
+    $scope.DeliveryNotesList = function () {
+        $scope.deliveryNotes = AngularDeliveryNotesService.GetDeliveryNotes({
+        },
+            function () {
+                console.log($scope.deliveryNotes);
+            });
+    };
+
     $scope.OrderItemsList = function (guid) {
         $scope.orderItems = AngularOrdersService.GetOrderItems({
             id: guid
         },
             function () {
                 console.log($scope.orderItems);
+            });
+    };
+
+    $scope.DeliveryItemsList = function (guid) {
+        $scope.deliveryItems = AngularDeliveryNotesService.GetDeliveryItems({
+            id: guid
+        },
+            function () {
+                console.log($scope.deliveryItems);
             });
     };
 
@@ -49,6 +68,23 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
         p.OrderQuantity = $scope.orderQuantity.value;
         $scope.orderItems.push(p);
         console.log($scope.orderItems);
+    };
+
+    $scope.CreateDeliveryNote = function () {
+        $scope.newDeliveryNote.DeliveryItems = $scope.deliveryItems;
+        $scope.newDeliveryNote.$PostDeliveryNote(
+            function (response) {
+                console.log("Success");
+                location.href = "/DeliveryNotes/Index";
+            },
+            function (error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.AddOrderItemToDeliveryItems = function (element) {
+        $scope.deliveryItems.push(element);
+        console.log($scope.deliveryItems);
     };
 
     $scope.EditStock = function () {

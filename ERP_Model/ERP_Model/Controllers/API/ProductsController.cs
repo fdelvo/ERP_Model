@@ -84,13 +84,15 @@ namespace ERP_Model.Controllers.API
 
         //create new product
         [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product)
+        public async Task<IHttpActionResult> PostProduct(Product product, Guid stockGuid)
         {
             //verify data
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var stockController = new StocksController();
 
             //generate new guid for the product
             product.ProductGuid = Guid.NewGuid();
@@ -114,6 +116,8 @@ namespace ERP_Model.Controllers.API
                     throw;
                 }
             }
+
+            await stockController.CreateStockItem(stockGuid, product);
 
             return CreatedAtRoute("DefaultApi", new { id = product.ProductGuid }, product);
         }

@@ -11,6 +11,9 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ERP_Model.Models;
 using ERP_Model.ViewModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 
 /*
 api controller to handle stocks
@@ -22,6 +25,12 @@ namespace ERP_Model.Controllers.API
     {
         //db context
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        public UserManager<ApplicationUser> UserManager()
+        {
+            var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            return manager;
+        }
 
         //returns all stocks
         public async Task<IHttpActionResult> GetStocks()
@@ -62,6 +71,15 @@ namespace ERP_Model.Controllers.API
             }
 
             return Ok(stock);
+        }
+
+        //returns a stock
+        public async Task<StockItem> GetStockItem(Guid id)
+        {
+            //get stock
+            StockItem stockItem = await db.StockItems.FindAsync(id);
+
+            return stockItem;
         }
 
         //determin value of a stock
@@ -112,13 +130,21 @@ namespace ERP_Model.Controllers.API
         }
 
         //returns the quantity of a stock item
-        private int GetStockItemQuantity(Guid id)
+        public int GetStockItemQuantity(Guid id)
         {
+            var stockItemQuantity = 0;
+
             //sums the quantities of stock transaction of a single stock item
-            var stockItemQuantity = db.StockTransactions
+            if (db.StockTransactions
+                .Include(si => si.StockTransactionItem)
+                .Any(si => si.StockTransactionItem.StockItemGuid == id))
+            {
+                stockItemQuantity = db.StockTransactions
                 .Include(si => si.StockTransactionItem)
                 .Where(si => si.StockTransactionItem.StockItemGuid == id)
                 .Sum(q => q.StockTransactionQuantity);
+            }
+            
 
             return stockItemQuantity;
         }
@@ -235,6 +261,40 @@ namespace ERP_Model.Controllers.API
             await db.SaveChangesAsync();
 
             return Ok(stock);
+        }
+
+        public async Task CreateStockItem(Guid stockGuid, Product product, int maxQuantity = 0, int minQuantity = 0)
+        {
+            var stockItem = new StockItem
+            {
+                StockItemGuid = Guid.NewGuid(),
+                StockItemStock = db.Stock.FirstOrDefault(g => g.StockGuid == stockGuid),
+                StockItemProduct = db.Products.FirstOrDefault(g => g.ProductGuid == product.ProductGuid),
+                StockItemMaximumQuantity = maxQuantity,
+                StockItemMinimumQuantity = minQuantity
+            };
+
+            db.StockItems.Add(stockItem);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task CreateStockTransaction(Guid id, int quantity)
+        {
+            var orderItem = await db.OrderItems
+                .Include(p => p.OrderItemProduct)
+                .FirstOrDefaultAsync(g => g.OrderItemGuid == id);
+
+            var stockTransaction = new StockTransaction
+            {
+                  StockTransactionItem = db.StockItems.FirstOrDefault(g => g.StockItemProduct.ProductGuid == orderItem.OrderItemProduct.ProductGuid),
+                  StockTransactionDate = DateTime.Now,
+                  StockTransactionGuid = Guid.NewGuid(),
+                  StockTransactionQuantity = -quantity,
+                  StockTransactionUser = UserManager().FindById(User.Identity.GetUserId())
+            };
+
+            db.StockTransactions.Add(stockTransaction);
+            await db.SaveChangesAsync();
         }
 
         protected override void Dispose(bool disposing)

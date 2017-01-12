@@ -13,6 +13,7 @@ using ERP_Model.Models;
 using ERP_Model.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security.Provider;
 
 namespace ERP_Model.Controllers.API
 {
@@ -142,7 +143,21 @@ namespace ERP_Model.Controllers.API
                 return BadRequest(ModelState);
             }
 
-                  
+            var productsOutOfStock = new List<string>();
+
+            foreach (var o in orderVm.OrderItems)
+            {
+                
+                if (!CheckIfStockItemAvailable(o.ProductGuid))
+                {
+                    productsOutOfStock.Add(o.ProductName);
+                };               
+            }
+
+            if (productsOutOfStock.Any())
+            {
+                return BadRequest($"Following products are out oft stock: {string.Join(", ", productsOutOfStock)}");
+            }
 
             var order = new Order
             {
@@ -183,6 +198,8 @@ namespace ERP_Model.Controllers.API
                 return BadRequest(ModelState);
             }
 
+            var stockController = new StocksController();
+
             //create the orderitems and link them to the order
             foreach (var p in orderItems)
             {
@@ -193,6 +210,9 @@ namespace ERP_Model.Controllers.API
                     OrderItemProduct = db.Products.FirstOrDefault(g => g.ProductGuid == p.ProductGuid),
                     OrderQuantity = p.OrderQuantity
                 };
+
+                await stockController.CreateStockTransaction(orderItem.OrderItemGuid, orderItem.OrderQuantity);
+
                 db.OrderItems.Add(orderItem);
             }
 
@@ -205,6 +225,13 @@ namespace ERP_Model.Controllers.API
             }
 
             return CreatedAtRoute("DefaultApi", new { id = orderItems }, orderItems);
+        }
+
+        private bool CheckIfStockItemAvailable(Guid productGuid)
+        {
+            var stockController = new StocksController();
+
+            return stockController.GetStockItemQuantity(productGuid) > 0;
         }
 
         // DELETE: api/Orders/5

@@ -16,7 +16,7 @@ namespace ERP_Model.Controllers.API
 {
     public class DeliveryNotesController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext _db = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
 
         public ApplicationUserManager UserManager
@@ -35,7 +35,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetDeliveryNotes()
         {
             //get delivery notes 
-            var deliveryNotes = await db.Deliveries
+            var deliveryNotes = await _db.Deliveries
                 .Include(o => o.DeliveryOrder)
                 .ToListAsync();
 
@@ -46,7 +46,7 @@ namespace ERP_Model.Controllers.API
         [ResponseType(typeof(List<DeliveryItem>))]
         public async Task<IHttpActionResult> GetDeliveryNote(Guid id)
         {
-            var deliveryNoteItems = await db.DeliveryItems
+            var deliveryNoteItems = await _db.DeliveryItems
                 .Include(o => o.DeliveryItemOrderItem)
                 .Where(dn => dn.DeliveryItemDelivery.DeliveryGuid == id)
                 .ToListAsync();
@@ -73,11 +73,11 @@ namespace ERP_Model.Controllers.API
                 return BadRequest();
             }
 
-            db.Entry(deliveryNote).State = EntityState.Modified;
+            _db.Entry(deliveryNote).State = EntityState.Modified;
 
             try
             {
-                await db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -96,7 +96,7 @@ namespace ERP_Model.Controllers.API
 
         // POST: api/Orders
         [ResponseType(typeof(Delivery))]
-        public async Task<IHttpActionResult> PostDeliveryNote(DeliveryViewModel deliveryNoteVM)
+        public async Task<IHttpActionResult> PostDeliveryNote(DeliveryViewModel deliveryNoteVm)
         {
             if (!ModelState.IsValid)
             {
@@ -108,14 +108,14 @@ namespace ERP_Model.Controllers.API
             var deliveryNote = new Delivery
             {
                 DeliveryGuid = Guid.NewGuid(),
-                DeliveryOrder = await db.Orders.FirstOrDefaultAsync(o => o.OrderGuid == deliveryNoteVM.DeliveryOrder)
+                DeliveryOrder = await _db.Orders.FirstOrDefaultAsync(o => o.OrderGuid == deliveryNoteVm.DeliveryOrder)
             };
 
-            db.Deliveries.Add(deliveryNote);
+            _db.Deliveries.Add(deliveryNote);
 
             try
             {
-                await db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -129,7 +129,7 @@ namespace ERP_Model.Controllers.API
                 }
             }
 
-            await PostDeliveryItems(deliveryNoteVM.DeliveryItems, deliveryNote.DeliveryGuid);
+            await PostDeliveryItems(deliveryNoteVm.DeliveryItems, deliveryNote.DeliveryGuid);
 
             return CreatedAtRoute("DefaultApi", new { id = deliveryNote.DeliveryGuid }, deliveryNote);
         }
@@ -140,25 +140,26 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
+            }            
 
             //create the orderitems and link them to the order
             foreach (var p in deliveryItems)
             {
                 var deliveryItem = new DeliveryItem
                 {
-                    DeliveryItemDelivery = await db.Deliveries.FirstOrDefaultAsync(d => d.DeliveryGuid == p.DeliveryItemDelivery),
+                    DeliveryItemDelivery = await _db.Deliveries.FirstOrDefaultAsync(d => d.DeliveryGuid == deliveryGuid),
                     DeliveryItemGuid = Guid.NewGuid(),
-                    DeliveryItemOrderItem = await db.OrderItems.FirstOrDefaultAsync(oi => oi.OrderItemGuid == p.DeliveryItemOrderItem),
+                    DeliveryItemOrderItem = await _db.OrderItems.FirstOrDefaultAsync(oi => oi.OrderItemGuid == p.DeliveryItemOrderItem),
                     DeliveryItemQuantity = p.DeliveryItemQuantity
 
-                };
-                db.DeliveryItems.Add(deliveryItem);
+                };              
+
+                _db.DeliveryItems.Add(deliveryItem);
             }
 
             try
             {
-                await db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -171,20 +172,20 @@ namespace ERP_Model.Controllers.API
         [ResponseType(typeof(Delivery))]
         public async Task<IHttpActionResult> DeleteDelivery(Guid id)
         {
-            Delivery deliveryNote = await db.Deliveries.FindAsync(id);
+            Delivery deliveryNote = await _db.Deliveries.FindAsync(id);
             if (deliveryNote == null)
             {
                 return NotFound();
             }
 
-            var deliveryItems = await db.DeliveryItems
+            var deliveryItems = await _db.DeliveryItems
                 .Where(d => d.DeliveryItemDelivery.DeliveryGuid == id)
                 .ToListAsync();
 
-            db.DeliveryItems.RemoveRange(deliveryItems);
+            _db.DeliveryItems.RemoveRange(deliveryItems);
 
-            db.Deliveries.Remove(deliveryNote);
-            await db.SaveChangesAsync();
+            _db.Deliveries.Remove(deliveryNote);
+            await _db.SaveChangesAsync();
 
             return Ok(deliveryNote);
         }
@@ -193,14 +194,14 @@ namespace ERP_Model.Controllers.API
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool DeliveryExists(Guid id)
         {
-            return db.Deliveries.Count(e => e.DeliveryGuid == id) > 0;
+            return _db.Deliveries.Count(e => e.DeliveryGuid == id) > 0;
         }
     }
 }

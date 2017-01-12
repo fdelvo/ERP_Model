@@ -16,6 +16,7 @@ namespace ERP_Model
                         "~/Scripts/Services/AngularStocksService.js",
                         "~/Scripts/Services/AngularAdminService.js",
                         "~/Scripts/Services/AngularOrdersService.js",
+                        "~/Scripts/Services/AngularDeliveryNotesService.js",
                         "~/Scripts/Controllers/AngularProductsController.js",
                         "~/Scripts/Controllers/AngularLoginController.js",
                         "~/Scripts/Controllers/AngularAdminController.js",
