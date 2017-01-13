@@ -11,6 +11,29 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
 
     $scope.newProduct = new AngularProductsService();
 
+    var page = 0;
+    $scope.pageSize = 5;  
+
+    $scope.Next = function(currentPage, pageAmount, fnc) {
+        if (currentPage+1 === pageAmount) {
+            page = currentPage;
+        } else {
+            page++;
+        }
+
+        fnc();
+    };
+
+    $scope.Previous = function (currentPage, pageAmount, fnc) {
+        if (currentPage === 0) {
+            page = currentPage;
+        } else {
+            page--;
+        }
+
+        fnc();
+    };
+
     $scope.StockList = function () {
         $scope.stocks = AngularStocksService.GetStocks({
         },
@@ -21,6 +44,7 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
 
     $scope.ProductList = function() {
         $scope.products = AngularProductsService.GetProducts({
+            page: page, pageSize: $scope.pageSize
             },
             function() {
                 console.log($scope.products);

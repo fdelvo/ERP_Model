@@ -15,13 +15,7 @@
         <input type="number" ng-model="newProduct.ProductPrice" />
         <br/>
         <label>Stock:</label>
-        <select ng-options="stock.StockGuid for stock in stocks track by stock.StockGuid" ng-model="stock"></select>
-        <br/>
-        <label>Max. Quantity:</label>
-        <input type="number" ng-model="maxQuantity" />
-        <br/>
-        <label>Min. Quantity:</label>
-        <input type="number" ng-model="minQuantity" />
+        <select ng-options="stock.StockName for stock in stocks track by stock.StockGuid" ng-model="stock"></select>
         <br />
         <label></label>
         <input type="submit" value="Create Product"/>

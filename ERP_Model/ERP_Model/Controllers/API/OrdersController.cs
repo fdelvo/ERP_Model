@@ -35,11 +35,14 @@ namespace ERP_Model.Controllers.API
         }
 
         // GET: api/Orders
-        public async Task<IHttpActionResult> GetOrders()
+        public async Task<IHttpActionResult> GetOrders(int page, int pageSize)
         {
             //get stocks including the stock addresses
             var orders = await db.Orders
                 .Include(u => u.OrderCustomer)
+                .OrderByDescending(o => o.OrderDate)
+                .Skip(page * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             //create a viewmodel list which will contain the final data
@@ -55,7 +58,14 @@ namespace ERP_Model.Controllers.API
                 OrderValue = GetOrderValue(o.OrderGuid)
             }));
 
-            return Ok(ordersViewModelList);
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = ordersViewModelList,
+                PageAmount = (db.Orders.Count() + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
         }
 
         public float GetOrderValue(Guid id)
@@ -65,25 +75,35 @@ namespace ERP_Model.Controllers.API
             if (db.Orders.Any(g => g.OrderGuid == id))
             {
                 orderValue = db.OrderItems
-                    .Include(p => p.OrderItemProduct)
+                    .Include(p => p.OrderItemStockItem.StockItemProduct)
                 .Where(o => o.OrderItemOrder.OrderGuid == id)
-                .Sum(s => s.OrderQuantity * s.OrderItemProduct.ProductPrice);
+                .Sum(s => s.OrderQuantity * s.OrderItemStockItem.StockItemProduct.ProductPrice);
             }
 
             return orderValue;
         }
 
         [ResponseType(typeof(Order))]
-        public async Task<IHttpActionResult> GetOrderItems(Guid id)
+        public async Task<IHttpActionResult> GetOrderItems(Guid id, int page, int pageSize)
         {
             var orderItems = await db.OrderItems
                 .Include(o => o.OrderItemOrder)
-                .Include(p => p.OrderItemProduct)
+                .Include(p => p.OrderItemStockItem.StockItemProduct)
                 .Include(u => u.OrderItemOrder.OrderCustomer)
                 .Where(g => g.OrderItemOrder.OrderGuid == id)
+                .OrderByDescending(o => o.OrderItemStockItem.StockItemProduct.ProductName)
+                .Skip(page * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
-            return Ok(orderItems);
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = orderItems,
+                PageAmount = (db.OrderItems.Include(o => o.OrderItemOrder).Count(g => g.OrderItemOrder.OrderGuid == id) + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
         }
 
         // GET: api/Orders/5
@@ -207,11 +227,15 @@ namespace ERP_Model.Controllers.API
                 {
                     OrderItemGuid = Guid.NewGuid(),
                     OrderItemOrder = db.Orders.FirstOrDefault(g => g.OrderGuid == orderGuid),
-                    OrderItemProduct = db.Products.FirstOrDefault(g => g.ProductGuid == p.ProductGuid),
+                    OrderItemStockItem = db.StockItems.FirstOrDefault(g => g.StockItemProduct.ProductGuid == p.ProductGuid),
                     OrderQuantity = p.OrderQuantity
                 };
 
-                await stockController.CreateStockTransaction(orderItem.OrderItemGuid, orderItem.OrderQuantity);
+                await stockController.CreateStockTransaction(new StockItemViewModel
+                {
+                    StockItemGuid = orderItem.OrderItemStockItem.StockItemGuid,
+                    StockItemQuantity = -orderItem.OrderQuantity
+                });
 
                 db.OrderItems.Add(orderItem);
             }
@@ -231,7 +255,8 @@ namespace ERP_Model.Controllers.API
         {
             var stockController = new StocksController();
 
-            return stockController.GetStockItemQuantity(productGuid) > 0;
+            var firstOrDefault = db.StockItems.FirstOrDefault(g => g.StockItemProduct.ProductGuid == productGuid);
+            return firstOrDefault != null && stockController.GetStockItemQuantity(firstOrDefault.StockItemGuid) > 0;
         }
 
         // DELETE: api/Orders/5

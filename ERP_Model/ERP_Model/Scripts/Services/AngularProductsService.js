@@ -9,7 +9,6 @@ function AngularProductsService($resource) {
             GetProducts: {
                 method: "GET",
                 url: "/api/products/getproducts",
-                isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             GetProduct: {

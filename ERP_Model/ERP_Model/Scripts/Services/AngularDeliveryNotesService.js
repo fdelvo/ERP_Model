@@ -9,7 +9,6 @@ function AngularDeliveryNotesService($resource) {
             GetDeliveryNotes: {
                 method: "GET",
                 url: "/api/deliverynotes/getdeliverynotes",
-                isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             GetDeliveryNote: {
@@ -20,7 +19,6 @@ function AngularDeliveryNotesService($resource) {
             GetDeliveryNoteItems: {
                 method: "GET",
                 url: "/api/deliverynotes/getdeliverynoteitems",
-                isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             PostDeliveryNote: {

@@ -9,6 +9,29 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
         location.href = "/Home/Index";
     }
 
+    var page = 0;
+    $scope.pageSize = 5;
+
+    $scope.Next = function (currentPage, pageAmount, fnc) {
+        if (currentPage + 1 === pageAmount) {
+            page = currentPage;
+        } else {
+            page++;
+        }
+
+        fnc();
+    };
+
+    $scope.Previous = function (currentPage, pageAmount, fnc) {
+        if (currentPage === 0) {
+            page = currentPage;
+        } else {
+            page--;
+        }
+
+        fnc();
+    };
+
     $scope.orderItems = [];
     $scope.deliveryItems = [];
     $scope.orderQuantity = {
@@ -18,8 +41,9 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
     $scope.newDeliveryNote = new AngularDeliveryNotesService();
 
     $scope.OrdersList = function () {
-        $scope.orders = AngularOrdersService.GetOrders({
-        },
+            $scope.orders = AngularOrdersService.GetOrders({
+                page: page, pageSize: $scope.pageSize
+            },
             function () {
                 console.log($scope.orders);
             });
@@ -27,6 +51,7 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
 
     $scope.DeliveryNotesList = function () {
         $scope.deliveryNotes = AngularDeliveryNotesService.GetDeliveryNotes({
+            page: page, pageSize: $scope.pageSize
         },
             function () {
                 console.log($scope.deliveryNotes);
@@ -35,7 +60,7 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
 
     $scope.OrderItemsList = function (guid) {
         $scope.orderItems = AngularOrdersService.GetOrderItems({
-            id: guid
+            id: guid, page: page, pageSize: $scope.pageSize
         },
             function () {
                 console.log($scope.orderItems);
@@ -44,7 +69,7 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
 
     $scope.DeliveryItemsList = function (guid) {
         $scope.deliveryItems = AngularDeliveryNotesService.GetDeliveryItems({
-            id: guid
+            id: guid, page: page, pageSize: $scope.pageSize
         },
             function () {
                 console.log($scope.deliveryItems);
@@ -64,9 +89,14 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
             });
     };
 
-    $scope.AddProductToOrderItems = function (p) {
-        p.OrderQuantity = $scope.orderQuantity.value;
+    $scope.AddProductToOrderItems = function (p, index) {
+        p.OrderQuantity = $scope.orderQuantity[index].value;
         $scope.orderItems.push(p);
+        console.log($scope.orderItems);
+    };
+
+    $scope.RemoveProductFromOrderItems = function (index) {
+        $scope.orderItems.splice(index, 1);
         console.log($scope.orderItems);
     };
 
@@ -111,6 +141,7 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
 
     $scope.ProductList = function () {
         $scope.products = AngularProductsService.GetProducts({
+            page: page, pageSize: $scope.pageSize
         },
             function () {
                 console.log($scope.products);
@@ -119,6 +150,7 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
 
     $scope.UserList = function () {
         $scope.users = AngularAdminService.GetUsers({
+            page: page, pageSize: $scope.pageSize
         },
             function () {
                 console.log($scope.users);

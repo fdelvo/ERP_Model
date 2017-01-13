@@ -32,14 +32,24 @@ namespace ERP_Model.Controllers.API
         }
 
         // GET: api/DeliverNotes
-        public async Task<IHttpActionResult> GetDeliveryNotes()
+        public async Task<IHttpActionResult> GetDeliveryNotes(int page, int pageSize)
         {
             //get delivery notes 
             var deliveryNotes = await _db.Deliveries
                 .Include(o => o.DeliveryOrder)
+                .OrderByDescending(o => o.DeliveryGuid)
+                .Skip(page * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
-            return Ok(deliveryNotes);
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = deliveryNotes,
+                PageAmount = (_db.Deliveries.Count() + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
         }
 
         // GET: api/Orders/5

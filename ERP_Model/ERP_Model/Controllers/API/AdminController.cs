@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ERP_Model.Models;
+using ERP_Model.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
@@ -37,11 +38,22 @@ namespace ERP_Model.Controllers.API
         }
 
         //returns all addresses
-        public async Task<IHttpActionResult> GetAddresses()
+        public async Task<IHttpActionResult> GetAddresses(int page, int pageSize)
         {
-            var addresses = await db.Addresses.ToListAsync();
+            var addresses = await db.Addresses
+                .OrderByDescending(o => o.AddressLastName)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
-            return Ok(addresses);
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = addresses,
+                PageAmount = (db.Addresses.Count() + pageSize - 1)/pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
         }
 
         //returns an address
@@ -153,10 +165,21 @@ namespace ERP_Model.Controllers.API
         }
 
         //returns all users
-        public async Task<IHttpActionResult> GetUsers()
+        public async Task<IHttpActionResult> GetUsers(int page, int pageSize)
         {
-            var users = await db.Users.ToListAsync();
-            return Ok(users);
+            var users = await db.Users
+                .OrderByDescending(o => o.Alias)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = users,
+                PageAmount = (db.Users.Count() + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+            return Ok(dataVm);
         }
 
         //returns a user

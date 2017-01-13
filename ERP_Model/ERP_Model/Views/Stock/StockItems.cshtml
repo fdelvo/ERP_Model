@@ -19,17 +19,24 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="si in stockItems track by si.StockItemGuid">
+            <tr ng-repeat="si in stockItems.DataObject track by si.StockItemGuid">
                 <td><a href="/ProductManagement/ProductDetails/{{si.StockItemProduct.ProductGuid}}">{{si.StockItemProduct.ProductName}}</a></td>
                 <td>{{si.StockItemProduct.ProductPrice}}</td>
                 <td>{{si.StockItemQuantity}}</td>
                 <td>{{si.StockItemMaximumQuantity}}</td>
                 <td>{{si.StockItemMinimumQuantity}}</td>
+                <td>
+                    <form ng-submit="StockTransaction()">
+                        <input hidden="hidden" ng-model="newStockTransaction.stockItemGuid" ng-init="newStockTransaction.StockItemGuid = si.StockItemGuid"/>
+                        <input ng-model="newStockTransaction.StockItemQuantity" type="number"/>
+                        <input type="submit" value="Submit Stock Transaction"/>
+                    </form>
+                </td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
-                <th colspan="5">Pagination</th>
+                <td colspan="5"><a href="" ng-click="Previous(stockItems.CurrentPage, stockItems.PageAmount, StockItemList)">Previous</a> {{stockItems.CurrentPage+1}} / {{stockItems.PageAmount}} <a href="" ng-click="Next(stockItems.CurrentPage, stockItems.PageAmount, StockItemList)">Next</a></td>
             </tr>
         </tfoot>
     </table>

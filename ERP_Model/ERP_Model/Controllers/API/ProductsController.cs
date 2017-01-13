@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ERP_Model.Models;
+using ERP_Model.ViewModels;
 
 /*
 api controller to handle products
@@ -24,9 +25,22 @@ namespace ERP_Model.Controllers.API
         private ApplicationDbContext db = new ApplicationDbContext();
 
         //returns all products
-        public IQueryable<Product> GetProducts()
+        public async Task<IHttpActionResult> GetProducts(int page, int pageSize)
         {
-            return db.Products;
+            var products = await db.Products
+                .OrderByDescending(o => o.ProductName)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = products,
+                PageAmount = (db.Products.Count() + pageSize - 1) / pageSize,
+                CurrentPage = page
+        };
+
+            return Ok(dataVm);
         }
 
         //returns a product

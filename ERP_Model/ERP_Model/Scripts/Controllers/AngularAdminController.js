@@ -9,11 +9,35 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
         location.href = "/Home/Index";
     }
 
+    var page = 0;
+    $scope.pageSize = 5;
+
+    $scope.Next = function (currentPage, pageAmount, fnc) {
+        if (currentPage + 1 === pageAmount) {
+            page = currentPage;
+        } else {
+            page++;
+        }
+
+        fnc();
+    };
+
+    $scope.Previous = function (currentPage, pageAmount, fnc) {
+        if (currentPage === 0) {
+            page = currentPage;
+        } else {
+            page--;
+        }
+
+        fnc();
+    };
+
     $scope.newAddress = new AngularAdminService();
     $scope.model = new AngularAdminService();
 
     $scope.AddressList = function () {
         $scope.addresses = AngularAdminService.GetAddresses({
+            page: page, pageSize: $scope.pageSize
         },
             function () {
                 console.log($scope.addresses);
@@ -59,6 +83,7 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
 
     $scope.UserList = function () {
         $scope.users = AngularAdminService.GetUsers({
+            page: page, pageSize: $scope.pageSize
         },
             function () {
                 console.log($scope.users);

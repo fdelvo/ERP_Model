@@ -15,14 +15,14 @@
             </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="d in deliveryNotes track by d.DeliveryGuid">
+        <tr ng-repeat="d in deliveryNotes.DataObject track by d.DeliveryGuid">
             <td><a href="/DeliveryNotes/DeliveryNoteItems/{{d.DeliveryGuid}}">{{d.DeliveryGuid}}</a></td>
             <td><a href="/Orders/OrderItems/{{d.DeliveryOrder.OrderGuid}}">{{d.DeliveryOrder.OrderGuid}}</a></td>
         </tr>
         </tbody>
         <tfoot>
             <tr>
-                <th colspan="2">Pagination</th>
+                <td colspan="5"><a href="" ng-click="Previous(deliveryNotes.CurrentPage, deliveryNotes.PageAmount, DeliveryNotesList)">Previous</a> {{deliveryNotes.CurrentPage+1}} / {{deliveryNotes.PageAmount}} <a href="" ng-click="Next(deliveryNotes.CurrentPage, deliveryNotes.PageAmount, DeliveryNotesList)">Next</a></td>
             </tr>
         </tfoot>
     </table>

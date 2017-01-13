@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="o in orders track by o.OrderGuid">
+            <tr ng-repeat="o in orders.DataObject track by o.OrderGuid">
                 <td><a href="/Orders/OrderItems/{{o.OrderGuid}}">{{o.OrderGuid}}</a></td>
                 <td>{{o.OrderCustomer.Alias}}</td>
                 <td>{{o.OrderDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
@@ -33,7 +33,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <th colspan="7">Pagination</th>
+                <td colspan="5"><a href="" ng-click="Previous(orders.CurrentPage, orders.PageAmount, OrdersList)">Previous</a> {{orders.CurrentPage+1}} / {{orders.PageAmount}} <a href="" ng-click="Next(orders.CurrentPage, orders.PageAmount, OrdersList)">Next</a></td>
             </tr>
         </tfoot>
     </table>

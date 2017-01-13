@@ -249,6 +249,10 @@
     <Compile Include="Migrations\201611231619257_address_changes_21.Designer.cs">
       <DependentUpon>201611231619257_address_changes_21.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701131425284_change_to_orderitems.cs" />
+    <Compile Include="Migrations\201701131425284_change_to_orderitems.Designer.cs">
+      <DependentUpon>201701131425284_change_to_orderitems.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -268,6 +272,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\DeliveryViewModels.cs" />
     <Compile Include="ViewModels\OrderViewModels.cs" />
+    <Compile Include="ViewModels\PaginationViewModels.cs" />
     <Compile Include="ViewModels\StockViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1158,6 +1163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611231619257_address_changes_21.resx">
       <DependentUpon>201611231619257_address_changes_21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701131425284_change_to_orderitems.resx">
+      <DependentUpon>201701131425284_change_to_orderitems.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

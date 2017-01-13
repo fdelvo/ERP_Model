@@ -9,7 +9,6 @@ function AngularAdminService($resource) {
             GetAddresses: {
                 method: "GET",
                 url: "/api/admin/getaddresses",
-                isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             GetAddress: {
@@ -36,7 +35,6 @@ function AngularAdminService($resource) {
             GetUsers: {
                 method: "GET",
                 url: "/api/admin/getusers",
-                isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             GetUser: {

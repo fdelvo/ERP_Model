@@ -33,12 +33,15 @@ namespace ERP_Model.Controllers.API
         }
 
         //returns all stocks
-        public async Task<IHttpActionResult> GetStocks()
+        public async Task<IHttpActionResult> GetStocks(int page, int pageSize)
         {
             //get stocks including the stock addresses
             var stocks = await db.Stock
                 .Include(a => a.StockAddress)
-                .ToListAsync();           
+                .OrderByDescending(o => o.StockName)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             //create a viewmodel list which will contain the final data
             var stockViewModelList = new List<StockViewModel>();
@@ -54,7 +57,14 @@ namespace ERP_Model.Controllers.API
                 StockValue = GetStockValue(s.StockGuid)
             }));
 
-            return Ok(stockViewModelList);
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = stockViewModelList,
+                PageAmount = (db.Stock.Count() + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
         }
 
         //returns a stock
@@ -102,13 +112,16 @@ namespace ERP_Model.Controllers.API
         }
 
         //returns all items in a astock
-        public async Task<IHttpActionResult> GetStockItems(Guid id)
+        public async Task<IHttpActionResult> GetStockItems(Guid id, int page, int pageSize)
         {
             //get all stock items of a stock
             var stockItems = await db.StockItems
                 .Include(s => s.StockItemStock)
                 .Include(p => p.StockItemProduct)
                 .Where(s => s.StockItemStock.StockGuid == id)
+                .OrderByDescending(o => o.StockItemProduct.ProductName)
+                .Skip(page * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             //initiate a viewmodel list to contain the stock items
@@ -126,7 +139,14 @@ namespace ERP_Model.Controllers.API
                 StockItemQuantity =  GetStockItemQuantity(stockItem.StockItemGuid)
             }));
 
-            return Ok(stockItemsViewList);
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = stockItemsViewList,
+                PageAmount = (db.StockItems.Include(s => s.StockItemStock).Count(s => s.StockItemStock.StockGuid == id) + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
         }
 
         //returns the quantity of a stock item
@@ -150,15 +170,25 @@ namespace ERP_Model.Controllers.API
         }
 
         //returns all transactions of a stock
-        public async Task<IHttpActionResult> GetStockTransactions(Guid id)
+        public async Task<IHttpActionResult> GetStockTransactions(Guid id, int page, int pageSize)
         {
             var stockTransactions = await db.StockTransactions
                 .Include(p => p.StockTransactionItem.StockItemProduct)
                 .Include(u => u.StockTransactionUser)
                 .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id)
+                .OrderByDescending(o => o.StockTransactionDate)
+                .Skip(page * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
-            return Ok(stockTransactions);
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = stockTransactions,
+                PageAmount = (db.StockTransactions.Include(p => p.StockTransactionItem.StockItemProduct).Count(s => s.StockTransactionItem.StockItemStock.StockGuid == id) + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
         }
 
         //update a stock
@@ -263,6 +293,7 @@ namespace ERP_Model.Controllers.API
             return Ok(stock);
         }
 
+
         public async Task CreateStockItem(Guid stockGuid, Product product, int maxQuantity = 0, int minQuantity = 0)
         {
             var stockItem = new StockItem
@@ -275,26 +306,38 @@ namespace ERP_Model.Controllers.API
             };
 
             db.StockItems.Add(stockItem);
+
             await db.SaveChangesAsync();
         }
 
-        public async Task CreateStockTransaction(Guid id, int quantity)
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateStockTransaction(StockItemViewModel stockItem)
         {
-            var orderItem = await db.OrderItems
-                .Include(p => p.OrderItemProduct)
-                .FirstOrDefaultAsync(g => g.OrderItemGuid == id);
-
             var stockTransaction = new StockTransaction
             {
-                  StockTransactionItem = db.StockItems.FirstOrDefault(g => g.StockItemProduct.ProductGuid == orderItem.OrderItemProduct.ProductGuid),
+                  StockTransactionItem = db.StockItems.FirstOrDefault(g => g.StockItemGuid == stockItem.StockItemGuid),
                   StockTransactionDate = DateTime.Now,
                   StockTransactionGuid = Guid.NewGuid(),
-                  StockTransactionQuantity = -quantity,
+                  StockTransactionQuantity = stockItem.StockItemQuantity,
                   StockTransactionUser = UserManager().FindById(User.Identity.GetUserId())
             };
 
             db.StockTransactions.Add(stockTransaction);
-            await db.SaveChangesAsync();
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (StockExists(stockTransaction.StockTransactionItem.StockItemStock.StockGuid))
+                {
+                    return Conflict();
+                }
+                throw;
+            }
+
+            return CreatedAtRoute("DefaultApi", new { id = stockTransaction.StockTransactionGuid }, stockTransaction);
         }
 
         protected override void Dispose(bool disposing)

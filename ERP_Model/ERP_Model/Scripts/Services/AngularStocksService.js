@@ -9,7 +9,6 @@ function AngularStocksService($resource) {
             GetStocks: {
                 method: "GET",
                 url: "/api/stocks/getstocks",
-                isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             GetStock: {
@@ -20,18 +19,21 @@ function AngularStocksService($resource) {
             GetStockItems: {
                 method: "GET",
                 url: "/api/stocks/getstockitems",
-                isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             GetStockTransactions: {
                 method: "GET",
                 url: "/api/stocks/getstocktransactions",
-                isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             PostStock: {
                 method: "POST",
                 url: "/api/stocks/poststock",
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
+            CreateStockTransaction: {
+                method: "POST",
+                url: "/api/stocks/createstocktransaction",
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             PutStock: {

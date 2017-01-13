@@ -9,7 +9,6 @@ function AngularOrdersService($resource) {
             GetOrders: {
                 method: "GET",
                 url: "/api/orders/getorders",
-                isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             GetOrder: {
@@ -20,7 +19,6 @@ function AngularOrdersService($resource) {
             GetOrderItems: {
                 method: "GET",
                 url: "/api/orders/getorderitems",
-                isArray: true,
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             },
             PostOrder: {

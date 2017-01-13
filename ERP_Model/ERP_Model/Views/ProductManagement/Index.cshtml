@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="p in products track by p.ProductGuid">
+        <tr ng-repeat="p in products.DataObject track by p.ProductGuid">
             <td>{{p.ProductName}}</td>
             <td>{{p.ProductDescription}}</td>
             <td>{{p.ProductPrice}}</td>
@@ -27,7 +27,7 @@
         </tbody>
         <tfoot>
         <tr>
-            <th colspan="5">Pagination</th>
+            <td colspan="5"><a href="" ng-click="Previous(products.CurrentPage, products.PageAmount, ProductList)">Previous</a> {{products.CurrentPage+1}} / {{products.PageAmount}} <a href="" ng-click="Next(products.CurrentPage, products.PageAmount, ProductList)">Next</a></td>
         </tr>
         </tfoot>
     </table>

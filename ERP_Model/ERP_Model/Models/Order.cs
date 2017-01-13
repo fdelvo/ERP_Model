@@ -19,7 +19,7 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid OrderItemGuid { get; set; }
-        public virtual Product OrderItemProduct { get; set; }
+        public virtual StockItem OrderItemStockItem { get; set; }
         public virtual Order OrderItemOrder { get; set; }
         public int OrderQuantity { get; set; }
     }

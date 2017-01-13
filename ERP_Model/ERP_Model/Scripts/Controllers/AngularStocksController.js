@@ -9,8 +9,32 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
         location.href = "/Home/Index";
     }
 
+    var page = 0;
+    $scope.pageSize = 5;
+
+    $scope.Next = function (currentPage, pageAmount, fnc) {
+        if (currentPage + 1 === pageAmount) {
+            page = currentPage;
+        } else {
+            page++;
+        }
+
+        fnc();
+    };
+
+    $scope.Previous = function (currentPage, pageAmount, fnc) {
+        if (currentPage === 0) {
+            page = currentPage;
+        } else {
+            page--;
+        }
+
+        fnc();
+    };
+
     $scope.AddressList = function () {
         $scope.addresses = AngularAdminService.GetAddresses({
+            page: page, pageSize: $scope.pageSize
         },
             function () {
                 console.log($scope.addresses);
@@ -18,9 +42,11 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
     };
 
     $scope.newStock = new AngularStocksService();
+    $scope.newStockTransaction = new AngularStocksService();
 
     $scope.StockList = function() {
         $scope.stocks = AngularStocksService.GetStocks({
+            page: page, pageSize: $scope.pageSize
             },
             function() {
                 console.log($scope.stocks);
@@ -36,7 +62,8 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
     };
 
     $scope.StockItemList = function (guid) {
-        $scope.stockItems = AngularStocksService.GetStockItems({id: guid
+        $scope.stockItems = AngularStocksService.GetStockItems({
+            id: guid, page: page, pageSize: $scope.pageSize
         },
             function () {
                 console.log($scope.stockItems);
@@ -45,7 +72,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
 
     $scope.StockTransactionList = function (guid) {
         $scope.stockTransactions = AngularStocksService.GetStockTransactions({
-            id: guid
+            id: guid, page: page, pageSize: $scope.pageSize
         },
             function () {
                 console.log($scope.stockTransactions);
@@ -76,6 +103,17 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
 
     $scope.RemoveStock = function (guid) {
         AngularStocksService.DeleteStock({ id: guid },
+            function (response) {
+                console.log("Success");
+                location.href = "/Stock/Index";
+            },
+            function (error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.StockTransaction = function() {
+        $scope.newStockTransaction.$CreateStockTransaction(
             function (response) {
                 console.log("Success");
                 location.href = "/Stock/Index";
