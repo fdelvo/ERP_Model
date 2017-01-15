@@ -56,34 +56,52 @@ namespace ERP_Model.Controllers.API
         [ResponseType(typeof(List<DeliveryItem>))]
         public async Task<IHttpActionResult> GetDeliveryNote(Guid id)
         {
+            var deliveryNote = await _db.Deliveries
+                .FirstOrDefaultAsync(g => g.DeliveryGuid == id);
+
             var deliveryNoteItems = await _db.DeliveryItems
                 .Include(o => o.DeliveryItemOrderItem)
+                .Include(s => s.DeliveryItemOrderItem.OrderItemStockItem)
+                .Include(p => p.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct)
                 .Where(dn => dn.DeliveryItemDelivery.DeliveryGuid == id)
                 .ToListAsync();
+
+            var deliveryNoteViewModel = new DeliveryNoteDetailsViewModel
+            {
+                DeliveryNote = deliveryNote,
+                DeliveryItems = deliveryNoteItems
+            };
 
             if (deliveryNoteItems == null)
             {
                 return NotFound();
             }
 
-            return Ok(deliveryNoteItems);
+            return Ok(deliveryNoteViewModel);
         }
 
         // PUT: api/Orders/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutDeliveryNote(Guid id, Delivery deliveryNote)
+        public async Task<IHttpActionResult> PutDeliveryNote(DeliveryNoteDetailsViewModel deliveryNoteDetailsVm, Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != deliveryNote.DeliveryGuid)
+            if (id != deliveryNoteDetailsVm.DeliveryNote.DeliveryGuid)
             {
                 return BadRequest();
             }
 
-            _db.Entry(deliveryNote).State = EntityState.Modified;
+
+
+            foreach(var d in deliveryNoteDetailsVm.DeliveryItems)
+            {
+                var deliveryItem = await _db.DeliveryItems.FirstOrDefaultAsync(g => g.DeliveryItemGuid == d.DeliveryItemGuid);
+                deliveryItem.DeliveryItemQuantity = d.DeliveryItemQuantity;
+                _db.Entry(deliveryItem).State = EntityState.Modified;
+            }
 
             try
             {

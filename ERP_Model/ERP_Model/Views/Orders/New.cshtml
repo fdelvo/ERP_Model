@@ -4,6 +4,7 @@
 }
 
 <div class="content-box" ng-controller="AngularOrdersController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
     <form ng-init="UserList(); ProductList();" ng-submit="CreateOrder()">
         <label>Customer:</label>
         <select ng-options="user.Alias for user in users.DataObject track by user.Id" ng-model="newOrder.OrderCustomer"></select>
@@ -47,7 +48,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5"><a href="" ng-click="Previous(products.CurrentPage, products.PageAmount, ProductList)">Previous</a> {{products.CurrentPage+1}} / {{products.PageAmount}} <a href="" ng-click="Next(products.CurrentPage, products.PageAmount, ProductList)">Next</a></td>
+                    <td colspan="5"><a class="button" href="" ng-click="Previous(products.CurrentPage, products.PageAmount, ProductList)">Previous</a> {{products.CurrentPage+1}} / {{products.PageAmount}} <a class="button" href="" ng-click="Next(products.CurrentPage, products.PageAmount, ProductList)">Next</a></td>
                 </tr>
             </tfoot>
         </table>

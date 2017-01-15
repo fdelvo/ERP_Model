@@ -4,6 +4,7 @@
 }
 
 <div class="content-box" ng-controller="AngularStocksController" ng-init="StockDetails(GetValueAtIndex(5)); StockItemList(GetValueAtIndex(5))">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
     <h1>{{stock.StockName}}</h1>
     <div class="nav-bar">
         <a href="/Stock/StockTransactions/{{stock.StockGuid}}" class="button">Show Stock Transactions</a>
@@ -36,7 +37,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="5"><a href="" ng-click="Previous(stockItems.CurrentPage, stockItems.PageAmount, StockItemList)">Previous</a> {{stockItems.CurrentPage+1}} / {{stockItems.PageAmount}} <a href="" ng-click="Next(stockItems.CurrentPage, stockItems.PageAmount, StockItemList)">Next</a></td>
+                <td colspan="5"><a class="button" href="" ng-click="Previous(stockItems.CurrentPage, stockItems.PageAmount, StockItemList)">Previous</a> {{stockItems.CurrentPage+1}} / {{stockItems.PageAmount}} <a class="button" href="" ng-click="Next(stockItems.CurrentPage, stockItems.PageAmount, StockItemList)">Next</a></td>
             </tr>
         </tfoot>
     </table>

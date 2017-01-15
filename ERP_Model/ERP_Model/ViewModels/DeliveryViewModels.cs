@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERP_Model.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -21,5 +22,11 @@ namespace ERP_Model.ViewModels
         public Guid DeliveryItemDelivery { get; set; }
         public Guid DeliveryItemOrderItem { get; set; }
         public int DeliveryItemQuantity { get; set; }
+    }
+
+    public class DeliveryNoteDetailsViewModel
+    {
+        public Delivery DeliveryNote { get; set; }
+        public List<DeliveryItem> DeliveryItems { get; set; }
     }
 }

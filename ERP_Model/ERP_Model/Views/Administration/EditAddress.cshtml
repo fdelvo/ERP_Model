@@ -9,6 +9,7 @@
 }
 
 <div class="content-box" ng-controller="AngularAdminController" ng-init="AddressDetails(GetValueAtIndex(5))">
+    <a class="back-link" href="javascript: window.history.back();">Back</a> 
     <form ng-submit="EditAddress()">
         <label>Description:</label>
         <input type="text" ng-model="address.AddressDescription" />

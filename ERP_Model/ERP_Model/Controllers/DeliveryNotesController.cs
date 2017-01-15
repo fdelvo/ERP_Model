@@ -23,5 +23,10 @@ namespace ERP_Model.Controllers
         {
             return View();
         }
+
+        public ActionResult DeliveryNoteItems()
+        {
+            return View();
+        }
     }
 }

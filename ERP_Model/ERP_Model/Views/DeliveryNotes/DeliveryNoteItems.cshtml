@@ -1,14 +1,12 @@
 ﻿
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "DeliveryNoteItems";
 }
 
-<div class="content-box" ng-controller="AngularOrdersController">
+<div class="content-box" ng-controller="AngularOrdersController" ng-init="DeliveryNoteDetails(GetValueAtIndex(5))">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
-    <form ng-init="DeliveryNoteDetails(GetValueAtIndex(5))" ng-submit="EditDeliveryNote()">
-        <label>Order:</label>
-        <input ng-model="deliveryNote.DeliveryNote.DeliveryGuid" disabled="disabled" />
-        <br />
+    <h1>Delivery Note: {{GetValueAtIndex(5)}}</h1>
+    <p>Order: {{deliveryNote.DeliveryNote.DeliveryGuid}}</p>
         <table>
             <thead>
                 <tr>
@@ -27,13 +25,9 @@
                     <td>{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
                     <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity}}</td>
                     <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity * deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-                    <td><input ng-model="deliveryItem.DeliveryItemQuantity" type="number" /></td>
+                    <td>{{deliveryItem.DeliveryItemQuantity}}</td>
                 </tr>
             </tbody>
         </table>
-        <br />
-        <label></label>
-        <input type="submit" value="Save Delivery Note" />
-    </form>
 </div>
 

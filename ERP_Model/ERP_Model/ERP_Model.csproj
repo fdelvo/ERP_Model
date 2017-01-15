@@ -1141,6 +1141,7 @@
     <Content Include="Views\DeliveryNotes\Index.cshtml" />
     <Content Include="Views\DeliveryNotes\New.cshtml" />
     <Content Include="Views\DeliveryNotes\Edit.cshtml" />
+    <Content Include="Views\DeliveryNotes\DeliveryNoteItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201611160649345_additional_models.resx">

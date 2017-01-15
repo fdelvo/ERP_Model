@@ -4,6 +4,7 @@
 }
 
 <div class="content-box" ng-controller="AngularAdminController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
     <form ng-submit="CreateUser()">
         <label>Email:</label>
         <input type="email" ng-model="model.Email" placeholder="Email" />

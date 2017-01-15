@@ -10,7 +10,7 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
     }
 
     var page = 0;
-    $scope.pageSize = 5;
+    $scope.pageSize = 20;
 
     $scope.Next = function (currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {

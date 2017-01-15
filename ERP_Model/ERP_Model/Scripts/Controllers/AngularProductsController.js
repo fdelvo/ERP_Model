@@ -12,7 +12,7 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
     $scope.newProduct = new AngularProductsService();
 
     var page = 0;
-    $scope.pageSize = 5;  
+    $scope.pageSize = 20;  
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage+1 === pageAmount) {

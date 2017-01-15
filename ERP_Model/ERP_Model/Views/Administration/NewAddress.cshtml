@@ -4,6 +4,7 @@
 }
 
 <div class="content-box" ng-controller="AngularAdminController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
     <form ng-submit="CreateAddress()">
         <label>Description:</label>
         <input type="text" ng-model="newAddress.AddressDescription" />

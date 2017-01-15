@@ -4,6 +4,7 @@
 }
 
 <div class="content-box" ng-controller="AngularProductsController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
     <form ng-init="StockList()" ng-submit="CreateProduct()">
         <label>Product Name:</label>
         <input type="text" ng-model="newProduct.ProductName"/>
@@ -15,7 +16,7 @@
         <input type="number" ng-model="newProduct.ProductPrice" />
         <br/>
         <label>Stock:</label>
-        <select ng-options="stock.StockName for stock in stocks track by stock.StockGuid" ng-model="stock"></select>
+        <select ng-options="stock.StockName for stock in stocks.DataObject track by stock.StockGuid" ng-model="stock"></select>
         <br />
         <label></label>
         <input type="submit" value="Create Product"/>

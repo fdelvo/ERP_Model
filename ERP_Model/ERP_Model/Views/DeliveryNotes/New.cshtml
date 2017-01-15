@@ -3,6 +3,7 @@
 }
 
 <div class="content-box" ng-controller="AngularOrdersController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
     <form ng-init="OrderItemsList(GetValueAtIndex(5))" ng-submit="CreateDeliveryNote()">
         <label>Order:</label>
         <input ng-model="newDeliveryNote.DeliveryOrder" ng-init="newDeliveryNote.DeliveryOrder = GetValueAtIndex(5)" disabled="disabled"/>

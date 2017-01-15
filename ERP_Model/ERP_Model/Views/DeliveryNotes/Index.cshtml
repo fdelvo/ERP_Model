@@ -18,11 +18,13 @@
         <tr ng-repeat="d in deliveryNotes.DataObject track by d.DeliveryGuid">
             <td><a href="/DeliveryNotes/DeliveryNoteItems/{{d.DeliveryGuid}}">{{d.DeliveryGuid}}</a></td>
             <td><a href="/Orders/OrderItems/{{d.DeliveryOrder.OrderGuid}}">{{d.DeliveryOrder.OrderGuid}}</a></td>
+            <td><a href="/DeliveryNotes/Edit/{{d.DeliveryGuid}}">Edit</a></td>
+            <td><a href="" ng-click="RemoveDeliveryNote(d.DeliveryGuid)">Delete</a></td>
         </tr>
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="5"><a href="" ng-click="Previous(deliveryNotes.CurrentPage, deliveryNotes.PageAmount, DeliveryNotesList)">Previous</a> {{deliveryNotes.CurrentPage+1}} / {{deliveryNotes.PageAmount}} <a href="" ng-click="Next(deliveryNotes.CurrentPage, deliveryNotes.PageAmount, DeliveryNotesList)">Next</a></td>
+                <td colspan="5"><a class="button" href="" ng-click="Previous(deliveryNotes.CurrentPage, deliveryNotes.PageAmount, DeliveryNotesList)">Previous</a> {{deliveryNotes.CurrentPage+1}} / {{deliveryNotes.PageAmount}} <a class="button" href="" ng-click="Next(deliveryNotes.CurrentPage, deliveryNotes.PageAmount, DeliveryNotesList)">Next</a></td>
             </tr>
         </tfoot>
     </table>

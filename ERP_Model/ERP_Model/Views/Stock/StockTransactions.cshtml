@@ -3,12 +3,8 @@
     ViewBag.Title = "StockTransactions";
 }
 
-
-@{
-    ViewBag.Title = "StockItems";
-}
-
 <div class="content-box" ng-controller="AngularStocksController" ng-init="StockDetails(GetValueAtIndex(5)); StockTransactionList(GetValueAtIndex(5))">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
     <h1>{{stock.StockName}} - Transactions</h1>
     <table>
         <thead>
@@ -31,7 +27,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="5"><a href="" ng-click="Previous(stockTransactions.CurrentPage, stockTransactions.PageAmount, StockTransactionList)">Previous</a> {{stockTransactions.CurrentPage+1}} / {{stockTransactions.PageAmount}} <a href="" ng-click="Next(stockTransactions.CurrentPage, stockTransactions.PageAmount, StockTransactionList)">Next</a></td>
+                <td colspan="5"><a class="button" href="" ng-click="Previous(stockTransactions.CurrentPage, stockTransactions.PageAmount, StockTransactionList)">Previous</a> {{stockTransactions.CurrentPage+1}} / {{stockTransactions.PageAmount}} <a class="button" href="" ng-click="Next(stockTransactions.CurrentPage, stockTransactions.PageAmount, StockTransactionList)">Next</a></td>
             </tr>
         </tfoot>
     </table>

@@ -10,7 +10,7 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
     }
 
     var page = 0;
-    $scope.pageSize = 5;
+    $scope.pageSize = 20;
 
     $scope.Next = function (currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
@@ -46,6 +46,28 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
             },
             function () {
                 console.log($scope.orders);
+            });
+    };
+
+    $scope.DeliveryNoteDetails = function (guid) {
+        $scope.deliveryNote = AngularDeliveryNotesService.GetDeliveryNote({
+            id: guid
+        },
+            function () {
+                console.log($scope.deliveryNote);
+            });
+    };
+
+    $scope.EditDeliveryNote = function () {
+        $scope.deliveryNote.$PutDeliveryNote({
+            id: $scope.deliveryNote.DeliveryNote.DeliveryGuid
+        },
+            function (response) {
+                console.log("Success");
+                location.href = "/DeliveryNotes/Index";
+            },
+            function (error) {
+                console.log("Fail");
             });
     };
 

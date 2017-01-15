@@ -33,8 +33,13 @@ namespace ERP_Model.Controllers.API
         }
 
         //returns all stocks
-        public async Task<IHttpActionResult> GetStocks(int page, int pageSize)
+        public async Task<IHttpActionResult> GetStocks(int page = 0, int pageSize = 0)
         {
+            if (pageSize == 0)
+            {
+                pageSize = await db.Stock.CountAsync();
+            }
+
             //get stocks including the stock addresses
             var stocks = await db.Stock
                 .Include(a => a.StockAddress)

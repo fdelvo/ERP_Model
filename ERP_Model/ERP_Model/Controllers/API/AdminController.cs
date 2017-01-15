@@ -38,8 +38,13 @@ namespace ERP_Model.Controllers.API
         }
 
         //returns all addresses
-        public async Task<IHttpActionResult> GetAddresses(int page, int pageSize)
+        public async Task<IHttpActionResult> GetAddresses(int page = 0, int pageSize = 0)
         {
+            if(pageSize == 0)
+            {
+                pageSize = await db.Addresses.CountAsync();
+            }
+
             var addresses = await db.Addresses
                 .OrderByDescending(o => o.AddressLastName)
                 .Skip(page * pageSize)

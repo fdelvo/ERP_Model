@@ -4,6 +4,7 @@
 }
 
 <div class="content-box" ng-controller="AngularOrdersController" ng-init="OrderItemsList(GetValueAtIndex(5))">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
     <h1>Order: {{GetValueAtIndex(5)}}</h1>
     <div class="nav-bar">
         <a class="button" href="/Orders/OrderItem/{{orderItems.OrderItemGuid}}">Edit</a>
@@ -30,7 +31,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="5"><a href="" ng-click="Previous(orderItems.CurrentPage, orderItems.PageAmount, OrderItemsList)">Previous</a> {{orderItems.CurrentPage+1}} / {{orderItems.PageAmount}} <a href="" ng-click="Next(orderItems.CurrentPage, orderItems.PageAmount, OrderItemsList)">Next</a></td>
+                <td colspan="5"><a class="button" href="" ng-click="Previous(orderItems.CurrentPage, orderItems.PageAmount, OrderItemsList)">Previous</a> {{orderItems.CurrentPage+1}} / {{orderItems.PageAmount}} <a class="button" href="" ng-click="Next(orderItems.CurrentPage, orderItems.PageAmount, OrderItemsList)">Next</a></td>
             </tr>
         </tfoot>
     </table>
