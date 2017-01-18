@@ -3,15 +3,15 @@
     ViewBag.Title = "Index";
 }
 
-<div class="content-box" ng-controller="AngularAdminController" ng-init="AddressList(); UserList()">
+<div class="content-box" ng-controller="AngularAdminController" ng-init="AddressList(); UserList(); visibilityAddresses = true;">
     <h1>Administration</h1>
 <div class="nav-bar">
-    <a class="button" href="">Addresses</a>
-    <a class="button" href="">Users</a>
-    <a class="button" href="">Customers</a>
-    <a class="button" href="">Suppliers</a>
+    <a class="button" href="" ng-click="visibilityAddresses = true; visibilityUsers = false; visibilityCustomers = false; visibilitySuppliers = false;">Addresses</a>
+    <a class="button" href="" ng-click="visibilityAddresses = false; visibilityUsers = true; visibilityCustomers = false; visibilitySuppliers = false;">Users</a>
+    <a class="button" href="" ng-click="visibilityAddresses = false; visibilityUsers = false; visibilityCustomers = true; visibilitySuppliers = false;">Customers</a>
+    <a class="button" href="" ng-click="visibilityAddresses = false; visibilityUsers = false; visibilityCustomers = false; visibilitySuppliers = true;">Suppliers</a>
 </div>
-<div ng-show="addresses">
+<div ng-show="visibilityAddresses">
     <div class="nav-bar">
         <a class="button" href="/Administration/NewAddress">New Address</a>
     </div>
@@ -23,7 +23,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="address in addresses track by address.AddressGuid">
+        <tr ng-repeat="address in addresses.DataObject track by address.AddressGuid">
             <td>{{address.AddressDescription}}</td>
             <td>
                 <ul>
@@ -39,9 +39,14 @@
             <td><a href="" ng-click="RemoveAddress(address.AddressGuid)">Remove</a></td>
         </tr>
         </tbody>
-        <tfoot></tfoot>
+        <tfoot>
+        <tr>
+            <td colspan="4"><a class="button" href="" ng-click="Previous(addresses.CurrentPage, addresses.PageAmount, AddressList)">Previous</a> {{addresses.CurrentPage+1}} / {{addresses.PageAmount}} <a class="button" href="" ng-click="Next(addresses.CurrentPage, addresses.PageAmount, AddressList)">Next</a></td>
+        </tr>
+        </tfoot>
     </table>
-    <div ng-show="users">
+</div>
+    <div ng-show="visibilityUsers">
         <div class="nav-bar">
             <a class="button" href="/Administration/NewUser">New User</a>
         </div>
@@ -53,7 +58,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="u in users track by u.Id">
+            <tr ng-repeat="u in users.DataObject track by u.Id">
                 <td>{{u.Alias}}</td>
                 <td>{{u.Email}}</td>
                 <td><a href="/Administration/EditUser/{{u.Id}}">Edit</a></td>
@@ -62,11 +67,81 @@
             </tbody>
             <tfoot>
             <tr>
-                <td colspan="4">Pagination</td>
+                <td colspan="4"><a class="button" href="" ng-click="Previous(users.CurrentPage, users.PageAmount, UserList)">Previous</a> {{users.CurrentPage+1}} / {{users.PageAmount}} <a class="button" href="" ng-click="Next(users.CurrentPage, users.PageAmount, UserList)">Next</a></td>
             </tr>
             </tfoot>
         </table>
     </div>
+    <div ng-show="visibilityCustomers">
+        <div class="nav-bar">
+            <a class="button" href="/Administration/NewCustomer">New Customer</a>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="c in customers.DataObject track by c.CustomerGuid">
+                <td>{{c.CustomerName}}</td>
+                <td>
+                    <ul>
+                        <li>Company: {{c.CustomerAddress.AddressCompany}}</li>
+                        <li>Forename: {{c.CustomerAddress.AddressForName}}</li>
+                        <li>Lastname: {{c.CustomerAddress.AddressLastName}}</li>
+                        <li>Street: {{c.CustomerAddress.AddressStreet}}</li>
+                        <li>Zipcode | City: {{c.CustomerAddress.AddressZipCode}} | {{c.CustomerAddress.AddressCity}}</li>
+                        <li>Country: {{c.CustomerAddress.AddressCountry}}</li>
+                    </ul>
+                </td>
+                <td><a href="/Administration/EditCustomer/{{c.CustomerGuid}}">Edit</a></td>
+                <td><a href="" ng-click="RemoveUser(c.CustomerGuid)">Remove</a></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="4"><a class="button" href="" ng-click="Previous(customers.CurrentPage, customers.PageAmount, CustomerList)">Previous</a> {{customers.CurrentPage+1}} / {{customers.PageAmount}} <a class="button" href="" ng-click="Next(customers.CurrentPage, customers.PageAmount, CustomerList)">Next</a></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div ng-show="visibilitySuppliers">
+        <div class="nav-bar">
+            <a class="button" href="/Administration/NewSupplier">New Supplier</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="s in suppliers.DataObject track by s.SupplierGuid">
+                    <td>{{s.SupplierName}}</td>
+                    <td>
+                        <ul>
+                            <li>Company: {{s.SupplierAddress.AddressCompany}}</li>
+                            <li>Forename: {{s.SupplierAddress.AddressForName}}</li>
+                            <li>Lastname: {{s.SupplierAddress.AddressLastName}}</li>
+                            <li>Street: {{s.SupplierAddress.AddressStreet}}</li>
+                            <li>Zipcode | City: {{s.SupplierAddress.AddressZipCode}} | {{s.SupplierAddress.AddressCity}}</li>
+                            <li>Country: {{s.SupplierAddress.AddressCountry}}</li>
+                        </ul>
+                    </td>
+                    <td><a href="/Administration/EditCustomer/{{c.CustomerGuid}}">Edit</a></td>
+                    <td><a href="" ng-click="RemoveUser(c.CustomerGuid)">Remove</a></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4"><a class="button" href="" ng-click="Previous(suppliers.CurrentPage, suppliers.PageAmount, SupplierList)">Previous</a> {{suppliers.CurrentPage+1}} / {{suppliers.PageAmount}} <a class="button" href="" ng-click="Next(suppliers.CurrentPage, suppliers.PageAmount, SupplierList)">Next</a></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </div>
-</div>
+
 

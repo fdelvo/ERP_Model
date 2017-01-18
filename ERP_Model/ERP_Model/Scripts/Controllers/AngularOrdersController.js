@@ -150,11 +150,11 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
             });
     };
 
-    $scope.RemoveStock = function (guid) {
-        AngularOrdersService.DeleteStock({ id: guid },
+    $scope.RemoveOrder = function (guid) {
+        AngularOrdersService.DeleteOrder({ id: guid },
             function (response) {
                 console.log("Success");
-                location.href = "/Stock/Index";
+                location.href = "/Orders/Index";
             },
             function (error) {
                 console.log("Fail");

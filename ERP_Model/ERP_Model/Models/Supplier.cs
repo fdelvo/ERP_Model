@@ -12,5 +12,6 @@ namespace ERP_Model.Models
         public Guid SupplierGuid { get; set; }
         public string SupplierName { get; set; }
         public virtual Address SupplierAddress { get; set; }
+        public bool SupplierDeleted { get; set; }
     }
 }

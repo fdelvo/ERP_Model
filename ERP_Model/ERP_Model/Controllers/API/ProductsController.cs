@@ -28,6 +28,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetProducts(int page, int pageSize)
         {
             var products = await db.Products
+                .Where(d => d.ProductDeleted == false)
                 .OrderByDescending(o => o.ProductName)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -140,22 +141,35 @@ namespace ERP_Model.Controllers.API
         [ResponseType(typeof(Product))]
         public async Task<IHttpActionResult> DeleteProduct(Guid id)
         {
-            //get the product
-            Product product = await db.Products.FindAsync(id);
-
-            //check if product exists
-            if (product == null)
+            //verify data
+            if (!db.Products.Any(g => g.ProductGuid == id))
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            //remove product from db context
-            db.Products.Remove(product);
+            var product = await db.Products.FindAsync(id);
+            product.ProductDeleted = true;
 
-            //save changes to db
-            await db.SaveChangesAsync();
+            db.Entry(product).State = EntityState.Modified;
 
-            return Ok(product);
+            //save changes
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         protected override void Dispose(bool disposing)

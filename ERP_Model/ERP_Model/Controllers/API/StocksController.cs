@@ -43,6 +43,7 @@ namespace ERP_Model.Controllers.API
             //get stocks including the stock addresses
             var stocks = await db.Stock
                 .Include(a => a.StockAddress)
+                .Where(d => d.StockDeleted == false)
                 .OrderByDescending(o => o.StockName)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -123,7 +124,7 @@ namespace ERP_Model.Controllers.API
             var stockItems = await db.StockItems
                 .Include(s => s.StockItemStock)
                 .Include(p => p.StockItemProduct)
-                .Where(s => s.StockItemStock.StockGuid == id)
+                .Where(s => s.StockItemStock.StockGuid == id && s.StockItemDeleted == false)
                 .OrderByDescending(o => o.StockItemProduct.ProductName)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -180,7 +181,7 @@ namespace ERP_Model.Controllers.API
             var stockTransactions = await db.StockTransactions
                 .Include(p => p.StockTransactionItem.StockItemProduct)
                 .Include(u => u.StockTransactionUser)
-                .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id)
+                .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id && s.StockTransactionDeleted == false)
                 .OrderByDescending(o => o.StockTransactionDate)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -280,22 +281,53 @@ namespace ERP_Model.Controllers.API
         [ResponseType(typeof(Stock))]
         public async Task<IHttpActionResult> DeleteStock(Guid id)
         {
-            //get the stock
-            Stock stock = await db.Stock.FindAsync(id);
-
-            //check if stock exists
-            if (stock == null)
+            //verify data
+            if (!db.Stock.Any(g => g.StockGuid == id))
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            //remove stock from db context
-            db.Stock.Remove(stock);
+            var stock = await db.Stock.FindAsync(id);
+            stock.StockDeleted = true;
 
-            //save changes to db
-            await db.SaveChangesAsync();
+            db.Entry(stock).State = EntityState.Modified;
 
-            return Ok(stock);
+            var stockItems = await db.StockItems.Where(g => g.StockItemStock.StockGuid == id).ToListAsync();
+
+            foreach (var s in stockItems)
+            {
+                s.StockItemDeleted = true;
+                db.Entry(s).State = EntityState.Modified;
+            }
+
+            var stockTransactions =
+                await
+                    db.StockTransactions.Where(g => g.StockTransactionItem.StockItemStock.StockGuid == id).ToListAsync();
+
+            foreach (var s in stockTransactions)
+            {
+                s.StockTransactionDeleted = true;
+                db.Entry(s).State = EntityState.Modified;
+            }
+
+            //save changes
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!StockExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
 

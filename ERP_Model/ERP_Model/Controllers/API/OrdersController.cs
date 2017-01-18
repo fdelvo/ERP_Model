@@ -40,6 +40,7 @@ namespace ERP_Model.Controllers.API
             //get stocks including the stock addresses
             var orders = await db.Orders
                 .Include(u => u.OrderCustomer)
+                .Where(d => d.OrderDeleted == false)
                 .OrderByDescending(o => o.OrderDate)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -90,7 +91,7 @@ namespace ERP_Model.Controllers.API
                 .Include(o => o.OrderItemOrder)
                 .Include(p => p.OrderItemStockItem.StockItemProduct)
                 .Include(u => u.OrderItemOrder.OrderCustomer)
-                .Where(g => g.OrderItemOrder.OrderGuid == id)
+                .Where(g => g.OrderItemOrder.OrderGuid == id && g.OrderItemDeleted == false)
                 .OrderByDescending(o => o.OrderItemStockItem.StockItemProduct.ProductName)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -263,16 +264,43 @@ namespace ERP_Model.Controllers.API
         [ResponseType(typeof(Order))]
         public async Task<IHttpActionResult> DeleteOrder(Guid id)
         {
-            Order order = await db.Orders.FindAsync(id);
-            if (order == null)
+            //verify data
+            if (!db.Orders.Any(g => g.OrderGuid == id))
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            db.Orders.Remove(order);
-            await db.SaveChangesAsync();
+            var order = await db.Orders.FindAsync(id);
+            order.OrderDeleted = true;
 
-            return Ok(order);
+            db.Entry(order).State = EntityState.Modified;
+
+            var orderItems = await db.OrderItems.Where(g => g.OrderItemOrder.OrderGuid == id).ToListAsync();
+
+            foreach (var o in orderItems)
+            {
+                o.OrderItemDeleted = true;
+                db.Entry(o).State = EntityState.Modified;
+            }           
+
+            //save changes
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OrderExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         protected override void Dispose(bool disposing)

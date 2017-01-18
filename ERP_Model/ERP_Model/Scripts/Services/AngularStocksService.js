@@ -44,7 +44,7 @@ function AngularStocksService($resource) {
             },
             DeleteStock: {
                 method: "DELETE",
-                url: "/api/stocks/deletestock/:id",
+                url: "/api/stocks/deletestock",
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             }
         });

@@ -13,6 +13,7 @@ namespace ERP_Model.Models
         public virtual ApplicationUser OrderCustomer { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime OrderDeliveryDate { get; set; }
+        public bool OrderDeleted { get; set; }
     }
 
     public class OrderItem
@@ -22,5 +23,6 @@ namespace ERP_Model.Models
         public virtual StockItem OrderItemStockItem { get; set; }
         public virtual Order OrderItemOrder { get; set; }
         public int OrderQuantity { get; set; }
+        public bool OrderItemDeleted { get; set; }
     }
 }

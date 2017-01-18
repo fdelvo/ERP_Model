@@ -253,6 +253,10 @@
     <Compile Include="Migrations\201701131425284_change_to_orderitems.Designer.cs">
       <DependentUpon>201701131425284_change_to_orderitems.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701181551199_deletion_fields.cs" />
+    <Compile Include="Migrations\201701181551199_deletion_fields.Designer.cs">
+      <DependentUpon>201701181551199_deletion_fields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -1167,6 +1171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701131425284_change_to_orderitems.resx">
       <DependentUpon>201701131425284_change_to_orderitems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701181551199_deletion_fields.resx">
+      <DependentUpon>201701181551199_deletion_fields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

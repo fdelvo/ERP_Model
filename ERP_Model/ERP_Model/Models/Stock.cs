@@ -14,6 +14,7 @@ namespace ERP_Model.Models
         public string StockName { get; set; }
         public virtual Address StockAddress { get; set; }
         public string StockMethod { get; set; }
+        public bool StockDeleted { get; set; }
     }
 
     public class StockItem
@@ -24,6 +25,7 @@ namespace ERP_Model.Models
         public virtual Stock StockItemStock { get; set; }
         public int StockItemMinimumQuantity { get; set; }
         public int StockItemMaximumQuantity { get; set; }
+        public bool StockItemDeleted { get; set; }
     }
 
     public class StockTransaction
@@ -34,5 +36,6 @@ namespace ERP_Model.Models
         public int StockTransactionQuantity { get; set; }
         public DateTime StockTransactionDate { get; set; }
         public virtual ApplicationUser StockTransactionUser { get; set; }
+        public bool StockTransactionDeleted { get; set; }
     }
 }

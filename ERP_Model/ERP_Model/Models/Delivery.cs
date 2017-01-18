@@ -11,6 +11,7 @@ namespace ERP_Model.Models
         [Key]
         public Guid DeliveryGuid { get; set; }
         public virtual Order DeliveryOrder { get; set; }
+        public bool DeliveryDeleted { get; set; }
     }
 
     public class DeliveryItem
@@ -20,5 +21,6 @@ namespace ERP_Model.Models
         public virtual Delivery DeliveryItemDelivery { get; set; }
         public virtual OrderItem DeliveryItemOrderItem { get; set; }
         public int DeliveryItemQuantity { get; set; }
+        public bool DeliveryItemDeleted { get; set; }
     }
 }

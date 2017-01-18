@@ -29,7 +29,7 @@ function AngularProductsService($resource) {
             },
             DeleteProduct: {
                 method: "DELETE",
-                url: "/api/products/deleteproduct/:id",
+                url: "/api/products/deleteproduct",
                 headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
             }
         });

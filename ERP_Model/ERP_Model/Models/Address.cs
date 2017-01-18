@@ -21,5 +21,6 @@ namespace ERP_Model.Models
         public string AddressLastName { get; set; }
         public string AddressForName { get; set; }
         public string AddressCompany { get; set; }
+        public bool AddressDeleted { get; set; }
     }
 }
