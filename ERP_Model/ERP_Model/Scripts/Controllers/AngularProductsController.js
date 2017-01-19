@@ -67,7 +67,7 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
     };
 
     $scope.EditProduct = function() {
-        $scope.product.$PutProduct({ id: $scope.product.ProductGuid },
+        $scope.product.$PutProduct({ id: $scope.product.ProductGuid, stockGuid: $scope.stock.StockGuid },
             function (response) {
                 console.log("Success");
                 location.href = "/ProductManagement/Index";

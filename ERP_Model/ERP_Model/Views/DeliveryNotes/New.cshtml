@@ -11,7 +11,6 @@
         <table>
             <thead>
             <tr>
-                <th>Product Guid</th>
                 <th>Product</th>
                 <th>Unit Price</th>
                 <th>Order Quantity</th>
@@ -20,10 +19,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="orderItems in orderItems track by orderItems.OrderItemGuid">
-                <td><input ng-model="deliveryItems[$index].DeliveryItemOrderItem" ng-init="deliveryItems[$index].DeliveryItemOrderItem = orderItems.OrderItemGuid" disabled="disabled"/></td>
-                <td><a href="/ProductManagement/ProductDetails/{{orderItems.OrderItemProduct.ProductGuid}}">{{orderItems.OrderItemProduct.ProductName}}</a></td>
-                <td>{{orderItems.OrderItemProduct.ProductPrice}}</td>
+            <tr ng-repeat="orderItems in orderItems.DataObject track by orderItems.OrderItemGuid">
+                <td hidden="hidden"><input ng-model="deliveryItems[$index].DeliveryItemOrderItem" ng-init="deliveryItems[$index].DeliveryItemOrderItem = orderItems.OrderItemGuid" disabled="disabled"/></td>
+                <td><a href="/ProductManagement/ProductDetails/{{orderItems.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{orderItems.OrderItemStockItem.StockItemProduct.ProductName}}</a></td>
+                <td>{{orderItems.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
                 <td>{{orderItems.OrderQuantity}}</td>
                 <td>{{orderItems.OrderQuantity * orderItems.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
                 <td><input ng-model="deliveryItems[$index].DeliveryItemQuantity" ng-init="deliveryItems[$index].DeliveryItemQuantity = orderItems.OrderQuantity" type="number"/></td>

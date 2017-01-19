@@ -42,7 +42,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
     };
 
     $scope.newStock = new AngularStocksService();
-    $scope.newStockTransaction = new AngularStocksService();
+    $scope.newStockTransaction = [new AngularStocksService()];
 
     $scope.StockList = function() {
         $scope.stocks = AngularStocksService.GetStocks({
@@ -112,8 +112,8 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
             });
     };
 
-    $scope.StockTransaction = function() {
-        $scope.newStockTransaction.$CreateStockTransaction(
+    $scope.StockTransaction = function(index) {
+        $scope.newStockTransaction[index].$CreateStockTransaction(
             function (response) {
                 console.log("Success");
                 location.href = "/Stock/Index";

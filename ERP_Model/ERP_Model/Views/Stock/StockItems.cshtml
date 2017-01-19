@@ -27,9 +27,9 @@
                 <td>{{si.StockItemMaximumQuantity}}</td>
                 <td>{{si.StockItemMinimumQuantity}}</td>
                 <td>
-                    <form ng-submit="StockTransaction()">
-                        <input hidden="hidden" ng-model="newStockTransaction.stockItemGuid" ng-init="newStockTransaction.StockItemGuid = si.StockItemGuid"/>
-                        <input ng-model="newStockTransaction.StockItemQuantity" type="number"/>
+                    <form ng-submit="StockTransaction($index)">
+                        <input hidden="hidden" ng-model="newStockTransaction[$index].StockItemGuid" ng-init="newStockTransaction[$index].StockItemGuid = si.StockItemGuid"/>
+                        <input ng-model="newStockTransaction[$index].StockItemQuantity" type="number"/>
                         <input type="submit" value="Submit Stock Transaction"/>
                     </form>
                 </td>

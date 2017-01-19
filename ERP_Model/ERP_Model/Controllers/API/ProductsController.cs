@@ -62,7 +62,7 @@ namespace ERP_Model.Controllers.API
 
         //updates a product
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(Guid id, Product product)
+        public async Task<IHttpActionResult> PutProduct(Guid id, Product product, Guid stockGuid)
         {
             //verify data
             if (!ModelState.IsValid)
@@ -74,6 +74,8 @@ namespace ERP_Model.Controllers.API
             {
                 return BadRequest();
             }
+
+            var stockController = new StocksController();
 
             db.Entry(product).State = EntityState.Modified;
 
@@ -93,6 +95,8 @@ namespace ERP_Model.Controllers.API
                     throw;
                 }
             }
+
+            await stockController.UpdateStockItem(stockGuid, product);
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -147,6 +151,8 @@ namespace ERP_Model.Controllers.API
                 return BadRequest();
             }
 
+            var stocksController = new StocksController();
+
             var product = await db.Products.FindAsync(id);
             product.ProductDeleted = true;
 
@@ -168,6 +174,9 @@ namespace ERP_Model.Controllers.API
                     throw;
                 }
             }
+
+            var stockItem = await db.StockItems.FirstOrDefaultAsync(si => si.StockItemProduct.ProductGuid == id);
+            await stocksController.DeleteStockItem(stockItem.StockItemGuid);
 
             return StatusCode(HttpStatusCode.NoContent);
         }

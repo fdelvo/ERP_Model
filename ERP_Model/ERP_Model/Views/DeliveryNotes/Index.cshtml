@@ -4,15 +4,16 @@
 }
 
 <div class="content-box" ng-controller="AngularOrdersController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
     <h1>Delivery Notes</h1>
     <div class="nav-bar">
     </div>
     <table ng-init="DeliveryNotesList()">
         <thead>
-            <tr>
-                <th>Delivery Note ID</th>
-                <th>Order ID</th>
-            </tr>
+        <tr>
+            <th>Delivery Note ID</th>
+            <th>Order ID</th>
+        </tr>
         </thead>
         <tbody>
         <tr ng-repeat="d in deliveryNotes.DataObject track by d.DeliveryGuid">
@@ -23,9 +24,9 @@
         </tr>
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="5"><a class="button" href="" ng-click="Previous(deliveryNotes.CurrentPage, deliveryNotes.PageAmount, DeliveryNotesList)">Previous</a> {{deliveryNotes.CurrentPage+1}} / {{deliveryNotes.PageAmount}} <a class="button" href="" ng-click="Next(deliveryNotes.CurrentPage, deliveryNotes.PageAmount, DeliveryNotesList)">Next</a></td>
-            </tr>
+        <tr>
+            <td colspan="5"><a class="button" href="" ng-click="Previous(deliveryNotes.CurrentPage, deliveryNotes.PageAmount, DeliveryNotesList)">Previous</a> {{deliveryNotes.CurrentPage+1}} / {{deliveryNotes.PageAmount}} <a class="button" href="" ng-click="Next(deliveryNotes.CurrentPage, deliveryNotes.PageAmount, DeliveryNotesList)">Next</a></td>
+        </tr>
         </tfoot>
     </table>
 </div>

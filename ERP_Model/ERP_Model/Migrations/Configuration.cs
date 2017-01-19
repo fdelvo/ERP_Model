@@ -11,12 +11,12 @@ namespace ERP_Model.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(ERP_Model.Models.ApplicationDbContext context)
         {
-            context.Products.AddOrUpdate(
+            /*context.Products.AddOrUpdate(
                 p => p.ProductGuid,
                 new Product { ProductGuid = new Guid("3124f3b1-f6b1-4d20-9a5c-63fcad2d0d67"), ProductDescription = "TestProductDescription", ProductName = "TestProduct", ProductPrice = 20.00F}
             );
@@ -47,7 +47,7 @@ namespace ERP_Model.Migrations
                 new Order { OrderGuid = new Guid("5b5c4a40-77d4-41d0-994c-1b8b9f4567f6"), OrderCustomer = context.Users.FirstOrDefault(g => g.Id == "82cfb04c-3c02-4659-8bb0-511c29cb17b6"), OrderDate = DateTime.Now, OrderDeliveryDate = DateTime.Now }
                 );
 
-            /*context.OrderItems.AddOrUpdate(
+            context.OrderItems.AddOrUpdate(
                 o => o.OrderItemGuid,
                 new OrderItem { OrderItemGuid = new Guid("a7b6cbc2-8a94-4774-962a-3969c9a2b4ff"), OrderItemOrder = context.Orders.FirstOrDefault(g => g.OrderGuid == new Guid("5b5c4a40-77d4-41d0-994c-1b8b9f4567f6")), OrderItemProduct = context.Products.FirstOrDefault(g => g.ProductGuid == new Guid("3124f3b1-f6b1-4d20-9a5c-63fcad2d0d67")), OrderQuantity = 5 },
                 new OrderItem { OrderItemGuid = new Guid("b38b29a6-33b5-452e-bc53-6932b8e53f2b"), OrderItemOrder = context.Orders.FirstOrDefault(g => g.OrderGuid == new Guid("5b5c4a40-77d4-41d0-994c-1b8b9f4567f6")), OrderItemProduct = context.Products.FirstOrDefault(g => g.ProductGuid == new Guid("30daf65a-af79-4a3c-be50-acc145aa1a94")), OrderQuantity = 5 }

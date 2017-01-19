@@ -57,7 +57,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetDeliveryNote(Guid id)
         {
             var deliveryNote = await _db.Deliveries
-                .FirstOrDefaultAsync(g => g.DeliveryGuid == id);
+                .FirstOrDefaultAsync(g => g.DeliveryGuid == id && g.DeliveryDeleted == false);
 
             var deliveryNoteItems = await _db.DeliveryItems
                 .Include(o => o.DeliveryItemOrderItem)

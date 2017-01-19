@@ -221,42 +221,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201611160649345_additional_models.cs" />
-    <Compile Include="Migrations\201611160649345_additional_models.Designer.cs">
-      <DependentUpon>201611160649345_additional_models.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611160816509_identity_mode_updated.cs" />
-    <Compile Include="Migrations\201611160816509_identity_mode_updated.Designer.cs">
-      <DependentUpon>201611160816509_identity_mode_updated.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611181504561_seeding.cs" />
-    <Compile Include="Migrations\201611181504561_seeding.Designer.cs">
-      <DependentUpon>201611181504561_seeding.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611181605240_address_mode_update.cs" />
-    <Compile Include="Migrations\201611181605240_address_mode_update.Designer.cs">
-      <DependentUpon>201611181605240_address_mode_update.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611231538429_address_changes.cs" />
-    <Compile Include="Migrations\201611231538429_address_changes.Designer.cs">
-      <DependentUpon>201611231538429_address_changes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611231617584_address_changes_2.cs" />
-    <Compile Include="Migrations\201611231617584_address_changes_2.Designer.cs">
-      <DependentUpon>201611231617584_address_changes_2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611231619257_address_changes_21.cs" />
-    <Compile Include="Migrations\201611231619257_address_changes_21.Designer.cs">
-      <DependentUpon>201611231619257_address_changes_21.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701131425284_change_to_orderitems.cs" />
-    <Compile Include="Migrations\201701131425284_change_to_orderitems.Designer.cs">
-      <DependentUpon>201701131425284_change_to_orderitems.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701181551199_deletion_fields.cs" />
-    <Compile Include="Migrations\201701181551199_deletion_fields.Designer.cs">
-      <DependentUpon>201701181551199_deletion_fields.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -1146,35 +1110,6 @@
     <Content Include="Views\DeliveryNotes\New.cshtml" />
     <Content Include="Views\DeliveryNotes\Edit.cshtml" />
     <Content Include="Views\DeliveryNotes\DeliveryNoteItems.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201611160649345_additional_models.resx">
-      <DependentUpon>201611160649345_additional_models.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611160816509_identity_mode_updated.resx">
-      <DependentUpon>201611160816509_identity_mode_updated.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611181504561_seeding.resx">
-      <DependentUpon>201611181504561_seeding.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611181605240_address_mode_update.resx">
-      <DependentUpon>201611181605240_address_mode_update.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611231538429_address_changes.resx">
-      <DependentUpon>201611231538429_address_changes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611231617584_address_changes_2.resx">
-      <DependentUpon>201611231617584_address_changes_2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611231619257_address_changes_21.resx">
-      <DependentUpon>201611231619257_address_changes_21.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701131425284_change_to_orderitems.resx">
-      <DependentUpon>201701131425284_change_to_orderitems.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701181551199_deletion_fields.resx">
-      <DependentUpon>201701181551199_deletion_fields.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

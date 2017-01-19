@@ -11,7 +11,7 @@
         <br />
         <label>Stock Address:</label>
         <select ng-model="newStock.StockAddress.AddressGuid">
-            <option ng-repeat="a in addresses track by a.AddressGuid" value="{{a.AddressGuid}}">{{a.AddressDescription}}</option>
+            <option ng-repeat="a in addresses.DataObject track by a.AddressGuid" value="{{a.AddressGuid}}">{{a.AddressDescription}}</option>
         </select>
         <br />
         <label>Stock Method:</label>

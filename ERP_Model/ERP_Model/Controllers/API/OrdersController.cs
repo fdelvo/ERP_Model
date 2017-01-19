@@ -111,7 +111,9 @@ namespace ERP_Model.Controllers.API
         [ResponseType(typeof(Order))]
         public async Task<IHttpActionResult> GetOrder(Guid id)
         {
-            Order order = await db.Orders.FindAsync(id);
+            Order order = await db.Orders
+                .FirstOrDefaultAsync(o => o.OrderGuid == id && o.OrderDeleted == false);
+
             if (order == null)
             {
                 return NotFound();

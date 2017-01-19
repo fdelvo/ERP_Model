@@ -78,7 +78,8 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetStock(Guid id)
         {
             //get stock
-            Stock stock = await db.Stock.FindAsync(id);
+            Stock stock = await db.Stock
+                .FirstOrDefaultAsync(s => s.StockGuid == id && s.StockDeleted == false);
 
             //check if stock exists
             if (stock == null)
@@ -93,7 +94,8 @@ namespace ERP_Model.Controllers.API
         public async Task<StockItem> GetStockItem(Guid id)
         {
             //get stock
-            StockItem stockItem = await db.StockItems.FindAsync(id);
+            StockItem stockItem = await db.StockItems
+                .FirstOrDefaultAsync(si => si.StockItemGuid == id && si.StockItemDeleted == false);
 
             return stockItem;
         }
@@ -239,6 +241,28 @@ namespace ERP_Model.Controllers.API
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        public async Task UpdateStockItem(Guid stockGuid, Product product)
+        {
+            var stockItem =
+                await db.StockItems.FirstOrDefaultAsync(g => g.StockItemProduct.ProductGuid == product.ProductGuid);
+
+            if (stockItem.StockItemStock.StockGuid != stockGuid)
+            {
+                stockItem.StockItemStock = await db.Stock.FirstOrDefaultAsync(g => g.StockGuid == stockGuid);
+
+                db.Entry(stockItem).State = EntityState.Modified;
+
+                //save changes
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                }
+            }
+        }
+
         //create a new stock
         [ResponseType(typeof(Stock))]
         public async Task<IHttpActionResult> PostStock(Stock stock)
@@ -330,6 +354,50 @@ namespace ERP_Model.Controllers.API
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        //deletes a stock
+        [ResponseType(typeof(Stock))]
+        public async Task<IHttpActionResult> DeleteStockItem(Guid id)
+        {
+            //verify data
+            if (!db.StockItems.Any(g => g.StockItemGuid == id))
+            {
+                return BadRequest();
+            }
+
+            var stockItem = await db.StockItems.FindAsync(id);
+            stockItem.StockItemDeleted = true;
+
+            db.Entry(stockItem).State = EntityState.Modified;
+
+            var stockTransactions =
+                await
+                    db.StockTransactions.Where(g => g.StockTransactionItem.StockItemGuid == id).ToListAsync();
+
+            foreach (var s in stockTransactions)
+            {
+                s.StockTransactionDeleted = true;
+                db.Entry(s).State = EntityState.Modified;
+            }
+
+            //save changes
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!StockExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
 
         public async Task CreateStockItem(Guid stockGuid, Product product, int maxQuantity = 0, int minQuantity = 0)
         {
