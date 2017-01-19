@@ -213,13 +213,19 @@
     <Compile Include="Controllers\API\ProductsController.cs" />
     <Compile Include="Controllers\API\StocksController.cs" />
     <Compile Include="Controllers\DeliveryNotesController.cs" />
+    <Compile Include="Controllers\GoodReceiptsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductManagementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StockController.cs" />
+    <Compile Include="Controllers\SupplysController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701191632109_initial.cs" />
+    <Compile Include="Migrations\201701191632109_initial.Designer.cs">
+      <DependentUpon>201701191632109_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -1110,6 +1116,19 @@
     <Content Include="Views\DeliveryNotes\New.cshtml" />
     <Content Include="Views\DeliveryNotes\Edit.cshtml" />
     <Content Include="Views\DeliveryNotes\DeliveryNoteItems.cshtml" />
+    <Content Include="Views\Supplys\Index.cshtml" />
+    <Content Include="Views\Supplys\SupplyItems.cshtml" />
+    <Content Include="Views\Supplys\New.cshtml" />
+    <Content Include="Views\Supplys\Edit.cshtml" />
+    <Content Include="Views\GoodReceipts\Index.cshtml" />
+    <Content Include="Views\GoodReceipts\New.cshtml" />
+    <Content Include="Views\GoodReceipts\Edit.cshtml" />
+    <Content Include="Views\GoodReceipts\GoodReceiptItems.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201701191632109_initial.resx">
+      <DependentUpon>201701191632109_initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

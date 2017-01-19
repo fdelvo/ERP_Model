@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="content-box" ng-controller="AngularSupplysController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Goods Receipts</h1>
+    <div class="nav-bar">
+    </div>
+    <table ng-init="GoodsReceiptList()">
+        <thead>
+            <tr>
+                <th>Goods Receipt ID</th>
+                <th>Supply ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="g in goodsReceipts.DataObject track by g.GoodsReceiptGuid">
+                <td><a href="/GoodsReceipt/GoodsReceiptItems/{{g.GoodsReceiptGuid}}">{{g.GoodsReceiptGuid}}</a></td>
+                <td><a href="/Supplys/SupplyItems/{{g.GoodsReceiptOrder.SupplyGuid}}">{{g.GoodsReceiptSupply.SupplyGuid}}</a></td>
+                <td><a href="/GoodsReceipt/Edit/{{g.GoodsReceiptGuid}}">Edit</a></td>
+                <td><a href="" ng-click="RemoveGoodsReceipt(g.GoodsReceiptGuid)">Delete</a></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5"><a class="button" href="" ng-click="Previous(goodsReceipts.CurrentPage, goodsReceipts.PageAmount, GoodsReceiptList)">Previous</a> {{goodsReceipts.CurrentPage+1}} / {{goodsReceipts.PageAmount}} <a class="button" href="" ng-click="Next(goodsReceipts.CurrentPage, goodsReceipts.PageAmount, GoodsReceiptList)">Next</a></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+

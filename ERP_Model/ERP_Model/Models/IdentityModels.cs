@@ -17,6 +17,14 @@ namespace ERP_Model.Models
         [Index(IsUnique = true)]
         public string Alias { get; set; }
 
+        [Required]
+        [StringLength(450)]
+        public string ForName { get; set; }
+
+        [Required]
+        [StringLength(450)]
+        public string LastName { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -41,14 +49,14 @@ namespace ERP_Model.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Supply> Supplies { get; set; }
-        public DbSet<SupplyItem> SupplyItems { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<DeliveryItem> DeliveryItems { get; set; }
         public DbSet<GoodsReceipt> GoodsReceipts { get; set; }
         public DbSet<GoodsReceiptItem> GoodsReceiptItems { get; set; }
+        public DbSet<Supply> Supplys { get; set; }
+        public DbSet<SupplyItem> SupplyItems { get; set; }
         
 
         public static ApplicationDbContext Create()

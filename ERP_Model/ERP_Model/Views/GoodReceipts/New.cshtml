@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "New";
+}
+
+<div class="content-box" ng-controller="AngularSupplysController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <form ng-init="SupplyItemsList(GetValueAtIndex(5))" ng-submit="CreateGoodsReceipt()">
+        <label>Supply:</label>
+        <input ng-model="newGoodsReceipt.GoodsReceiptSupply" ng-init="newGoodsReceipt.GoodsReceiptSupply = GetValueAtIndex(5)" disabled="disabled" />
+        <br />
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Supply Quantity</th>
+                    <th>Total Price</th>
+                    <th>Goods Receipt Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="supplyItem in supplyItems.DataObject track by supply.SupplyItemGuid">
+                    <td hidden="hidden"><input ng-model="supplyItem[$index].GoodsReceiptItemSupplyItem" ng-init="supplyItem[$index].GoodsReceiptItemSupplyItem = supplyItems.SupplyItemGuid" disabled="disabled" /></td>
+                    <td><a href="/ProductManagement/ProductDetails/{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductName}}</a></td>
+                    <td>{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+                    <td>{{supplyItem.SupplyQuantity}}</td>
+                    <td>{{supplyItem.SupplyQuantity * supplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+                    <td><input ng-model="goodsReceiptItem[$index].GoodsReceiptItemQuantity" ng-init="goodsReceiptItems[$index].GoodsReceiptItemQuantity = supplyItem.SupplyQuantity" type="number" /></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="4">Pagination</th>
+                </tr>
+            </tfoot>
+        </table>
+        <br />
+        <label></label>
+        <input type="submit" value="Create Goods Receipt" />
+    </form>
+</div>
+

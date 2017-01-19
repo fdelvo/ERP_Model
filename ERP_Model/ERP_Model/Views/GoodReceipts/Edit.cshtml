@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="content-box" ng-controller="AngularSupplysController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <form ng-init="GoodsReceiptDetails(GetValueAtIndex(5))" ng-submit="EditGoodsReceipt()">
+        <label>Supply:</label>
+        <input ng-model="goodsReceipt.GoodsReceipt.GoodsReceiptGuid" disabled="disabled" />
+        <br />
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Guid</th>
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Supply Quantity</th>
+                    <th>Total Price</th>
+                    <th>Goods Receipt Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="goodsReceiptItem in goodsReceipt.GoodsReceiptItems track by goodsReceiptItem.GoodsReceiptItemGuid">
+                    <td>{{goodsReceiptItem.GoodsReceiptItemGuid}}</td>
+                    <td><a href="/ProductManagement/ProductDetails/{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a></td>
+                    <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+                    <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity}}</td>
+                    <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity * goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+                    <td><input ng-model="goodsReceiptItem.GoodsReceiptItemQuantity" type="number" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <label></label>
+        <input type="submit" value="Save Goods Receipt" />
+    </form>
+</div>
+

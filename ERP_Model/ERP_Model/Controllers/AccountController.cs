@@ -328,7 +328,7 @@ namespace ERP_Model.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, Alias = model.Alias };
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, Alias = model.Alias, ForName = model.ForName, LastName = model.LastName};
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

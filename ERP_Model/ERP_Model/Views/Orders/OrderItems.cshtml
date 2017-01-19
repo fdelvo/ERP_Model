@@ -26,7 +26,8 @@
                 <td><a href="/ProductManagement/ProductDetails/{{orderItem.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{orderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a></td>
                 <td>{{orderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
                 <td>{{orderItem.OrderQuantity}}</td>
-                <td>{{orderItem.OrderQuantity * orderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>               
+                <td>{{orderItem.OrderQuantity * orderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td ng-show="orderItem.OrderItemStockItem.StockItemProduct.ProductDeleted">Old Product</td>               
             </tr>
         </tbody>
         <tfoot>

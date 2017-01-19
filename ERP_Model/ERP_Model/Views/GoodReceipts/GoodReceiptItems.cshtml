@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "GoodsReceiptItems";
+}
+
+<div class="content-box" ng-controller="AngularSupplysController" ng-init="GoodsReceiptDetails(GetValueAtIndex(5))">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Goods Receipt: {{GetValueAtIndex(5)}}</h1>
+    <p>Supply: {{goodsReceipt.GoodsReceipt.GoodsReceiptSupply.SupplyGuid}}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Product Guid</th>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Supply Quantity</th>
+                <th>Total Price</th>
+                <th>Goods Receipt Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="goodsReceiptItem in goodsReceipt.GoodsReceiptItems track by goodsReceiptItem.GoodsReceiptItemGuid">
+                <td>{{goodsReceiptItem.GoodsReceiptItemGuid}}</td>
+                <td><a href="/ProductManagement/ProductDetails/{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductName}}</a></td>
+                <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity}}</td>
+                <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity * goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td>{{goodsReceiptItem.GoodsReceiptItemQuantity}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
