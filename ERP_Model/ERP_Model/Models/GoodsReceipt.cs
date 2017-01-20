@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace ERP_Model.Models
 {
@@ -10,6 +7,7 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid GoodsReceiptGuid { get; set; }
+
         public virtual Supply GoodsReceiptSupply { get; set; }
         public bool GoodsReceiptDeleted { get; set; }
     }
@@ -18,6 +16,7 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid GoodsReceiptItemGuid { get; set; }
+
         public virtual GoodsReceipt GoodsReceiptItemGoodsReceipt { get; set; }
         public virtual SupplyItem GoodsReceiptItemSupplyItem { get; set; }
         public int GoodsReceiptItemQuantity { get; set; }

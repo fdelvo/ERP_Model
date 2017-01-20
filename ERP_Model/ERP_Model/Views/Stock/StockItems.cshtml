@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "StockItems";
 }
 
@@ -11,35 +10,36 @@
     </div>
     <table>
         <thead>
-            <tr>
-                <th>Stock Item Product</th>
-                <th>Stock Item Product Price</th>
-                <th>Quantity</th>
-                <th>Maximum Quantity</th>
-                <th>Minimum Quantity</th>
-            </tr>
+        <tr>
+            <th>Stock Item Product</th>
+            <th>Stock Item Product Price</th>
+            <th>Quantity</th>
+            <th>Maximum Quantity</th>
+            <th>Minimum Quantity</th>
+        </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="si in stockItems.DataObject track by si.StockItemGuid">
-                <td><a href="/ProductManagement/ProductDetails/{{si.StockItemProduct.ProductGuid}}">{{si.StockItemProduct.ProductName}}</a></td>
-                <td>{{si.StockItemProduct.ProductPrice}}</td>
-                <td>{{si.StockItemQuantity}}</td>
-                <td>{{si.StockItemMaximumQuantity}}</td>
-                <td>{{si.StockItemMinimumQuantity}}</td>
-                <td>
-                    <form ng-submit="StockTransaction($index)">
-                        <input hidden="hidden" ng-model="newStockTransaction[$index].StockItemGuid" ng-init="newStockTransaction[$index].StockItemGuid = si.StockItemGuid"/>
-                        <input ng-model="newStockTransaction[$index].StockItemQuantity" type="number"/>
-                        <input type="submit" value="Submit Stock Transaction"/>
-                    </form>
-                </td>
-            </tr>
+        <tr ng-repeat="si in stockItems.DataObject track by si.StockItemGuid">
+            <td>
+                <a href="/ProductManagement/ProductDetails/{{si.StockItemProduct.ProductGuid}}">{{si.StockItemProduct.ProductName}}</a>
+            </td>
+            <td>{{si.StockItemProduct.ProductPrice}}</td>
+            <td>{{si.StockItemQuantity}}</td>
+            <td>{{si.StockItemMaximumQuantity}}</td>
+            <td>{{si.StockItemMinimumQuantity}}</td>
+            <td>
+                <form ng-submit="StockTransaction($index)">
+                    <input hidden="hidden" ng-model="newStockTransaction[$index].StockItemGuid" ng-init="newStockTransaction[$index].StockItemGuid = si.StockItemGuid"/>
+                    <input ng-model="newStockTransaction[$index].StockItemQuantity" type="number"/>
+                    <input type="submit" value="Submit Stock Transaction"/>
+                </form>
+            </td>
+        </tr>
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="5"><a class="button" href="" ng-click="Previous(stockItems.CurrentPage, stockItems.PageAmount, StockItemList)">Previous</a> {{stockItems.CurrentPage+1}} / {{stockItems.PageAmount}} <a class="button" href="" ng-click="Next(stockItems.CurrentPage, stockItems.PageAmount, StockItemList)">Next</a></td>
-            </tr>
+        <tr>
+            <td colspan="5"><a class="button" href="" ng-click="Previous(stockItems.CurrentPage, stockItems.PageAmount, StockItemList)">Previous</a> {{stockItems.CurrentPage+1}} / {{stockItems.PageAmount}} <a class="button" href="" ng-click="Next(stockItems.CurrentPage, stockItems.PageAmount, StockItemList)">Next</a></td>
+        </tr>
         </tfoot>
     </table>
 </div>
-

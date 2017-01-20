@@ -1,7 +1,40 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "SupplyItems";
 }
 
-<h2>SupplyItems</h2>
-
+<div class="content-box" ng-controller="AngularSupplysController" ng-init="SupplyItemsList(GetValueAtIndex(5))">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Supply: {{GetValueAtIndex(5)}}</h1>
+    <div class="nav-bar">
+        <a class="button" href="/Supplys/SupplyItem/{{supplyItems.SupplyItemGuid}}">Edit</a>
+        <a class="button" href="" ng-click="RemoveSupplyItem(supplyItems.SupplyItemGuid)">Delete</a>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Product</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="supplyItem in supplyItems.DataObject track by supplyItem.SupplyItemGuid">
+            <td>{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}</td>
+            <td>
+                <a href="/ProductManagement/ProductDetails/{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{orderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a>
+            </td>
+            <td>{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td>{{supplyItem.SupplyQuantity}}</td>
+            <td>{{supplyItem.SupplyQuantity * supplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td ng-show="supplyItem.SupplyItemStockItem.StockItemProduct.ProductDeleted">Old Product</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="6"><a class="button" href="" ng-click="Previous(supplyItems.CurrentPage, supplyItems.PageAmount, SupplyItemsList)">Previous</a> {{supplyItems.CurrentPage+1}} / {{supplyItems.PageAmount}} <a class="button" href="" ng-click="Next(supplyItems.CurrentPage, supplyItems.PageAmount, SupplyItemsList)">Next</a></td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

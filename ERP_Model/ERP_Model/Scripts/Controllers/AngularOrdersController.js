@@ -1,10 +1,16 @@
 ﻿angular.module("ERPModelApp").controller("AngularOrdersController", AngularOrdersController);
 
 AngularOrdersController.$inject = [
-    "$scope", "AngularOrdersService", "AngularProductsService", "AngularAdminService", "AngularDeliveryNotesService", "$rootScope"
+    "$scope", "AngularOrdersService", "AngularProductsService", "AngularAdminService", "AngularDeliveryNotesService",
+    "$rootScope"
 ];
 
-function AngularOrdersController($scope, AngularOrdersService, AngularProductsService, AngularAdminService, AngularDeliveryNotesService, $rootScope) {
+function AngularOrdersController($scope,
+    AngularOrdersService,
+    AngularProductsService,
+    AngularAdminService,
+    AngularDeliveryNotesService,
+    $rootScope) {
     if (localStorage.getItem("tokenKey") === null) {
         location.href = "/Home/Index";
     }
@@ -12,7 +18,7 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
     var page = 0;
     $scope.pageSize = 20;
 
-    $scope.Next = function (currentPage, pageAmount, fnc) {
+    $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
             page = currentPage;
         } else {
@@ -22,7 +28,7 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
         fnc();
     };
 
-    $scope.Previous = function (currentPage, pageAmount, fnc) {
+    $scope.Previous = function(currentPage, pageAmount, fnc) {
         if (currentPage === 0) {
             page = currentPage;
         } else {
@@ -40,146 +46,168 @@ function AngularOrdersController($scope, AngularOrdersService, AngularProductsSe
     $scope.newOrder = new AngularOrdersService();
     $scope.newDeliveryNote = new AngularDeliveryNotesService();
 
-    $scope.OrdersList = function () {
-            $scope.orders = AngularOrdersService.GetOrders({
-                page: page, pageSize: $scope.pageSize
+    $scope.OrdersList = function() {
+        $scope.orders = AngularOrdersService.GetOrders({
+                page: page,
+                pageSize: $scope.pageSize
             },
-            function () {
+            function() {
                 console.log($scope.orders);
             });
     };
 
-    $scope.DeliveryNoteDetails = function (guid) {
+    $scope.DeliveryNoteDetails = function(guid) {
         $scope.deliveryNote = AngularDeliveryNotesService.GetDeliveryNote({
-            id: guid
-        },
-            function () {
+                id: guid
+            },
+            function() {
                 console.log($scope.deliveryNote);
             });
     };
 
-    $scope.EditDeliveryNote = function () {
+    $scope.OrderDetails = function(guid) {
+        $scope.order = AngularOrdersService.GetOrder({
+                id: guid
+            },
+            function() {
+                console.log($scope.order);
+            });
+    };
+
+    $scope.EditDeliveryNote = function() {
         $scope.deliveryNote.$PutDeliveryNote({
-            id: $scope.deliveryNote.DeliveryNote.DeliveryGuid
-        },
-            function (response) {
+                id: $scope.deliveryNote.DeliveryNote.DeliveryGuid
+            },
+            function(response) {
                 console.log("Success");
                 location.href = "/DeliveryNotes/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.DeliveryNotesList = function () {
+    $scope.EditOrder = function() {
+        $scope.order.$PutOrder({
+                id: $scope.order.Order.OrderGuid
+            },
+            function(response) {
+                console.log("Success");
+                location.href = "/Orders/Index";
+            },
+            function(error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.DeliveryNotesList = function() {
         $scope.deliveryNotes = AngularDeliveryNotesService.GetDeliveryNotes({
-            page: page, pageSize: $scope.pageSize
-        },
-            function () {
+                page: page,
+                pageSize: $scope.pageSize
+            },
+            function() {
                 console.log($scope.deliveryNotes);
             });
     };
 
-    $scope.OrderItemsList = function (guid) {
+    $scope.OrderItemsList = function(guid, pageSize) {
+        if (pageSize) {
+            $scope.pageSize = pageSize;
+        }
         $scope.orderItems = AngularOrdersService.GetOrderItems({
-            id: guid, page: page, pageSize: $scope.pageSize
-        },
-            function () {
+                id: guid,
+                page: page,
+                pageSize: $scope.pageSize
+            },
+            function() {
                 console.log($scope.orderItems);
             });
     };
 
-    $scope.DeliveryItemsList = function (guid) {
-        $scope.deliveryItems = AngularDeliveryNotesService.GetDeliveryItems({
-            id: guid, page: page, pageSize: $scope.pageSize
-        },
-            function () {
-                console.log($scope.deliveryItems);
-            });
-    };
-
-    $scope.CreateOrder = function () {
+    $scope.CreateOrder = function() {
         $scope.newOrder.OrderItems = $scope.orderItems;
         $scope.newOrder.OrderDeliveryDate = new Date($scope.newOrder.OrderDeliveryDate);
         $scope.newOrder.$PostOrder(
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Orders/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.AddProductToOrderItems = function (p, index) {
+    $scope.AddProductToOrderItems = function(p, index) {
         p.OrderQuantity = $scope.orderQuantity[index].value;
         $scope.orderItems.push(p);
         console.log($scope.orderItems);
     };
 
-    $scope.RemoveProductFromOrderItems = function (index) {
+    $scope.RemoveProductFromOrderItems = function(index) {
         $scope.orderItems.splice(index, 1);
         console.log($scope.orderItems);
     };
 
-    $scope.CreateDeliveryNote = function () {
+    $scope.CreateDeliveryNote = function() {
         $scope.newDeliveryNote.DeliveryItems = $scope.deliveryItems;
         $scope.newDeliveryNote.$PostDeliveryNote(
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/DeliveryNotes/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.AddOrderItemToDeliveryItems = function (element) {
+    $scope.AddOrderItemToDeliveryItems = function(element) {
         $scope.deliveryItems.push(element);
         console.log($scope.deliveryItems);
     };
 
-    $scope.EditStock = function () {
+    $scope.EditStock = function() {
         $scope.stock.$PutStock({ id: $scope.stock.StockGuid },
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Stock/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.RemoveOrder = function (guid) {
+    $scope.RemoveOrder = function(guid) {
         AngularOrdersService.DeleteOrder({ id: guid },
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Orders/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.ProductList = function () {
+    $scope.ProductList = function() {
         $scope.products = AngularProductsService.GetProducts({
-            page: page, pageSize: $scope.pageSize
-        },
-            function () {
+                page: page,
+                pageSize: $scope.pageSize
+            },
+            function() {
                 console.log($scope.products);
             });
     };
 
-    $scope.UserList = function () {
+    $scope.UserList = function() {
         $scope.users = AngularAdminService.GetUsers({
-            page: page, pageSize: $scope.pageSize
-        },
-            function () {
+                page: page,
+                pageSize: $scope.pageSize
+            },
+            function() {
                 console.log($scope.users);
             });
     };
 
-    $scope.GetValueAtIndex = function (index) {
+    $scope.GetValueAtIndex = function(index) {
         var str = window.location.href;
         console.log(str.split("/")[index]);
         return str.split("/")[index];

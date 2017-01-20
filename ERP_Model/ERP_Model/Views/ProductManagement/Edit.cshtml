@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Edit";
 }
 
@@ -7,19 +6,18 @@
     <a class="back-link" href="javascript: window.history.back();">Back</a>
     <form ng-submit="EditProduct()">
         <label>Product Name:</label>
-        <input type="text" ng-model="product.ProductName" />
-        <br />
+        <input type="text" ng-model="product.ProductName"/>
+        <br/>
         <label>Product Description:</label>
-        <input type="text" ng-model="product.ProductDescription" />
-        <br />
+        <input type="text" ng-model="product.ProductDescription"/>
+        <br/>
         <label>Product Price:</label>
-        <input type="number" ng-model="product.ProductPrice" />
+        <input type="number" ng-model="product.ProductPrice"/>
         <br/>
         <label>Stock:</label>
         <select ng-options="stock.StockName for stock in stocks.DataObject track by stock.StockGuid" ng-model="stock"></select>
-        <br />
+        <br/>
         <label></label>
-        <input type="submit" value="Save Product" />
+        <input type="submit" value="Save Product"/>
     </form>
 </div>
-

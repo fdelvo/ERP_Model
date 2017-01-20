@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -13,7 +11,6 @@ using ERP_Model.Models;
 using ERP_Model.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 
 /*
 api controller to handle stocks
@@ -24,7 +21,7 @@ namespace ERP_Model.Controllers.API
     public class StocksController : ApiController
     {
         //db context
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         public UserManager<ApplicationUser> UserManager()
         {
@@ -45,7 +42,7 @@ namespace ERP_Model.Controllers.API
                 .Include(a => a.StockAddress)
                 .Where(d => d.StockDeleted == false)
                 .OrderByDescending(o => o.StockName)
-                .Skip(page * pageSize)
+                .Skip(page*pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -66,7 +63,7 @@ namespace ERP_Model.Controllers.API
             var dataVm = new PaginationViewModel
             {
                 DataObject = stockViewModelList,
-                PageAmount = (db.Stock.Count() + pageSize - 1) / pageSize,
+                PageAmount = (db.Stock.Count() + pageSize - 1)/pageSize,
                 CurrentPage = page
             };
 
@@ -78,7 +75,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetStock(Guid id)
         {
             //get stock
-            Stock stock = await db.Stock
+            var stock = await db.Stock
                 .FirstOrDefaultAsync(s => s.StockGuid == id && s.StockDeleted == false);
 
             //check if stock exists
@@ -94,7 +91,7 @@ namespace ERP_Model.Controllers.API
         public async Task<StockItem> GetStockItem(Guid id)
         {
             //get stock
-            StockItem stockItem = await db.StockItems
+            var stockItem = await db.StockItems
                 .FirstOrDefaultAsync(si => si.StockItemGuid == id && si.StockItemDeleted == false);
 
             return stockItem;
@@ -107,12 +104,12 @@ namespace ERP_Model.Controllers.API
             var stockValue = 0.0F;
 
             //check if there are items/transactions in a stock
-            if(db.StockTransactions.Any(s => s.StockTransactionItem.StockItemStock.StockGuid == id))
-            { 
+            if (db.StockTransactions.Any(s => s.StockTransactionItem.StockItemStock.StockGuid == id))
+            {
                 //get all stock transactions and sum the prices
                 stockValue = db.StockTransactions
                     .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id)
-                    .Sum(p => p.StockTransactionItem.StockItemProduct.ProductPrice * p.StockTransactionQuantity);
+                    .Sum(p => p.StockTransactionItem.StockItemProduct.ProductPrice*p.StockTransactionQuantity);
             }
 
 
@@ -128,7 +125,7 @@ namespace ERP_Model.Controllers.API
                 .Include(p => p.StockItemProduct)
                 .Where(s => s.StockItemStock.StockGuid == id && s.StockItemDeleted == false)
                 .OrderByDescending(o => o.StockItemProduct.ProductName)
-                .Skip(page * pageSize)
+                .Skip(page*pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -144,13 +141,15 @@ namespace ERP_Model.Controllers.API
                 StockItemMinimumQuantity = stockItem.StockItemMinimumQuantity,
                 StockItemProduct = stockItem.StockItemProduct,
                 //determine the quantity of the stock items
-                StockItemQuantity =  GetStockItemQuantity(stockItem.StockItemGuid)
+                StockItemQuantity = GetStockItemQuantity(stockItem.StockItemGuid)
             }));
 
             var dataVm = new PaginationViewModel
             {
                 DataObject = stockItemsViewList,
-                PageAmount = (db.StockItems.Include(s => s.StockItemStock).Count(s => s.StockItemStock.StockGuid == id) + pageSize - 1) / pageSize,
+                PageAmount =
+                    (db.StockItems.Include(s => s.StockItemStock).Count(s => s.StockItemStock.StockGuid == id) +
+                     pageSize - 1)/pageSize,
                 CurrentPage = page
             };
 
@@ -168,11 +167,11 @@ namespace ERP_Model.Controllers.API
                 .Any(si => si.StockTransactionItem.StockItemGuid == id))
             {
                 stockItemQuantity = db.StockTransactions
-                .Include(si => si.StockTransactionItem)
-                .Where(si => si.StockTransactionItem.StockItemGuid == id)
-                .Sum(q => q.StockTransactionQuantity);
+                    .Include(si => si.StockTransactionItem)
+                    .Where(si => si.StockTransactionItem.StockItemGuid == id)
+                    .Sum(q => q.StockTransactionQuantity);
             }
-            
+
 
             return stockItemQuantity;
         }
@@ -183,16 +182,20 @@ namespace ERP_Model.Controllers.API
             var stockTransactions = await db.StockTransactions
                 .Include(p => p.StockTransactionItem.StockItemProduct)
                 .Include(u => u.StockTransactionUser)
+                .Include(o => o.StockTransactionOrder)
+                .Include(s => s.StockTransactionSupply)
                 .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id && s.StockTransactionDeleted == false)
                 .OrderByDescending(o => o.StockTransactionDate)
-                .Skip(page * pageSize)
+                .Skip(page*pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             var dataVm = new PaginationViewModel
             {
                 DataObject = stockTransactions,
-                PageAmount = (db.StockTransactions.Include(p => p.StockTransactionItem.StockItemProduct).Count(s => s.StockTransactionItem.StockItemStock.StockGuid == id) + pageSize - 1) / pageSize,
+                PageAmount =
+                    (db.StockTransactions.Include(p => p.StockTransactionItem.StockItemProduct)
+                        .Count(s => s.StockTransactionItem.StockItemStock.StockGuid == id) + pageSize - 1)/pageSize,
                 CurrentPage = page
             };
 
@@ -218,7 +221,7 @@ namespace ERP_Model.Controllers.API
             stock.StockMethod = stockVm.StockMethod;
             stock.StockName = stockVm.StockName;
             stock.StockAddress = await db.Addresses.FindAsync(stockVm.StockAddress.AddressGuid);
-            
+
             db.Entry(stock).State = EntityState.Modified;
 
             //save changes
@@ -232,10 +235,7 @@ namespace ERP_Model.Controllers.API
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -276,7 +276,8 @@ namespace ERP_Model.Controllers.API
             //generate new guid
             stock.StockGuid = Guid.NewGuid();
             //get the stock address, as just the address guid is submitted, not the object itself
-            stock.StockAddress = await db.Addresses.FirstOrDefaultAsync(a => a.AddressGuid == stock.StockAddress.AddressGuid);
+            stock.StockAddress =
+                await db.Addresses.FirstOrDefaultAsync(a => a.AddressGuid == stock.StockAddress.AddressGuid);
 
             //add the stock to db context
             db.Stock.Add(stock);
@@ -292,13 +293,10 @@ namespace ERP_Model.Controllers.API
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = stock.StockGuid }, stock);
+            return CreatedAtRoute("DefaultApi", new {id = stock.StockGuid}, stock);
         }
 
         //deletes a stock
@@ -345,10 +343,7 @@ namespace ERP_Model.Controllers.API
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -390,10 +385,7 @@ namespace ERP_Model.Controllers.API
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -420,11 +412,19 @@ namespace ERP_Model.Controllers.API
         {
             var stockTransaction = new StockTransaction
             {
-                  StockTransactionItem = db.StockItems.FirstOrDefault(g => g.StockItemGuid == stockItem.StockItemGuid),
-                  StockTransactionDate = DateTime.Now,
-                  StockTransactionGuid = Guid.NewGuid(),
-                  StockTransactionQuantity = stockItem.StockItemQuantity,
-                  StockTransactionUser = UserManager().FindById(User.Identity.GetUserId())
+                StockTransactionItem = db.StockItems.FirstOrDefault(g => g.StockItemGuid == stockItem.StockItemGuid),
+                StockTransactionDate = DateTime.Now,
+                StockTransactionGuid = Guid.NewGuid(),
+                StockTransactionQuantity = stockItem.StockItemQuantity,
+                StockTransactionUser = UserManager().FindById(User.Identity.GetUserId()),
+                StockTransactionOrder =
+                    stockItem.Order == null
+                        ? null
+                        : await db.Orders.FirstOrDefaultAsync(g => g.OrderGuid == stockItem.Order.OrderGuid),
+                StockTransactionSupply =
+                    stockItem.Supply == null
+                        ? null
+                        : await db.Supplys.FirstOrDefaultAsync(g => g.SupplyGuid == stockItem.Supply.SupplyGuid)
             };
 
             db.StockTransactions.Add(stockTransaction);
@@ -442,7 +442,7 @@ namespace ERP_Model.Controllers.API
                 throw;
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = stockTransaction.StockTransactionGuid }, stockTransaction);
+            return CreatedAtRoute("DefaultApi", new {id = stockTransaction.StockTransactionGuid}, stockTransaction);
         }
 
         protected override void Dispose(bool disposing)

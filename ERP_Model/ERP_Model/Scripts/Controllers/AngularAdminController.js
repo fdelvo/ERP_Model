@@ -12,7 +12,7 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
     var page = 0;
     $scope.pageSize = 20;
 
-    $scope.Next = function (currentPage, pageAmount, fnc) {
+    $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
             page = currentPage;
         } else {
@@ -22,7 +22,7 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
         fnc();
     };
 
-    $scope.Previous = function (currentPage, pageAmount, fnc) {
+    $scope.Previous = function(currentPage, pageAmount, fnc) {
         if (currentPage === 0) {
             page = currentPage;
         } else {
@@ -35,83 +35,85 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
     $scope.newAddress = new AngularAdminService();
     $scope.model = new AngularAdminService();
 
-    $scope.AddressList = function () {
+    $scope.AddressList = function() {
         $scope.addresses = AngularAdminService.GetAddresses({
-            page: page, pageSize: $scope.pageSize
-        },
-            function () {
+                page: page,
+                pageSize: $scope.pageSize
+            },
+            function() {
                 console.log($scope.addresses);
             });
     };
 
-    $scope.AddressDetails = function (guid) {
+    $scope.AddressDetails = function(guid) {
         $scope.address = AngularAdminService.GetAddress({ id: guid });
     };
 
-    $scope.CreateAddress = function () {
+    $scope.CreateAddress = function() {
         $scope.newAddress.$PostAddress(
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.EditAddress = function () {
+    $scope.EditAddress = function() {
         $scope.address.$PutAddress({ id: $scope.address.AddressGuid },
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.RemoveAddress = function (guid) {
+    $scope.RemoveAddress = function(guid) {
         AngularAdminService.DeleteAddress({ id: guid },
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.UserList = function () {
+    $scope.UserList = function() {
         $scope.users = AngularAdminService.GetUsers({
-            page: page, pageSize: $scope.pageSize
-        },
-            function () {
+                page: page,
+                pageSize: $scope.pageSize
+            },
+            function() {
                 console.log($scope.users);
             });
     };
 
-    $scope.UserDetails = function (guid) {
+    $scope.UserDetails = function(guid) {
         $scope.user = AngularAdminService.GetUser({ id: guid });
     };
 
-    $scope.CreateUser = function () {
+    $scope.CreateUser = function() {
         $scope.model.$PostUser(
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.EditUser = function () {
+    $scope.EditUser = function() {
         $scope.user.$PutUser({ id: $scope.user.Id },
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
@@ -127,18 +129,18 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
             });
     };
 
-    $scope.RemoveUser = function (guid) {
+    $scope.RemoveUser = function(guid) {
         AngularAdminService.DeleteUser({ id: guid },
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.GetValueAtIndex = function (index) {
+    $scope.GetValueAtIndex = function(index) {
         var str = window.location.href;
         console.log(str.split("/")[index]);
         return str.split("/")[index];

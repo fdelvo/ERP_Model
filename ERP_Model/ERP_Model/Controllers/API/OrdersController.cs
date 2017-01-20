@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -11,27 +10,19 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ERP_Model.Models;
 using ERP_Model.ViewModels;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security.Provider;
 
 namespace ERP_Model.Controllers.API
 {
     public class OrdersController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         public ApplicationUserManager UserManager
         {
-            get
-            {
-                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            get { return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
         }
 
         // GET: api/Orders
@@ -42,7 +33,7 @@ namespace ERP_Model.Controllers.API
                 .Include(u => u.OrderCustomer)
                 .Where(d => d.OrderDeleted == false)
                 .OrderByDescending(o => o.OrderDate)
-                .Skip(page * pageSize)
+                .Skip(page*pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -62,7 +53,7 @@ namespace ERP_Model.Controllers.API
             var dataVm = new PaginationViewModel
             {
                 DataObject = ordersViewModelList,
-                PageAmount = (db.Orders.Count() + pageSize - 1) / pageSize,
+                PageAmount = (db.Orders.Count() + pageSize - 1)/pageSize,
                 CurrentPage = page
             };
 
@@ -77,8 +68,8 @@ namespace ERP_Model.Controllers.API
             {
                 orderValue = db.OrderItems
                     .Include(p => p.OrderItemStockItem.StockItemProduct)
-                .Where(o => o.OrderItemOrder.OrderGuid == id)
-                .Sum(s => s.OrderQuantity * s.OrderItemStockItem.StockItemProduct.ProductPrice);
+                    .Where(o => o.OrderItemOrder.OrderGuid == id)
+                    .Sum(s => s.OrderQuantity*s.OrderItemStockItem.StockItemProduct.ProductPrice);
             }
 
             return orderValue;
@@ -87,20 +78,27 @@ namespace ERP_Model.Controllers.API
         [ResponseType(typeof(Order))]
         public async Task<IHttpActionResult> GetOrderItems(Guid id, int page, int pageSize)
         {
+            if (pageSize == 0)
+            {
+                pageSize = await db.OrderItems.CountAsync(g => g.OrderItemOrder.OrderGuid == id);
+            }
+
             var orderItems = await db.OrderItems
                 .Include(o => o.OrderItemOrder)
                 .Include(p => p.OrderItemStockItem.StockItemProduct)
                 .Include(u => u.OrderItemOrder.OrderCustomer)
                 .Where(g => g.OrderItemOrder.OrderGuid == id && g.OrderItemDeleted == false)
                 .OrderByDescending(o => o.OrderItemStockItem.StockItemProduct.ProductName)
-                .Skip(page * pageSize)
+                .Skip(page*pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             var dataVm = new PaginationViewModel
             {
                 DataObject = orderItems,
-                PageAmount = (db.OrderItems.Include(o => o.OrderItemOrder).Count(g => g.OrderItemOrder.OrderGuid == id) + pageSize - 1) / pageSize,
+                PageAmount =
+                    (db.OrderItems.Include(o => o.OrderItemOrder).Count(g => g.OrderItemOrder.OrderGuid == id) +
+                     pageSize - 1)/pageSize,
                 CurrentPage = page
             };
 
@@ -111,32 +109,62 @@ namespace ERP_Model.Controllers.API
         [ResponseType(typeof(Order))]
         public async Task<IHttpActionResult> GetOrder(Guid id)
         {
-            Order order = await db.Orders
-                .FirstOrDefaultAsync(o => o.OrderGuid == id && o.OrderDeleted == false);
+            var order = await db.Orders
+                .FirstOrDefaultAsync(g => g.OrderGuid == id && g.OrderDeleted == false);
 
-            if (order == null)
+            var orderItems = await db.OrderItems
+                .Include(s => s.OrderItemStockItem)
+                .Include(p => p.OrderItemStockItem.StockItemProduct)
+                .Where(dn => dn.OrderItemOrder.OrderGuid == id)
+                .ToListAsync();
+
+            var orderViewModel = new OrderDetailsViewModel
+            {
+                Order = order,
+                OrderItems = orderItems
+            };
+
+            if (orderItems == null)
             {
                 return NotFound();
             }
 
-            return Ok(order);
+            return Ok(orderViewModel);
         }
 
         // PUT: api/Orders/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutOrder(Guid id, Order order)
+        public async Task<IHttpActionResult> PutOrder(Guid id, OrderDetailsViewModel orderVm)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != order.OrderGuid)
+            if (id != orderVm.Order.OrderGuid)
             {
                 return BadRequest();
             }
 
-            db.Entry(order).State = EntityState.Modified;
+
+            foreach (var o in orderVm.OrderItems)
+            {
+                var orderItem = await db.OrderItems.FirstOrDefaultAsync(g => g.OrderItemGuid == o.OrderItemGuid);
+                orderItem.OrderQuantity = o.OrderQuantity;
+                db.Entry(orderItem).State = EntityState.Modified;
+
+                var stockTransaction =
+                    await
+                        db.StockTransactions.FirstOrDefaultAsync(
+                            g =>
+                                g.StockTransactionItem.StockItemGuid == o.OrderItemStockItem.StockItemGuid &&
+                                g.StockTransactionOrder.OrderGuid == o.OrderItemOrder.OrderGuid);
+                if (stockTransaction != null)
+                {
+                    stockTransaction.StockTransactionQuantity = -o.OrderQuantity;
+                    db.Entry(stockTransaction).State = EntityState.Modified;
+                }
+            }
 
             try
             {
@@ -148,10 +176,7 @@ namespace ERP_Model.Controllers.API
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -170,11 +195,11 @@ namespace ERP_Model.Controllers.API
 
             foreach (var o in orderVm.OrderItems)
             {
-                
                 if (!CheckIfStockItemAvailable(o.ProductGuid))
                 {
                     productsOutOfStock.Add(o.ProductName);
-                };               
+                }
+                ;
             }
 
             if (productsOutOfStock.Any())
@@ -202,15 +227,12 @@ namespace ERP_Model.Controllers.API
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             await PostOrderItems(orderVm.OrderItems, order.OrderGuid);
 
-            return CreatedAtRoute("DefaultApi", new { id = order.OrderGuid }, order);
+            return CreatedAtRoute("DefaultApi", new {id = order.OrderGuid}, order);
         }
 
         [ResponseType(typeof(Order))]
@@ -230,28 +252,31 @@ namespace ERP_Model.Controllers.API
                 {
                     OrderItemGuid = Guid.NewGuid(),
                     OrderItemOrder = db.Orders.FirstOrDefault(g => g.OrderGuid == orderGuid),
-                    OrderItemStockItem = db.StockItems.FirstOrDefault(g => g.StockItemProduct.ProductGuid == p.ProductGuid),
+                    OrderItemStockItem =
+                        db.StockItems.FirstOrDefault(g => g.StockItemProduct.ProductGuid == p.ProductGuid),
                     OrderQuantity = p.OrderQuantity
                 };
+
+                db.OrderItems.Add(orderItem);
+
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                }
 
                 await stockController.CreateStockTransaction(new StockItemViewModel
                 {
                     StockItemGuid = orderItem.OrderItemStockItem.StockItemGuid,
-                    StockItemQuantity = -orderItem.OrderQuantity
+                    StockItemQuantity = -orderItem.OrderQuantity,
+                    Order = orderItem.OrderItemOrder,
+                    Supply = null
                 });
-
-                db.OrderItems.Add(orderItem);
             }
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-            }
-
-            return CreatedAtRoute("DefaultApi", new { id = orderItems }, orderItems);
+            return CreatedAtRoute("DefaultApi", new {id = orderItems}, orderItems);
         }
 
         private bool CheckIfStockItemAvailable(Guid productGuid)
@@ -283,7 +308,7 @@ namespace ERP_Model.Controllers.API
             {
                 o.OrderItemDeleted = true;
                 db.Entry(o).State = EntityState.Modified;
-            }           
+            }
 
             //save changes
             try
@@ -296,10 +321,7 @@ namespace ERP_Model.Controllers.API
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);

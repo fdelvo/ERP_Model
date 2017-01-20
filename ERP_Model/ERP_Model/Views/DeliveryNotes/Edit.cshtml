@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Edit";
 }
 
@@ -7,33 +6,36 @@
     <a class="back-link" href="javascript: window.history.back();">Back</a>
     <form ng-init="DeliveryNoteDetails(GetValueAtIndex(5))" ng-submit="EditDeliveryNote()">
         <label>Order:</label>
-        <input ng-model="deliveryNote.DeliveryNote.DeliveryGuid" disabled="disabled" />
-        <br />
+        <input ng-model="deliveryNote.DeliveryNote.DeliveryGuid" disabled="disabled"/>
+        <br/>
         <table>
             <thead>
-                <tr>
-                    <th>Product Guid</th>
-                    <th>Product</th>
-                    <th>Unit Price</th>
-                    <th>Order Quantity</th>
-                    <th>Total Price</th>
-                    <th>Delivery Note Quantity</th>
-                </tr>
+            <tr>
+                <th>Product Guid</th>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Order Quantity</th>
+                <th>Total Price</th>
+                <th>Delivery Note Quantity</th>
+            </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="deliveryItem in deliveryNote.DeliveryItems track by deliveryItem.DeliveryItemGuid">
-                    <td>{{deliveryItem.DeliveryItemGuid}}</td>
-                    <td><a href="/ProductManagement/ProductDetails/{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a></td>
-                    <td>{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-                    <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity}}</td>
-                    <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity * deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-                    <td><input ng-model="deliveryItem.DeliveryItemQuantity" type="number" /></td>
-                </tr>
+            <tr ng-repeat="deliveryItem in deliveryNote.DeliveryItems track by deliveryItem.DeliveryItemGuid">
+                <td>{{deliveryItem.DeliveryItemGuid}}</td>
+                <td>
+                    <a href="/ProductManagement/ProductDetails/{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a>
+                </td>
+                <td>{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity}}</td>
+                <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity * deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td>
+                    <input ng-model="deliveryItem.DeliveryItemQuantity" type="number"/>
+                </td>
+            </tr>
             </tbody>
         </table>
-        <br />
+        <br/>
         <label></label>
-        <input type="submit" value="Save Delivery Note" />
+        <input type="submit" value="Save Delivery Note"/>
     </form>
 </div>
-

@@ -7,7 +7,7 @@
     <form ng-init="OrderItemsList(GetValueAtIndex(5))" ng-submit="CreateDeliveryNote()">
         <label>Order:</label>
         <input ng-model="newDeliveryNote.DeliveryOrder" ng-init="newDeliveryNote.DeliveryOrder = GetValueAtIndex(5)" disabled="disabled"/>
-        <br />
+        <br/>
         <table>
             <thead>
             <tr>
@@ -20,25 +20,28 @@
             </thead>
             <tbody>
             <tr ng-repeat="orderItems in orderItems.DataObject track by orderItems.OrderItemGuid">
-                <td hidden="hidden"><input ng-model="deliveryItems[$index].DeliveryItemOrderItem" ng-init="deliveryItems[$index].DeliveryItemOrderItem = orderItems.OrderItemGuid" disabled="disabled"/></td>
-                <td><a href="/ProductManagement/ProductDetails/{{orderItems.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{orderItems.OrderItemStockItem.StockItemProduct.ProductName}}</a></td>
+                <td hidden="hidden">
+                    <input ng-model="deliveryItems[$index].DeliveryItemOrderItem" ng-init="deliveryItems[$index].DeliveryItemOrderItem = orderItems.OrderItemGuid" disabled="disabled"/>
+                </td>
+                <td>
+                    <a href="/ProductManagement/ProductDetails/{{orderItems.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{orderItems.OrderItemStockItem.StockItemProduct.ProductName}}</a>
+                </td>
                 <td>{{orderItems.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
                 <td>{{orderItems.OrderQuantity}}</td>
                 <td>{{orderItems.OrderQuantity * orderItems.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-                <td><input ng-model="deliveryItems[$index].DeliveryItemQuantity" ng-init="deliveryItems[$index].DeliveryItemQuantity = orderItems.OrderQuantity" type="number"/></td>
+                <td>
+                    <input ng-model="deliveryItems[$index].DeliveryItemQuantity" ng-init="deliveryItems[$index].DeliveryItemQuantity = orderItems.OrderQuantity" type="number"/>
+                </td>
             </tr>
             </tbody>
             <tfoot>
-                <tr>
-                    <th colspan="4">Pagination</th>
-                </tr>
+            <tr>
+                <th colspan="4">Pagination</th>
+            </tr>
             </tfoot>
         </table>
-        <br />
+        <br/>
         <label></label>
-        <input type="submit" value="Create Delivery Note" />
+        <input type="submit" value="Create Delivery Note"/>
     </form>
 </div>
-
-
-

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace ERP_Model.Models
 {
@@ -10,6 +7,7 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid SupplyGuid { get; set; }
+
         public virtual ApplicationUser SupplySupplier { get; set; }
         public DateTime SupplyDate { get; set; }
         public DateTime SupplyDeliveryDate { get; set; }
@@ -20,6 +18,7 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid SupplyItemGuid { get; set; }
+
         public virtual StockItem SupplyItemStockItem { get; set; }
         public virtual Supply SupplyItemSupply { get; set; }
         public int SupplyQuantity { get; set; }

@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -11,31 +10,38 @@
     </div>
     <table ng-init="SupplyList()">
         <thead>
-            <tr>
-                <th>Supply ID</th>
-                <th>Supplier</th>
-                <th>Creation Date</th>
-                <th>Delivery Date</th>
-                <th>Supply Value</th>
-            </tr>
+        <tr>
+            <th>Supply ID</th>
+            <th>Supplier</th>
+            <th>Creation Date</th>
+            <th>Delivery Date</th>
+            <th>Supply Value</th>
+        </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="s in supplys.DataObject track by s.SupplyGuid">
-                <td><a href="/Supplys/SupplyItems/{{s.SupplyGuid}}">{{s.SupplyGuid}}</a></td>
-                <td>{{s.SupplyCustomer.Alias}}</td>
-                <td>{{s.SupplyDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
-                <td>{{s.SupplyDeliveryDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
-                <td>{{s.SupplyValue}}</td>
-                <td><a href="/GoodsReceipts/New/{{s.SupplyGuid}}">Create Goods Receipt</a></td>
-                <td><a href="/Supplys/Edit/{{s.SupplyGuid}}">Edit</a></td>
-                <td><a href="" ng-click="RemoveSupply(s.SupplyGuid)">Delete</a></td>
-            </tr>
+        <tr ng-repeat="s in supplys.DataObject track by s.SupplyGuid">
+            <td>
+                <a href="/Supplys/SupplyItems/{{s.SupplyGuid}}">{{s.SupplyGuid}}</a>
+            </td>
+            <td>{{s.SupplyCustomer.Alias}}</td>
+            <td>{{s.SupplyDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+            <td>{{s.SupplyDeliveryDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+            <td>{{s.SupplyValue}}</td>
+            <td>
+                <a href="/GoodsReceipts/New/{{s.SupplyGuid}}">Create Goods Receipt</a>
+            </td>
+            <td>
+                <a href="/Supplys/Edit/{{s.SupplyGuid}}">Edit</a>
+            </td>
+            <td>
+                <a href="" ng-click="RemoveSupply(s.SupplyGuid)">Delete</a>
+            </td>
+        </tr>
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="5"><a class="button" href="" ng-click="Previous(supplys.CurrentPage, supplys.PageAmount, SupplyList)">Previous</a> {{supplys.CurrentPage+1}} / {{supplys.PageAmount}} <a class="button" href="" ng-click="Next(supplys.CurrentPage, supplys.PageAmount, SupplyList)">Next</a></td>
-            </tr>
+        <tr>
+            <td colspan="5"><a class="button" href="" ng-click="Previous(supplys.CurrentPage, supplys.PageAmount, SupplyList)">Previous</a> {{supplys.CurrentPage+1}} / {{supplys.PageAmount}} <a class="button" href="" ng-click="Next(supplys.CurrentPage, supplys.PageAmount, SupplyList)">Next</a></td>
+        </tr>
         </tfoot>
     </table>
 </div>
-

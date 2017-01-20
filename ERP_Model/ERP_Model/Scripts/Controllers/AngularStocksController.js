@@ -12,7 +12,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
     var page = 0;
     $scope.pageSize = 20;
 
-    $scope.Next = function (currentPage, pageAmount, fnc) {
+    $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
             page = currentPage;
         } else {
@@ -22,7 +22,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
         fnc();
     };
 
-    $scope.Previous = function (currentPage, pageAmount, fnc) {
+    $scope.Previous = function(currentPage, pageAmount, fnc) {
         if (currentPage === 0) {
             page = currentPage;
         } else {
@@ -32,98 +32,106 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
         fnc();
     };
 
-    $scope.AddressList = function () {
+    $scope.AddressList = function() {
         $scope.addresses = AngularAdminService.GetAddresses({
-            page: page, pageSize: $scope.pageSize
-        },
-            function () {
+                page: page,
+                pageSize: $scope.pageSize
+            },
+            function() {
                 console.log($scope.addresses);
             });
     };
 
     $scope.newStock = new AngularStocksService();
-    $scope.newStockTransaction = [new AngularStocksService()];
+    $scope.newStockTransaction = [];
 
     $scope.StockList = function() {
         $scope.stocks = AngularStocksService.GetStocks({
-            page: page, pageSize: $scope.pageSize
+                page: page,
+                pageSize: $scope.pageSize
             },
             function() {
                 console.log($scope.stocks);
             });
     };
 
-    $scope.StockDetails = function (guid) {
-        $scope.stock = AngularStocksService.GetStock({id: guid
-        },
-            function () {
+    $scope.StockDetails = function(guid) {
+        $scope.stock = AngularStocksService.GetStock({
+                id: guid
+            },
+            function() {
                 console.log($scope.stock);
             });
     };
 
-    $scope.StockItemList = function (guid) {
+    $scope.StockItemList = function(guid) {
         $scope.stockItems = AngularStocksService.GetStockItems({
-            id: guid, page: page, pageSize: $scope.pageSize
-        },
-            function () {
+                id: guid,
+                page: page,
+                pageSize: $scope.pageSize
+            },
+            function() {
                 console.log($scope.stockItems);
             });
     };
 
-    $scope.StockTransactionList = function (guid) {
+    $scope.StockTransactionList = function(guid) {
         $scope.stockTransactions = AngularStocksService.GetStockTransactions({
-            id: guid, page: page, pageSize: $scope.pageSize
-        },
-            function () {
+                id: guid,
+                page: page,
+                pageSize: $scope.pageSize
+            },
+            function() {
                 console.log($scope.stockTransactions);
             });
     };
 
-    $scope.CreateStock = function () {
+    $scope.CreateStock = function() {
         $scope.newStock.$PostStock(
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Stock/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.EditStock = function () {
+    $scope.EditStock = function() {
         $scope.stock.$PutStock({ id: $scope.stock.StockGuid },
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Stock/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.RemoveStock = function (guid) {
+    $scope.RemoveStock = function(guid) {
         AngularStocksService.DeleteStock({ id: guid },
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Stock/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
     $scope.StockTransaction = function(index) {
+        $scope.newStockTransaction[index] = new AngularStocksService($scope.newStockTransaction[index]);
         $scope.newStockTransaction[index].$CreateStockTransaction(
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/Stock/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.GetValueAtIndex = function (index) {
+    $scope.GetValueAtIndex = function(index) {
         var str = window.location.href;
         console.log(str.split("/")[index]);
         return str.split("/")[index];

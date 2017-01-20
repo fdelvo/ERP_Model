@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "StockTransactions";
 }
 
@@ -8,30 +7,32 @@
     <h1>{{stock.StockName}} - Transactions</h1>
     <table>
         <thead>
-            <tr>
-                <th>Stock Item Product</th>
-                <th>Stock Item Product Price</th>
-                <th>Quantity</th>
-                <th>User</th>
-                <th>Date</th>
-            </tr>
+        <tr>
+            <th>Stock Item Product</th>
+            <th>Stock Item Product Price</th>
+            <th>Quantity</th>
+            <th>Initiated By</th>
+            <th>User</th>
+            <th>Date</th>
+        </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="st in stockTransactions.DataObject track by st.StockTransactionGuid">
-                <td><a href="/ProductManagement/ProductDetails/{{st.StockTransactionItem.StockItemProduct.ProductGuid}}">{{st.StockTransactionItem.StockItemProduct.ProductName}}</a></td>
-                <td>{{st.StockTransactionItem.StockItemProduct.ProductPrice}}</td>
-                <td>{{st.StockTransactionQuantity}}</td>
-                <td>{{st.StockTransactionUser.Email}}</td>
-                <td>{{st.StockTransactionDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
-            </tr>
+        <tr ng-repeat="st in stockTransactions.DataObject track by st.StockTransactionGuid">
+            <td>
+                <a href="/ProductManagement/ProductDetails/{{st.StockTransactionItem.StockItemProduct.ProductGuid}}">{{st.StockTransactionItem.StockItemProduct.ProductName}}</a>
+            </td>
+            <td>{{st.StockTransactionItem.StockItemProduct.ProductPrice}}</td>
+            <td>{{st.StockTransactionQuantity}}</td>
+            <td>
+                <a ng-hide="st.StockTransactionOrder==null" href="/Orders/OrderItems/{{st.StockTransactionOrder.OrderGuid}}">Order</a><a ng-hide="st.StockTransactionSupply==null" href="/Supplys/SupplyItems/{{st.StockTransactionSupply.SupplyGuid}}">Supply</a><span ng-hide="st.StockTransactionOrder && st.StockTransactionSupply==null">Manually</span></td>
+            <td>{{st.StockTransactionUser.Email}}</td>
+            <td>{{st.StockTransactionDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+        </tr>
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="5"><a class="button" href="" ng-click="Previous(stockTransactions.CurrentPage, stockTransactions.PageAmount, StockTransactionList)">Previous</a> {{stockTransactions.CurrentPage+1}} / {{stockTransactions.PageAmount}} <a class="button" href="" ng-click="Next(stockTransactions.CurrentPage, stockTransactions.PageAmount, StockTransactionList)">Next</a></td>
-            </tr>
+        <tr>
+            <td colspan="5"><a class="button" href="" ng-click="Previous(stockTransactions.CurrentPage, stockTransactions.PageAmount, StockTransactionList)">Previous</a> {{stockTransactions.CurrentPage+1}} / {{stockTransactions.PageAmount}} <a class="button" href="" ng-click="Next(stockTransactions.CurrentPage, stockTransactions.PageAmount, StockTransactionList)">Next</a></td>
+        </tr>
         </tfoot>
     </table>
 </div>
-
-
-

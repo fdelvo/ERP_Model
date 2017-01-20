@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "New";
 }
 
@@ -8,53 +7,60 @@
     <form ng-init="UserList(); ProductList();" ng-submit="CreateOrder()">
         <label>Customer:</label>
         <select ng-options="user.Alias for user in users.DataObject track by user.Id" ng-model="newOrder.OrderCustomer"></select>
-        <br />
+        <br/>
         <label>Delivery Date:</label>
-        <input type="text" ng-model="newOrder.OrderDeliveryDate" />
-        <br />
+        <input type="text" ng-model="newOrder.OrderDeliveryDate"/>
+        <br/>
         <label>Products:</label>
         <table>
             <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                </tr>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="oI in orderItems track by oI.ProductGuid">
-                    <td>{{oI.ProductName}}</td>
-                    <td>{{oI.ProductPrice}}</td>
-                    <td><input ng-model="oI.OrderQuantity" type="number" /></td>
-                    <td><a ng-click="RemoveProductFromOrderItems($index)" href="">Remove</a></td>
-                </tr>
+            <tr ng-repeat="oI in orderItems track by oI.ProductGuid">
+                <td>{{oI.ProductName}}</td>
+                <td>{{oI.ProductPrice}}</td>
+                <td>
+                    <input ng-model="oI.OrderQuantity" type="number"/>
+                </td>
+                <td>
+                    <a ng-click="RemoveProductFromOrderItems($index)" href="">Remove</a>
+                </td>
+            </tr>
             </tbody>
         </table>
         <table>
             <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                </tr>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="p in products.DataObject track by p.ProductGuid">
-                    <td>{{p.ProductName}}</td>
-                    <td>{{p.ProductPrice}}</td>
-                    <td><input ng-model="orderQuantity[$index].value" type="number"/></td>
-                    <td><a ng-click="AddProductToOrderItems(p, $index)" href="">Add</a></td>
-                </tr>
+            <tr ng-repeat="p in products.DataObject track by p.ProductGuid">
+                <td>{{p.ProductName}}</td>
+                <td>{{p.ProductPrice}}</td>
+                <td>
+                    <input ng-model="orderQuantity[$index].value" type="number"/>
+                </td>
+                <td>
+                    <a ng-click="AddProductToOrderItems(p, $index)" href="">Add</a>
+                </td>
+            </tr>
             </tbody>
             <tfoot>
-                <tr>
-                    <td colspan="5"><a class="button" href="" ng-click="Previous(products.CurrentPage, products.PageAmount, ProductList)">Previous</a> {{products.CurrentPage+1}} / {{products.PageAmount}} <a class="button" href="" ng-click="Next(products.CurrentPage, products.PageAmount, ProductList)">Next</a></td>
-                </tr>
+            <tr>
+                <td colspan="4"><a class="button" href="" ng-click="Previous(products.CurrentPage, products.PageAmount, ProductList)">Previous</a> {{products.CurrentPage+1}} / {{products.PageAmount}} <a class="button" href="" ng-click="Next(products.CurrentPage, products.PageAmount, ProductList)">Next</a></td>
+            </tr>
             </tfoot>
         </table>
-        <br />
+        <br/>
         <label></label>
-        <input type="submit" value="Create Order" />
+        <input type="submit" value="Create Order"/>
     </form>
 </div>
-

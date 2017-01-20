@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using ERP_Model.Models;
 
 namespace ERP_Model.ViewModels
@@ -14,6 +11,8 @@ namespace ERP_Model.ViewModels
         public int StockItemMinimumQuantity { get; set; }
         public int StockItemMaximumQuantity { get; set; }
         public int StockItemQuantity { get; set; }
+        public Order Order { get; set; }
+        public Supply Supply { get; set; }
     }
 
     public class StockViewModel

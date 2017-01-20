@@ -12,10 +12,10 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
     $scope.newProduct = new AngularProductsService();
 
     var page = 0;
-    $scope.pageSize = 20;  
+    $scope.pageSize = 20;
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
-        if (currentPage+1 === pageAmount) {
+        if (currentPage + 1 === pageAmount) {
             page = currentPage;
         } else {
             page++;
@@ -24,7 +24,7 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
         fnc();
     };
 
-    $scope.Previous = function (currentPage, pageAmount, fnc) {
+    $scope.Previous = function(currentPage, pageAmount, fnc) {
         if (currentPage === 0) {
             page = currentPage;
         } else {
@@ -34,17 +34,19 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
         fnc();
     };
 
-    $scope.StockList = function () {
+    $scope.StockList = function() {
         $scope.stocks = AngularStocksService.GetStocks({
-        },
-            function () {
+        
+            },
+            function() {
                 console.log($scope.stocks);
             });
     };
 
     $scope.ProductList = function() {
         $scope.products = AngularProductsService.GetProducts({
-            page: page, pageSize: $scope.pageSize
+                page: page,
+                pageSize: $scope.pageSize
             },
             function() {
                 console.log($scope.products);
@@ -52,43 +54,47 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
     };
 
     $scope.ProductDetails = function(guid) {
-        $scope.product = AngularProductsService.GetProduct({id:guid});
-    }; 
+        $scope.product = AngularProductsService.GetProduct({ id: guid });
+    };
 
     $scope.CreateProduct = function() {
-        $scope.newProduct.$PostProduct({stockGuid: $scope.stock.StockGuid, maxQuantity: $scope.maxQuantity, minQuantity: $scope.minQuantity},
-            function (response) {
+        $scope.newProduct.$PostProduct({
+                stockGuid: $scope.stock.StockGuid,
+                maxQuantity: $scope.maxQuantity,
+                minQuantity: $scope.minQuantity
+            },
+            function(response) {
                 console.log("Success");
                 location.href = "/ProductManagement/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
     $scope.EditProduct = function() {
         $scope.product.$PutProduct({ id: $scope.product.ProductGuid, stockGuid: $scope.stock.StockGuid },
-            function (response) {
+            function(response) {
                 console.log("Success");
                 location.href = "/ProductManagement/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
     $scope.RemoveProduct = function(guid) {
-        AngularProductsService.DeleteProduct({id:guid},
-            function (response) {
+        AngularProductsService.DeleteProduct({ id: guid },
+            function(response) {
                 console.log("Success");
                 location.href = "/ProductManagement/Index";
             },
-            function (error) {
+            function(error) {
                 console.log("Fail");
             });
     };
 
-    $scope.GetValueAtIndex = function (index) {
+    $scope.GetValueAtIndex = function(index) {
         var str = window.location.href;
         console.log(str.split("/")[index]);
         return str.split("/")[index];

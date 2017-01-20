@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace ERP_Model.ViewModels
+﻿namespace ERP_Model.ViewModels
 {
     public class PaginationViewModel
     {

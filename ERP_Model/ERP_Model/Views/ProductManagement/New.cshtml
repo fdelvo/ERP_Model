@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "New";
 }
 
@@ -10,16 +9,15 @@
         <input type="text" ng-model="newProduct.ProductName"/>
         <br/>
         <label>Product Description:</label>
-        <input type="text" ng-model="newProduct.ProductDescription" />
+        <input type="text" ng-model="newProduct.ProductDescription"/>
         <br/>
         <label>Product Price:</label>
-        <input type="number" ng-model="newProduct.ProductPrice" />
+        <input type="number" ng-model="newProduct.ProductPrice"/>
         <br/>
         <label>Stock:</label>
         <select ng-options="stock.StockName for stock in stocks.DataObject track by stock.StockGuid" ng-model="stock"></select>
-        <br />
+        <br/>
         <label></label>
         <input type="submit" value="Create Product"/>
     </form>
 </div>
-

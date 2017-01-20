@@ -1,7 +1,39 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
-
+<div class="content-box" ng-controller="AngularOrdersController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <form ng-init="OrderDetails(GetValueAtIndex(5))" ng-submit="EditOrder()">
+        <label>Order:</label>
+        <input ng-model="order.Order.OrderGuid" disabled="disabled"/>
+        <br/>
+        <table>
+            <thead>
+            <tr>
+                <th>Product Guid</th>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Order Quantity</th>
+                <th>Total Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="oI in order.OrderItems track by oI.OrderItemGuid">
+                <td>{{oI.OrderItemStockItem.StockItemProduct.ProductGuid}}</td>
+                <td>
+                    <a href="/ProductManagement/ProductDetails/{{oI.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{oI.OrderItemStockItem.StockItemProduct.ProductName}}</a>
+                </td>
+                <td>{{oI.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td>
+                    <input ng-model="oI.OrderQuantity" type="number"/>
+                </td>
+                <td>{{oI.OrderQuantity * oI.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br/>
+        <label></label>
+        <input type="submit" value="Save Order"/>
+    </form>
+</div>

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace ERP_Model.Models
 {
@@ -10,6 +7,7 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid SupplierGuid { get; set; }
+
         public string SupplierName { get; set; }
         public virtual Address SupplierAddress { get; set; }
         public bool SupplierDeleted { get; set; }

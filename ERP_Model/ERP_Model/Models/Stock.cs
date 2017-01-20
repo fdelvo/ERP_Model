@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using ERP_Model.Models;
 
 namespace ERP_Model.Models
 {
@@ -11,6 +7,7 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid StockGuid { get; set; }
+
         public string StockName { get; set; }
         public virtual Address StockAddress { get; set; }
         public string StockMethod { get; set; }
@@ -21,6 +18,7 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid StockItemGuid { get; set; }
+
         public virtual Product StockItemProduct { get; set; }
         public virtual Stock StockItemStock { get; set; }
         public int StockItemMinimumQuantity { get; set; }
@@ -32,10 +30,13 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid StockTransactionGuid { get; set; }
+
         public virtual StockItem StockTransactionItem { get; set; }
         public int StockTransactionQuantity { get; set; }
         public DateTime StockTransactionDate { get; set; }
         public virtual ApplicationUser StockTransactionUser { get; set; }
         public bool StockTransactionDeleted { get; set; }
+        public Order StockTransactionOrder { get; set; }
+        public Supply StockTransactionSupply { get; set; }
     }
 }

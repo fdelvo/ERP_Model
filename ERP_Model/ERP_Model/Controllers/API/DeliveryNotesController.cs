@@ -1,7 +1,4 @@
-﻿using ERP_Model.Models;
-using ERP_Model.ViewModels;
-using Microsoft.AspNet.Identity.Owin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -11,24 +8,21 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using ERP_Model.Models;
+using ERP_Model.ViewModels;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace ERP_Model.Controllers.API
 {
     public class DeliveryNotesController : ApiController
     {
-        private ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
 
         public ApplicationUserManager UserManager
         {
-            get
-            {
-                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            get { return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
         }
 
         // GET: api/DeliverNotes
@@ -38,14 +32,14 @@ namespace ERP_Model.Controllers.API
             var deliveryNotes = await _db.Deliveries
                 .Include(o => o.DeliveryOrder)
                 .OrderByDescending(o => o.DeliveryGuid)
-                .Skip(page * pageSize)
+                .Skip(page*pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             var dataVm = new PaginationViewModel
             {
                 DataObject = deliveryNotes,
-                PageAmount = (_db.Deliveries.Count() + pageSize - 1) / pageSize,
+                PageAmount = (_db.Deliveries.Count() + pageSize - 1)/pageSize,
                 CurrentPage = page
             };
 
@@ -95,10 +89,10 @@ namespace ERP_Model.Controllers.API
             }
 
 
-
-            foreach(var d in deliveryNoteDetailsVm.DeliveryItems)
+            foreach (var d in deliveryNoteDetailsVm.DeliveryItems)
             {
-                var deliveryItem = await _db.DeliveryItems.FirstOrDefaultAsync(g => g.DeliveryItemGuid == d.DeliveryItemGuid);
+                var deliveryItem =
+                    await _db.DeliveryItems.FirstOrDefaultAsync(g => g.DeliveryItemGuid == d.DeliveryItemGuid);
                 deliveryItem.DeliveryItemQuantity = d.DeliveryItemQuantity;
                 _db.Entry(deliveryItem).State = EntityState.Modified;
             }
@@ -113,10 +107,7 @@ namespace ERP_Model.Controllers.API
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -131,7 +122,13 @@ namespace ERP_Model.Controllers.API
                 return BadRequest(ModelState);
             }
 
+            var order =
+                await _db.Deliveries.FirstOrDefaultAsync(d => d.DeliveryOrder.OrderGuid == deliveryNoteVm.DeliveryOrder);
 
+            if (order != null)
+            {
+                return BadRequest($"Delivery Note for Order {order.DeliveryOrder.OrderGuid} already exists.");
+            }
 
             var deliveryNote = new Delivery
             {
@@ -151,24 +148,22 @@ namespace ERP_Model.Controllers.API
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             await PostDeliveryItems(deliveryNoteVm.DeliveryItems, deliveryNote.DeliveryGuid);
 
-            return CreatedAtRoute("DefaultApi", new { id = deliveryNote.DeliveryGuid }, deliveryNote);
+            return CreatedAtRoute("DefaultApi", new {id = deliveryNote.DeliveryGuid}, deliveryNote);
         }
 
         [ResponseType(typeof(Order))]
-        public async Task<IHttpActionResult> PostDeliveryItems(List<DeliveryItemViewModel> deliveryItems, Guid deliveryGuid)
+        public async Task<IHttpActionResult> PostDeliveryItems(List<DeliveryItemViewModel> deliveryItems,
+            Guid deliveryGuid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }            
+            }
 
             //create the orderitems and link them to the order
             foreach (var p in deliveryItems)
@@ -177,10 +172,10 @@ namespace ERP_Model.Controllers.API
                 {
                     DeliveryItemDelivery = await _db.Deliveries.FirstOrDefaultAsync(d => d.DeliveryGuid == deliveryGuid),
                     DeliveryItemGuid = Guid.NewGuid(),
-                    DeliveryItemOrderItem = await _db.OrderItems.FirstOrDefaultAsync(oi => oi.OrderItemGuid == p.DeliveryItemOrderItem),
+                    DeliveryItemOrderItem =
+                        await _db.OrderItems.FirstOrDefaultAsync(oi => oi.OrderItemGuid == p.DeliveryItemOrderItem),
                     DeliveryItemQuantity = p.DeliveryItemQuantity
-
-                };              
+                };
 
                 _db.DeliveryItems.Add(deliveryItem);
             }
@@ -193,14 +188,14 @@ namespace ERP_Model.Controllers.API
             {
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = deliveryItems }, deliveryItems);
+            return CreatedAtRoute("DefaultApi", new {id = deliveryItems}, deliveryItems);
         }
 
         // DELETE: api/Orders/5
         [ResponseType(typeof(Delivery))]
         public async Task<IHttpActionResult> DeleteDelivery(Guid id)
         {
-            Delivery deliveryNote = await _db.Deliveries.FindAsync(id);
+            var deliveryNote = await _db.Deliveries.FindAsync(id);
             if (deliveryNote == null)
             {
                 return NotFound();

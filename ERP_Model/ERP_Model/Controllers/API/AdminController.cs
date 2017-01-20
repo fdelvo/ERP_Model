@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -21,33 +20,27 @@ namespace ERP_Model.Controllers.API
 {
     public class AdminController : ApiController
     {
-        //get database context
-        private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
+        //get database context
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         public ApplicationUserManager UserManager
         {
-            get
-            {
-                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            get { return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
         }
 
         //returns all addresses
         public async Task<IHttpActionResult> GetAddresses(int page = 0, int pageSize = 0)
         {
-            if(pageSize == 0)
+            if (pageSize == 0)
             {
                 pageSize = await db.Addresses.CountAsync();
             }
 
             var addresses = await db.Addresses
                 .OrderByDescending(o => o.AddressLastName)
-                .Skip(page * pageSize)
+                .Skip(page*pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -65,7 +58,7 @@ namespace ERP_Model.Controllers.API
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> GetAddress(Guid id)
         {
-            Address address = await db.Addresses.FindAsync(id);
+            var address = await db.Addresses.FindAsync(id);
             if (address == null)
             {
                 return NotFound();
@@ -102,10 +95,7 @@ namespace ERP_Model.Controllers.API
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -138,13 +128,10 @@ namespace ERP_Model.Controllers.API
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = address.AddressGuid }, address);
+            return CreatedAtRoute("DefaultApi", new {id = address.AddressGuid}, address);
         }
 
         //deletes an address
@@ -152,7 +139,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> DeleteAddress(Guid id)
         {
             //get the address
-            Address address = await db.Addresses.FindAsync(id);
+            var address = await db.Addresses.FindAsync(id);
 
             //check if address exists
             if (address == null)
@@ -174,14 +161,14 @@ namespace ERP_Model.Controllers.API
         {
             var users = await db.Users
                 .OrderByDescending(o => o.Alias)
-                .Skip(page * pageSize)
+                .Skip(page*pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             var dataVm = new PaginationViewModel
             {
                 DataObject = users,
-                PageAmount = (db.Users.Count() + pageSize - 1) / pageSize,
+                PageAmount = (db.Users.Count() + pageSize - 1)/pageSize,
                 CurrentPage = page
             };
             return Ok(dataVm);
@@ -198,9 +185,9 @@ namespace ERP_Model.Controllers.API
         //creates an user
         public async Task<IHttpActionResult> PostUser(RegisterBindingModel model)
         {
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, Alias = model.Alias };
+            var user = new ApplicationUser {UserName = model.Email, Email = model.Email, Alias = model.Alias};
 
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            var result = await UserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
@@ -237,10 +224,7 @@ namespace ERP_Model.Controllers.API
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -260,7 +244,7 @@ namespace ERP_Model.Controllers.API
 
             await UserManager.RemovePasswordAsync(id.ToString());
 
-            IdentityResult result = await UserManager.AddPasswordAsync(id.ToString(), model.NewPassword);
+            var result = await UserManager.AddPasswordAsync(id.ToString(), model.NewPassword);
 
             if (!result.Succeeded)
             {
@@ -273,7 +257,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> DeleteUser(Guid id)
         {
             //get the user
-            ApplicationUser user = await db.Users.FirstOrDefaultAsync(i => i.Id == id.ToString());
+            var user = await db.Users.FirstOrDefaultAsync(i => i.Id == id.ToString());
 
             //check if user exists
             if (user == null)
@@ -322,7 +306,7 @@ namespace ERP_Model.Controllers.API
             {
                 if (result.Errors != null)
                 {
-                    foreach (string error in result.Errors)
+                    foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError("", error);
                     }

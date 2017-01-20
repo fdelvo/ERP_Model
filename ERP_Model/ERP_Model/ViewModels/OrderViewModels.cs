@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 using ERP_Model.Models;
 
 namespace ERP_Model.ViewModels
@@ -11,6 +9,7 @@ namespace ERP_Model.ViewModels
     {
         [Key]
         public Guid OrderGuid { get; set; }
+
         public virtual ApplicationUser OrderCustomer { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime OrderDeliveryDate { get; set; }
@@ -21,6 +20,7 @@ namespace ERP_Model.ViewModels
     {
         [Key]
         public Guid OrderGuid { get; set; }
+
         public virtual ApplicationUser OrderCustomer { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime OrderDeliveryDate { get; set; }
@@ -31,9 +31,16 @@ namespace ERP_Model.ViewModels
     {
         [Key]
         public Guid ProductGuid { get; set; }
+
         public string ProductName { get; set; }
         public float ProductPrice { get; set; }
         public string ProductDescription { get; set; }
         public int OrderQuantity { get; set; }
+    }
+
+    public class OrderDetailsViewModel
+    {
+        public Order Order { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
     }
 }

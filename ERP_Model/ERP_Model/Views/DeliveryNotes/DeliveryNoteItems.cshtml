@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "DeliveryNoteItems";
 }
 
@@ -7,27 +6,32 @@
     <a class="back-link" href="javascript: window.history.back();">Back</a>
     <h1>Delivery Note: {{GetValueAtIndex(5)}}</h1>
     <p>Order: {{deliveryNote.DeliveryNote.DeliveryOrder.OrderGuid}}</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Product Guid</th>
-                    <th>Product</th>
-                    <th>Unit Price</th>
-                    <th>Order Quantity</th>
-                    <th>Total Price</th>
-                    <th>Delivery Note Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="deliveryItem in deliveryNote.DeliveryItems track by deliveryItem.DeliveryItemGuid">
-                    <td>{{deliveryItem.DeliveryItemGuid}}</td>
-                    <td><a href="/ProductManagement/ProductDetails/{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a></td>
-                    <td>{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-                    <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity}}</td>
-                    <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity * deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-                    <td>{{deliveryItem.DeliveryItemQuantity}}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="nav-bar">
+        <a class="button" href="/DeliveryNotes/Edit/{{deliveryNote.DeliveryNote.DeliveryGuid}}">Edit</a>
+        <a class="button" href="" ng-click="RemoveDeliveryNote(deliveryNote.DeliveryNote.DeliveryOrder)">Delete</a>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Product Guid</th>
+            <th>Product</th>
+            <th>Unit Price</th>
+            <th>Order Quantity</th>
+            <th>Total Price</th>
+            <th>Delivery Note Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="deliveryItem in deliveryNote.DeliveryItems track by deliveryItem.DeliveryItemGuid">
+            <td>{{deliveryItem.DeliveryItemGuid}}</td>
+            <td>
+                <a href="/ProductManagement/ProductDetails/{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a>
+            </td>
+            <td>{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity}}</td>
+            <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity * deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td>{{deliveryItem.DeliveryItemQuantity}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-

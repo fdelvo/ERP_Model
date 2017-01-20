@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -22,7 +19,7 @@ namespace ERP_Model.Controllers.API
     public class ProductsController : ApiController
     {
         //db context
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         //returns all products
         public async Task<IHttpActionResult> GetProducts(int page, int pageSize)
@@ -30,16 +27,16 @@ namespace ERP_Model.Controllers.API
             var products = await db.Products
                 .Where(d => d.ProductDeleted == false)
                 .OrderByDescending(o => o.ProductName)
-                .Skip(page * pageSize)
+                .Skip(page*pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             var dataVm = new PaginationViewModel
             {
                 DataObject = products,
-                PageAmount = (db.Products.Count() + pageSize - 1) / pageSize,
+                PageAmount = (db.Products.Count() + pageSize - 1)/pageSize,
                 CurrentPage = page
-        };
+            };
 
             return Ok(dataVm);
         }
@@ -49,7 +46,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetProduct(Guid id)
         {
             //get the product from db.context
-            Product product = await db.Products.FindAsync(id);
+            var product = await db.Products.FindAsync(id);
 
             //check if porduct exists
             if (product == null)
@@ -90,10 +87,7 @@ namespace ERP_Model.Controllers.API
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             await stockController.UpdateStockItem(stockGuid, product);
@@ -130,15 +124,12 @@ namespace ERP_Model.Controllers.API
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             await stockController.CreateStockItem(stockGuid, product);
 
-            return CreatedAtRoute("DefaultApi", new { id = product.ProductGuid }, product);
+            return CreatedAtRoute("DefaultApi", new {id = product.ProductGuid}, product);
         }
 
         //deletes a product
@@ -169,10 +160,7 @@ namespace ERP_Model.Controllers.API
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             var stockItem = await db.StockItems.FirstOrDefaultAsync(si => si.StockItemProduct.ProductGuid == id);

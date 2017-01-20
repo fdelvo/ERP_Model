@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -11,31 +10,38 @@
     </div>
     <table ng-init="OrdersList()">
         <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Creation Date</th>
-                <th>Delivery Date</th>
-                <th>Order Value</th>
-            </tr>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Creation Date</th>
+            <th>Delivery Date</th>
+            <th>Order Value</th>
+        </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="o in orders.DataObject track by o.OrderGuid">
-                <td><a href="/Orders/OrderItems/{{o.OrderGuid}}">{{o.OrderGuid}}</a></td>
-                <td>{{o.OrderCustomer.Alias}}</td>
-                <td>{{o.OrderDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
-                <td>{{o.OrderDeliveryDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
-                <td>{{o.OrderValue}}</td>
-                <td><a href="/DeliveryNotes/New/{{o.OrderGuid}}">Create Delivery Note</a></td>
-                <td><a href="/Orders/Edit/{{o.OrderGuid}}">Edit</a></td>
-                <td><a href="" ng-click="RemoveOrder(o.OrderGuid)">Delete</a></td>
-            </tr>
+        <tr ng-repeat="o in orders.DataObject track by o.OrderGuid">
+            <td>
+                <a href="/Orders/OrderItems/{{o.OrderGuid}}">{{o.OrderGuid}}</a>
+            </td>
+            <td>{{o.OrderCustomer.Alias}}</td>
+            <td>{{o.OrderDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+            <td>{{o.OrderDeliveryDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+            <td>{{o.OrderValue}}</td>
+            <td>
+                <a href="/DeliveryNotes/New/{{o.OrderGuid}}">Create Delivery Note</a>
+            </td>
+            <td>
+                <a href="/Orders/Edit/{{o.OrderGuid}}">Edit</a>
+            </td>
+            <td>
+                <a href="" ng-click="RemoveOrder(o.OrderGuid)">Delete</a>
+            </td>
+        </tr>
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="5"><a class="button" href="" ng-click="Previous(orders.CurrentPage, orders.PageAmount, OrdersList)">Previous</a> {{orders.CurrentPage+1}} / {{orders.PageAmount}} <a class="button" href="" ng-click="Next(orders.CurrentPage, orders.PageAmount, OrdersList)">Next</a></td>
-            </tr>
+        <tr>
+            <td colspan="5"><a class="button" href="" ng-click="Previous(orders.CurrentPage, orders.PageAmount, OrdersList)">Previous</a> {{orders.CurrentPage+1}} / {{orders.PageAmount}} <a class="button" href="" ng-click="Next(orders.CurrentPage, orders.PageAmount, OrdersList)">Next</a></td>
+        </tr>
         </tfoot>
     </table>
 </div>
-

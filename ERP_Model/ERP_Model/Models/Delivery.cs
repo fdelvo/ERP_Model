@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace ERP_Model.Models
 {
@@ -11,8 +8,10 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid DeliveryGuid { get; set; }
+
         [Index(IsUnique = true)]
         public virtual Order DeliveryOrder { get; set; }
+
         public bool DeliveryDeleted { get; set; }
     }
 
@@ -20,6 +19,7 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid DeliveryItemGuid { get; set; }
+
         public virtual Delivery DeliveryItemDelivery { get; set; }
         public virtual OrderItem DeliveryItemOrderItem { get; set; }
         public int DeliveryItemQuantity { get; set; }

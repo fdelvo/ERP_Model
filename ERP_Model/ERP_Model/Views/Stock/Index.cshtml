@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -19,7 +18,9 @@
         </thead>
         <tbody>
         <tr ng-repeat="s in stocks.DataObject track by s.StockGuid">
-            <td><a href="/Stock/StockItems/{{s.StockGuid}}">{{s.StockName}}</a></td>
+            <td>
+                <a href="/Stock/StockItems/{{s.StockGuid}}">{{s.StockName}}</a>
+            </td>
             <td>
                 <ul>
                     <li>Company: {{s.StockAddress.AddressCompany}}</li>
@@ -32,8 +33,12 @@
             </td>
             <td>{{s.StockMethod}}</td>
             <td>{{s.StockValue}}</td>
-            <td><a href="/Stock/Edit/{{s.StockGuid}}">Edit</a></td>
-            <td><a href="" ng-click="RemoveStock(s.StockGuid)">Delete</a></td>
+            <td>
+                <a href="/Stock/Edit/{{s.StockGuid}}">Edit</a>
+            </td>
+            <td>
+                <a href="" ng-click="RemoveStock(s.StockGuid)">Delete</a>
+            </td>
         </tr>
         </tbody>
         <tfoot>
@@ -43,4 +48,3 @@
         </tfoot>
     </table>
 </div>
-
