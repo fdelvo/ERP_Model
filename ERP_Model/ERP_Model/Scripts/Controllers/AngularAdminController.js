@@ -33,9 +33,14 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
     };
 
     $scope.newAddress = new AngularAdminService();
+    $scope.newCustomer = new AngularAdminService();
+    $scope.newSupplier = new AngularAdminService();
     $scope.model = new AngularAdminService();
 
-    $scope.AddressList = function() {
+    $scope.AddressList = function (pageSize) {
+        if (pageSize) {
+            $scope.pageSize = pageSize;
+        }
         $scope.addresses = AngularAdminService.GetAddresses({
                 page: page,
                 pageSize: $scope.pageSize
@@ -45,8 +50,42 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
             });
     };
 
+    $scope.CustomerList = function (pageSize) {
+        if (pageSize) {
+            $scope.pageSize = pageSize;
+        }
+        $scope.customers = AngularAdminService.GetCustomers({
+            page: page,
+            pageSize: $scope.pageSize
+        },
+            function () {
+                console.log($scope.customers);
+            });
+    };
+
+    $scope.SupplierList = function (pageSize) {
+        if (pageSize) {
+            $scope.pageSize = pageSize;
+        }
+        $scope.suppliers = AngularAdminService.GetSuppliers({
+            page: page,
+            pageSize: $scope.pageSize
+        },
+            function () {
+                console.log($scope.suppliers);
+            });
+    };
+
     $scope.AddressDetails = function(guid) {
         $scope.address = AngularAdminService.GetAddress({ id: guid });
+    };
+
+    $scope.CustomerDetails = function (guid) {
+        $scope.customer = AngularAdminService.GetCustomer({ id: guid });
+    };
+
+    $scope.SupplierDetails = function (guid) {
+        $scope.supplier = AngularAdminService.GetSupplier({ id: guid });
     };
 
     $scope.CreateAddress = function() {
@@ -56,6 +95,28 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 location.href = "/Administration/Index";
             },
             function(error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.CreateCustomer = function () {
+        $scope.newCustomer.$PostCustomer(
+            function (response) {
+                console.log("Success");
+                location.href = "/Administration/Index";
+            },
+            function (error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.CreateSupplier = function () {
+        $scope.newSupplier.$PostSupplier(
+            function (response) {
+                console.log("Success");
+                location.href = "/Administration/Index";
+            },
+            function (error) {
                 console.log("Fail");
             });
     };
@@ -71,6 +132,28 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
             });
     };
 
+    $scope.EditCustomer = function () {
+        $scope.customer.$PutCustomer({ id: $scope.customer.CustomerGuid },
+            function (response) {
+                console.log("Success");
+                location.href = "/Administration/Index";
+            },
+            function (error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.EditSupplier = function () {
+        $scope.supplier.$PutSupplier({ id: $scope.supplier.SupplierGuid },
+            function (response) {
+                console.log("Success");
+                location.href = "/Administration/Index";
+            },
+            function (error) {
+                console.log("Fail");
+            });
+    };
+
     $scope.RemoveAddress = function(guid) {
         AngularAdminService.DeleteAddress({ id: guid },
             function(response) {
@@ -78,6 +161,28 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 location.href = "/Administration/Index";
             },
             function(error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.RemoveCustomer = function (guid) {
+        AngularAdminService.DeleteCustomer({ id: guid },
+            function (response) {
+                console.log("Success");
+                location.href = "/Administration/Index";
+            },
+            function (error) {
+                console.log("Fail");
+            });
+    };
+
+    $scope.RemoveSupplier = function (guid) {
+        AngularAdminService.DeleteSupplier({ id: guid },
+            function (response) {
+                console.log("Success");
+                location.href = "/Administration/Index";
+            },
+            function (error) {
                 console.log("Fail");
             });
     };

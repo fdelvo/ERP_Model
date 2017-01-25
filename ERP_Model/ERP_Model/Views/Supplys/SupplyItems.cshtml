@@ -2,13 +2,14 @@
     ViewBag.Title = "SupplyItems";
 }
 
-<div class="content-box" ng-controller="AngularSupplysController" ng-init="SupplyItemsList(GetValueAtIndex(5))">
+<div class="content-box" ng-controller="AngularSupplysController" ng-init="SupplyDetails(GetValueAtIndex(5))">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
     <h1>Supply: {{GetValueAtIndex(5)}}</h1>
-    <div class="nav-bar">
-        <a class="button" href="/Supplys/SupplyItem/{{supplyItems.SupplyItemGuid}}">Edit</a>
-        <a class="button" href="" ng-click="RemoveSupplyItem(supplyItems.SupplyItemGuid)">Delete</a>
+    <div ng-hide="supply.Supply.SupplyDeleted" class="nav-bar">
+        <a class="button" href="/Supplys/Edit/{{supply.Supply.SupplyGuid}}">Edit</a>
+        <a class="button" href="" ng-click="RemoveSupply(supply.Supply.SupplyGuid)">Delete</a>
     </div>
+    <span ng-show="supply.Supply.SupplyDeleted" class="label">Old Supply</span>
     <table>
         <thead>
         <tr>
@@ -20,7 +21,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="supplyItem in supplyItems.DataObject track by supplyItem.SupplyItemGuid">
+        <tr ng-repeat="supplyItem in supply.SupplyItems track by supplyItem.SupplyItemGuid">
             <td>{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}</td>
             <td>
                 <a href="/ProductManagement/ProductDetails/{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{orderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a>

@@ -15,11 +15,14 @@ namespace ERP_Model
                 "~/Scripts/Services/AngularStocksService.js",
                 "~/Scripts/Services/AngularAdminService.js",
                 "~/Scripts/Services/AngularOrdersService.js",
+                "~/Scripts/Services/AngularSupplysService.js",
                 "~/Scripts/Services/AngularDeliveryNotesService.js",
+                "~/Scripts/Services/AngularGoodsReceiptsService.js",
                 "~/Scripts/Controllers/AngularProductsController.js",
                 "~/Scripts/Controllers/AngularLoginController.js",
                 "~/Scripts/Controllers/AngularAdminController.js",
                 "~/Scripts/Controllers/AngularOrdersController.js",
+                "~/Scripts/Controllers/AngularSupplysController.js",
                 "~/Scripts/Controllers/AngularStocksController.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're

@@ -4,9 +4,9 @@
 
 <div class="content-box" ng-controller="AngularOrdersController">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
-    <form ng-init="UserList(); ProductList();" ng-submit="CreateOrder()">
+    <form ng-init="CustomerList(0); ProductList();" ng-submit="CreateOrder()">
         <label>Customer:</label>
-        <select ng-options="user.Alias for user in users.DataObject track by user.Id" ng-model="newOrder.OrderCustomer"></select>
+        <select ng-options="customer.CustomerLastName || customer.CustomerCompany for customer in customers.DataObject track by customer.CustomerGuid" ng-model="newOrder.OrderCustomer"></select>
         <br/>
         <label>Delivery Date:</label>
         <input type="text" ng-model="newOrder.OrderDeliveryDate"/>

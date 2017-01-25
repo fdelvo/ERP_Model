@@ -29,5 +29,35 @@ namespace ERP_Model.Controllers
         {
             return View();
         }
+
+        public ActionResult NewCustomer()
+        {
+            return View();
+        }
+
+        public ActionResult EditCustomer()
+        {
+            return View();
+        }
+
+        public ActionResult NewSupplier()
+        {
+            return View();
+        }
+
+        public ActionResult EditSupplier()
+        {
+            return View();
+        }
+
+        public ActionResult Supplier()
+        {
+            return View();
+        }
+
+        public ActionResult Customer()
+        {
+            return View();
+        }
     }
 }

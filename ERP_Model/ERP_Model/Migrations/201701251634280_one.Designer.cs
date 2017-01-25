@@ -7,13 +7,13 @@ namespace ERP_Model.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class stock_transaction_change : IMigrationMetadata
+    public sealed partial class one : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(stock_transaction_change));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(one));
         
         string IMigrationMetadata.Id
         {
-            get { return "201701201547023_stock_transaction_change"; }
+            get { return "201701251634280_one"; }
         }
         
         string IMigrationMetadata.Source

@@ -2,7 +2,7 @@
     ViewBag.Title = "Index";
 }
 
-<div class="content-box" ng-controller="AngularAdminController" ng-init="AddressList(); UserList(); visibilityAddresses = true;">
+<div class="content-box" ng-controller="AngularAdminController" ng-init="AddressList(); UserList(); CustomerList(); SupplierList(); visibilityAddresses = true;">
     <h1>Administration</h1>
     <div class="nav-bar">
         <a class="button" href="" ng-click="visibilityAddresses = true; visibilityUsers = false; visibilityCustomers = false; visibilitySuppliers = false;">Addresses</a>
@@ -86,13 +86,17 @@
         <table>
             <thead>
             <tr>
-                <th>Name</th>
+                <th>Company</th>
+                <th>Forname</th>
+                <th>Lastname</th>
                 <th>Address</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="c in customers.DataObject track by c.CustomerGuid">
-                <td>{{c.CustomerName}}</td>
+                <td>{{c.CustomerCompany}}</td>
+                <td>{{c.CustomerForName}}</td>
+                <td>{{c.CustomerLastName}}</td>
                 <td>
                     <ul>
                         <li>Company: {{c.CustomerAddress.AddressCompany}}</li>
@@ -125,13 +129,17 @@
         <table>
             <thead>
             <tr>
-                <th>Name</th>
+                <th>Company</th>
+                <th>Forname</th>
+                <th>Lastname</th>
                 <th>Address</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="s in suppliers.DataObject track by s.SupplierGuid">
-                <td>{{s.SupplierName}}</td>
+                <td>{{s.SupplierCompany}}</td>
+                <td>{{s.SupplierForName}}</td>
+                <td>{{s.SupplierLastName}}</td>
                 <td>
                     <ul>
                         <li>Company: {{s.SupplierAddress.AddressCompany}}</li>

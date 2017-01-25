@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "NewSupplier";
+}
+
+<div class="content-box" ng-controller="AngularAdminController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <form ng-init="AddressList(0)" ng-submit="CreateSupplier()">
+        <label>ForName:</label>
+        <input type="text" ng-model="newSupplier.SupplierForName" placeholder="Forname" />
+        <br />
+        <label>LastName:</label>
+        <input type="text" ng-model="newSupplier.SupplierLastName" placeholder="Lastname" />
+        <br/>
+        <label>Company:</label>
+        <input type="text" ng-model="newSupplier.SupplierCompany" placeholder="Company" />
+        <br />
+        <label>Address:</label>
+        <select ng-options="address.AddressDescription for address in addresses.DataObject track by address.AddressGuid" ng-model="newSupplier.SupplierAddress"></select>
+        <br />
+        <label></label>
+        <input type="submit" value="Create Supplier" />
+    </form>
+</div>
+

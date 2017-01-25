@@ -54,6 +54,52 @@ namespace ERP_Model.Controllers.API
             return Ok(dataVm);
         }
 
+        public async Task<IHttpActionResult> GetCustomers(int page = 0, int pageSize = 0)
+        {
+            if (pageSize == 0)
+            {
+                pageSize = await db.Customers.CountAsync();
+            }
+
+            var customers = await db.Customers
+                .OrderByDescending(o => o.CustomerLastName)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = customers,
+                PageAmount = (db.Customers.Count() + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
+        }
+
+        public async Task<IHttpActionResult> GetSuppliers(int page = 0, int pageSize = 0)
+        {
+            if (pageSize == 0)
+            {
+                pageSize = await db.Suppliers.CountAsync();
+            }
+
+            var suppliers = await db.Suppliers
+                .OrderByDescending(o => o.SupplierLastName)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = suppliers,
+                PageAmount = (db.Customers.Count() + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
+        }
+
         //returns an address
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> GetAddress(Guid id)
@@ -65,6 +111,28 @@ namespace ERP_Model.Controllers.API
             }
 
             return Ok(address);
+        }
+
+        public async Task<IHttpActionResult> GetCustomer(Guid id)
+        {
+            var customer = await db.Customers.FindAsync(id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(customer);
+        }
+
+        public async Task<IHttpActionResult> GetSupplier(Guid id)
+        {
+            var supplier = await db.Suppliers.FindAsync(id);
+            if (supplier == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(supplier);
         }
 
         //updates an address
@@ -83,6 +151,72 @@ namespace ERP_Model.Controllers.API
             }
 
             db.Entry(address).State = EntityState.Modified;
+
+            //save changes to the address
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AddressExists(id))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutCustomer(Guid id, Customer customer)
+        {
+            //check if data sent from form matches the format of the data in database
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != customer.CustomerGuid)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(customer).State = EntityState.Modified;
+
+            //save changes to the address
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AddressExists(id))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutSupplier(Guid id, Supplier supplier)
+        {
+            //check if data sent from form matches the format of the data in database
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != supplier.SupplierGuid)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(supplier).State = EntityState.Modified;
 
             //save changes to the address
             try
@@ -134,6 +268,72 @@ namespace ERP_Model.Controllers.API
             return CreatedAtRoute("DefaultApi", new {id = address.AddressGuid}, address);
         }
 
+        [ResponseType(typeof(Customer))]
+        public async Task<IHttpActionResult> PostCustomer(Customer customer)
+        {
+            //check if data sent from form matches the format of the data in database
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //generate new guid for the address
+            customer.CustomerGuid = Guid.NewGuid();
+            customer.CustomerAddress = await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == customer.CustomerAddress.AddressGuid);
+
+            //add address to db context
+            db.Customers.Add(customer);
+
+            //save changes
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (CustomerExists(customer.CustomerGuid))
+                {
+                    return Conflict();
+                }
+                throw;
+            }
+
+            return CreatedAtRoute("DefaultApi", new { id = customer.CustomerGuid }, customer);
+        }
+
+        [ResponseType(typeof(Supplier))]
+        public async Task<IHttpActionResult> PostSupplier(Supplier supplier)
+        {
+            //check if data sent from form matches the format of the data in database
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //generate new guid for the address
+            supplier.SupplierGuid = Guid.NewGuid();
+            supplier.SupplierAddress = await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == supplier.SupplierAddress.AddressGuid);
+
+            //add address to db context
+            db.Suppliers.Add(supplier);
+
+            //save changes
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (SupplierExists(supplier.SupplierGuid))
+                {
+                    return Conflict();
+                }
+                throw;
+            }
+
+            return CreatedAtRoute("DefaultApi", new { id = supplier.SupplierGuid }, supplier);
+        }
+
         //deletes an address
         [ResponseType(typeof(Address))]
         public async Task<IHttpActionResult> DeleteAddress(Guid id)
@@ -154,6 +354,48 @@ namespace ERP_Model.Controllers.API
             await db.SaveChangesAsync();
 
             return Ok(address);
+        }
+
+        [ResponseType(typeof(Customer))]
+        public async Task<IHttpActionResult> DeleteCustomer(Guid id)
+        {
+            //get the address
+            var customer = await db.Customers.FindAsync(id);
+
+            //check if address exists
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            //remove address from db context
+            db.Customers.Remove(customer);
+
+            //save changes to db
+            await db.SaveChangesAsync();
+
+            return Ok(customer);
+        }
+
+        [ResponseType(typeof(Supplier))]
+        public async Task<IHttpActionResult> DeleteSupplier(Guid id)
+        {
+            //get the address
+            var supplier = await db.Suppliers.FindAsync(id);
+
+            //check if address exists
+            if (supplier == null)
+            {
+                return NotFound();
+            }
+
+            //remove address from db context
+            db.Suppliers.Remove(supplier);
+
+            //save changes to db
+            await db.SaveChangesAsync();
+
+            return Ok(supplier);
         }
 
         //returns all users
@@ -287,6 +529,16 @@ namespace ERP_Model.Controllers.API
         private bool AddressExists(Guid id)
         {
             return db.Addresses.Count(e => e.AddressGuid == id) > 0;
+        }
+
+        private bool CustomerExists(Guid id)
+        {
+            return db.Customers.Count(e => e.CustomerGuid == id) > 0;
+        }
+
+        private bool SupplierExists(Guid id)
+        {
+            return db.Suppliers.Count(e => e.SupplierGuid == id) > 0;
         }
 
         //check if user exists

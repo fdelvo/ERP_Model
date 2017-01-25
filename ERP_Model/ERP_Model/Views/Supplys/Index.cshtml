@@ -23,7 +23,7 @@
             <td>
                 <a href="/Supplys/SupplyItems/{{s.SupplyGuid}}">{{s.SupplyGuid}}</a>
             </td>
-            <td>{{s.SupplyCustomer.Alias}}</td>
+            <td><a href="/Administration/Supplier/{{s.SupplySupplier.SupplierGuid}}">{{s.SupplySupplier.SupplierLastName || " "}} {{s.SupplySupplier.SupplierForName || " "}} {{s.SupplySupplier.SupplierCompany || " "}}</a></td>
             <td>{{s.SupplyDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
             <td>{{s.SupplyDeliveryDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
             <td>{{s.SupplyValue}}</td>

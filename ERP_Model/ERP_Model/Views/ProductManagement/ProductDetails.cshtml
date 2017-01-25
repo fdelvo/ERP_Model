@@ -5,6 +5,11 @@
 <div class="content-box" ng-controller="AngularProductsController" ng-init="ProductDetails(GetValueAtIndex(5))">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
     <h1>{{product.ProductName}}</h1>
+    <div ng-hide="product.ProductDeleted" class="nav-bar">
+        <a class="button" href="/ProductManagement/Edit/{{product.ProductGuid}}">Edit</a>
+        <a class="button" href="" ng-click="RemoveProduct(product.ProductGuid)">Delete</a>
+    </div>
+    <span ng-show="product.ProductDeleted" class="label">Old Product</span>
     <table>
         <tr>
             <td>

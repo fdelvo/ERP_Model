@@ -209,11 +209,13 @@
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\API\AdminController.cs" />
     <Compile Include="Controllers\API\DeliveryNotesController.cs" />
+    <Compile Include="Controllers\API\GoodsReceiptsController.cs" />
     <Compile Include="Controllers\API\OrdersController.cs" />
     <Compile Include="Controllers\API\ProductsController.cs" />
     <Compile Include="Controllers\API\StocksController.cs" />
+    <Compile Include="Controllers\API\SupplysController.cs" />
     <Compile Include="Controllers\DeliveryNotesController.cs" />
-    <Compile Include="Controllers\GoodReceiptsController.cs" />
+    <Compile Include="Controllers\GoodsReceiptsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductManagementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -223,13 +225,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201701191632109_initial.cs" />
-    <Compile Include="Migrations\201701191632109_initial.Designer.cs">
-      <DependentUpon>201701191632109_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701201547023_stock_transaction_change.cs" />
-    <Compile Include="Migrations\201701201547023_stock_transaction_change.Designer.cs">
-      <DependentUpon>201701201547023_stock_transaction_change.cs</DependentUpon>
+    <Compile Include="Migrations\201701251634280_one.cs" />
+    <Compile Include="Migrations\201701251634280_one.Designer.cs">
+      <DependentUpon>201701251634280_one.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -249,9 +247,11 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\DeliveryViewModels.cs" />
+    <Compile Include="ViewModels\GoodsReceiptViewModel.cs" />
     <Compile Include="ViewModels\OrderViewModels.cs" />
     <Compile Include="ViewModels\PaginationViewModels.cs" />
     <Compile Include="ViewModels\StockViewModels.cs" />
+    <Compile Include="ViewModels\SupplyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -321,6 +321,7 @@
     <Content Include="Scripts\Controllers\AngularOrdersController.js" />
     <Content Include="Scripts\Controllers\AngularProductsController.js" />
     <Content Include="Scripts\Controllers\AngularStocksController.js" />
+    <Content Include="Scripts\Controllers\AngularSupplysController.js" />
     <Content Include="Scripts\ERPModelApp.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
@@ -1071,9 +1072,11 @@
     <Content Include="Scripts\Angular_Core\respond.min.js" />
     <Content Include="Scripts\Services\AngularAdminService.js" />
     <Content Include="Scripts\Services\AngularDeliveryNotesService.js" />
+    <Content Include="Scripts\Services\AngularGoodsReceiptsService.js" />
     <Content Include="Scripts\Services\AngularOrdersService.js" />
     <Content Include="Scripts\Services\AngularProductsService.js" />
     <Content Include="Scripts\Services\AngularStocksService.js" />
+    <Content Include="Scripts\Services\AngularSupplysService.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1095,6 +1098,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Customers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -1124,17 +1128,20 @@
     <Content Include="Views\Supplys\SupplyItems.cshtml" />
     <Content Include="Views\Supplys\New.cshtml" />
     <Content Include="Views\Supplys\Edit.cshtml" />
-    <Content Include="Views\GoodReceipts\Index.cshtml" />
-    <Content Include="Views\GoodReceipts\New.cshtml" />
-    <Content Include="Views\GoodReceipts\Edit.cshtml" />
-    <Content Include="Views\GoodReceipts\GoodReceiptItems.cshtml" />
+    <Content Include="Views\GoodsReceipts\Index.cshtml" />
+    <Content Include="Views\GoodsReceipts\New.cshtml" />
+    <Content Include="Views\GoodsReceipts\Edit.cshtml" />
+    <Content Include="Views\GoodsReceipts\GoodsReceiptItems.cshtml" />
+    <Content Include="Views\Administration\NewCustomer.cshtml" />
+    <Content Include="Views\Administration\EditCustomer.cshtml" />
+    <Content Include="Views\Administration\NewSupplier.cshtml" />
+    <Content Include="Views\Administration\EditSupplier.cshtml" />
+    <Content Include="Views\Administration\Supplier.cshtml" />
+    <Content Include="Views\Administration\Customer.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201701191632109_initial.resx">
-      <DependentUpon>201701191632109_initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701201547023_stock_transaction_change.resx">
-      <DependentUpon>201701201547023_stock_transaction_change.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201701251634280_one.resx">
+      <DependentUpon>201701251634280_one.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

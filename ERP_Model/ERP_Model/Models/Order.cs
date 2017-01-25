@@ -8,7 +8,7 @@ namespace ERP_Model.Models
         [Key]
         public Guid OrderGuid { get; set; }
 
-        public virtual ApplicationUser OrderCustomer { get; set; }
+        public virtual Customer OrderCustomer { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime OrderDeliveryDate { get; set; }
         public bool OrderDeleted { get; set; }

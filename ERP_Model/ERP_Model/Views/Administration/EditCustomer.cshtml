@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "EditCustomer";
+}
+
+<div class="content-box" ng-controller="AngularAdminController" ng-init="CustomerDetails(GetValueAtIndex(5));AddressList(0);">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <form ng-submit="EditCustomer()">
+        <label>Forname:</label>
+        <input type="text" ng-model="customer.CustomerForName" placeholder="Forname" />
+        <br />
+        <label>Lastname:</label>
+        <input type="text" ng-model="customer.CustomerLastName" placeholder="Lastname" />
+        <br />
+        <label>Company:</label>
+        <input type="text" ng-model="customer.CustomerCompany" placeholder="Company" />
+        <br />
+        <label>Address:</label>
+        <select ng-model="customer.CustomerAddress">
+            <option ng-repeat="a in addresses track by a.AddressGuid">{{a.AddressDescription}}</option>
+        </select>
+        <br />
+        <label></label>
+        <input type="submit" value="Save Customer" />
+    </form>
+</div>
+

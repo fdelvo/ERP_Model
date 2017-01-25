@@ -17,13 +17,13 @@
         <tbody>
         <tr ng-repeat="g in goodsReceipts.DataObject track by g.GoodsReceiptGuid">
             <td>
-                <a href="/GoodsReceipt/GoodsReceiptItems/{{g.GoodsReceiptGuid}}">{{g.GoodsReceiptGuid}}</a>
+                <a href="/GoodsReceipts/GoodsReceiptItems/{{g.GoodsReceiptGuid}}">{{g.GoodsReceiptGuid}}</a>
             </td>
             <td>
-                <a href="/Supplys/SupplyItems/{{g.GoodsReceiptOrder.SupplyGuid}}">{{g.GoodsReceiptSupply.SupplyGuid}}</a>
+                <a href="/Supplys/SupplyItems/{{g.GoodsReceiptSupply.SupplyGuid}}">{{g.GoodsReceiptSupply.SupplyGuid}}</a>
             </td>
             <td>
-                <a href="/GoodsReceipt/Edit/{{g.GoodsReceiptGuid}}">Edit</a>
+                <a href="/GoodsReceipts/Edit/{{g.GoodsReceiptGuid}}">Edit</a>
             </td>
             <td>
                 <a href="" ng-click="RemoveGoodsReceipt(g.GoodsReceiptGuid)">Delete</a>

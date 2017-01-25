@@ -7,6 +7,8 @@
     <h1>{{stock.StockName}}</h1>
     <div class="nav-bar">
         <a href="/Stock/StockTransactions/{{stock.StockGuid}}" class="button">Show Stock Transactions</a>
+        <a href="/Stock/Edit/{{stock.StockGuid}}" class="button">Edit</a>
+        <a href="" ng-click="RemoveStock(stock.StockGuid)" class="button">Delete</a>
     </div>
     <table>
         <thead>

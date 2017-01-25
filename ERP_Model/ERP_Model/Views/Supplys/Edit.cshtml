@@ -2,4 +2,38 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<div class="content-box" ng-controller="AngularSupplysController">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <form ng-init="SupplyDetails(GetValueAtIndex(5))" ng-submit="EditSupply()">
+        <label>Supply:</label>
+        <input ng-model="supply.Supply.SupplyGuid" disabled="disabled"/>
+        <br/>
+        <table>
+            <thead>
+            <tr>
+                <th>Product Guid</th>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Supply Quantity</th>
+                <th>Total Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="oI in supply.SupplyItems track by oI.SupplyItemGuid">
+                <td>{{oI.SupplyItemStockItem.StockItemProduct.ProductGuid}}</td>
+                <td>
+                    <a href="/ProductManagement/ProductDetails/{{oI.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{oI.SupplyItemStockItem.StockItemProduct.ProductName}}</a>
+                </td>
+                <td>{{oI.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td>
+                    <input ng-model="oI.SupplyQuantity" type="number"/>
+                </td>
+                <td>{{oI.SupplyQuantity * oI.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br/>
+        <label></label>
+        <input type="submit" value="Save Supply"/>
+    </form>
+</div>

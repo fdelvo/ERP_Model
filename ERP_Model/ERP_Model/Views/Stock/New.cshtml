@@ -2,7 +2,7 @@
     ViewBag.Title = "New";
 }
 
-<div class="content-box" ng-controller="AngularStocksController" ng-init="AddressList();">
+<div class="content-box" ng-controller="AngularStocksController" ng-init="AddressList(0);">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
     <form ng-submit="CreateStock()">
         <label>Stock Name:</label>
@@ -10,7 +10,7 @@
         <br/>
         <label>Stock Address:</label>
         <select ng-model="newStock.StockAddress.AddressGuid">
-            <option ng-repeat="a in addresses.DataObject track by a.AddressGuid" value="{{a.AddressGuid}}">{{a.AddressDescription}}</option>
+            <option ng-repeat="a in addresses track by a.AddressGuid" value="{{a.AddressGuid}}">{{a.AddressDescription}}</option>
         </select>
         <br/>
         <label>Stock Method:</label>

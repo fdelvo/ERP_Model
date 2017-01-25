@@ -4,9 +4,9 @@
 
 <div class="content-box" ng-controller="AngularSupplysController">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
-    <form ng-init="UserList(); ProductList();" ng-submit="CreateSupply()">
+    <form ng-init="SupplierList(0); ProductList();" ng-submit="CreateSupply()">
         <label>Supplier:</label>
-        <select ng-options="user.Alias for user in users.DataObject track by user.Id" ng-model="newSupply.SupplySupplier"></select>
+        <select ng-options="supplier.SupplierLastName || supplier.SupplierCompany for supplier in suppliers.DataObject track by supplier.SupplierGuid" ng-model="newSupply.SupplySupplier"></select>
         <br/>
         <label>Delivery Date:</label>
         <input type="text" ng-model="newSupply.SupplyDeliveryDate"/>
@@ -25,7 +25,7 @@
                 <td>{{sI.ProductName}}</td>
                 <td>{{sI.ProductPrice}}</td>
                 <td>
-                    <input ng-model="sI.OrderQuantity" type="number"/>
+                    <input ng-model="sI.SupplyQuantity" type="number"/>
                 </td>
                 <td>
                     <a ng-click="RemoveProductFromSupplyItems($index)" href="">Remove</a>
@@ -46,7 +46,7 @@
                 <td>{{p.ProductName}}</td>
                 <td>{{p.ProductPrice}}</td>
                 <td>
-                    <input ng-model="orderQuantity[$index].value" type="number"/>
+                    <input ng-model="supplyQuantity[$index].value" type="number"/>
                 </td>
                 <td>
                     <a ng-click="AddProductToSupplyItems(p, $index)" href="">Add</a>

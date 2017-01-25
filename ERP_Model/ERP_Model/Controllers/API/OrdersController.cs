@@ -110,7 +110,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetOrder(Guid id)
         {
             var order = await db.Orders
-                .FirstOrDefaultAsync(g => g.OrderGuid == id && g.OrderDeleted == false);
+                .FirstOrDefaultAsync(g => g.OrderGuid == id);
 
             var orderItems = await db.OrderItems
                 .Include(s => s.OrderItemStockItem)
@@ -146,6 +146,10 @@ namespace ERP_Model.Controllers.API
                 return BadRequest();
             }
 
+            if (db.Orders.FirstOrDefault(g => g.OrderGuid == orderVm.Order.OrderGuid).OrderDeleted)
+            {
+                BadRequest("Old orders can't be edited.");
+            }
 
             foreach (var o in orderVm.OrderItems)
             {
@@ -210,7 +214,7 @@ namespace ERP_Model.Controllers.API
             var order = new Order
             {
                 OrderGuid = Guid.NewGuid(),
-                OrderCustomer = db.Users.FirstOrDefault(g => g.Id == orderVm.OrderCustomer.Id),
+                OrderCustomer = db.Customers.FirstOrDefault(g => g.CustomerGuid == orderVm.OrderCustomer.CustomerGuid),
                 OrderDate = DateTime.Now,
                 OrderDeliveryDate = orderVm.OrderDeliveryDate
             };
@@ -295,6 +299,11 @@ namespace ERP_Model.Controllers.API
             if (!db.Orders.Any(g => g.OrderGuid == id))
             {
                 return BadRequest();
+            }
+
+            if (db.Orders.FirstOrDefault(g => g.OrderGuid == id).OrderDeleted)
+            {
+                BadRequest("Old orders can't be deleted.");
             }
 
             var order = await db.Orders.FindAsync(id);

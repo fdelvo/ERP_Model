@@ -10,7 +10,7 @@ namespace ERP_Model.ViewModels
         [Key]
         public Guid OrderGuid { get; set; }
 
-        public virtual ApplicationUser OrderCustomer { get; set; }
+        public virtual Customer OrderCustomer { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime OrderDeliveryDate { get; set; }
         public float OrderValue { get; set; }
@@ -21,7 +21,7 @@ namespace ERP_Model.ViewModels
         [Key]
         public Guid OrderGuid { get; set; }
 
-        public virtual ApplicationUser OrderCustomer { get; set; }
+        public virtual Customer OrderCustomer { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime OrderDeliveryDate { get; set; }
         public List<OrderItemProductViewModel> OrderItems { get; set; }

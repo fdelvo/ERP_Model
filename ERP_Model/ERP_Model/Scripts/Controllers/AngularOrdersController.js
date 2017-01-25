@@ -28,6 +28,19 @@ function AngularOrdersController($scope,
         fnc();
     };
 
+    $scope.CustomerList = function (pageSize) {
+        if (pageSize) {
+            $scope.pageSize = pageSize;
+        }
+        $scope.customers = AngularAdminService.GetCustomers({
+            page: page,
+            pageSize: $scope.pageSize
+        },
+            function () {
+                console.log($scope.customers);
+            });
+    };
+
     $scope.Previous = function(currentPage, pageAmount, fnc) {
         if (currentPage === 0) {
             page = currentPage;

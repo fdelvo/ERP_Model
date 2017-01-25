@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "EditSupplier";
+}
+
+<div class="content-box" ng-controller="AngularAdminController" ng-init="SupplierDetails(GetValueAtIndex(5));AddressList(0);">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <form ng-submit="EditSupplier()">
+        <label>Forname:</label>
+        <input type="text" ng-model="supplier.SupplierForName" placeholder="Forname" />
+        <br/>
+        <label>Lastname:</label>
+        <input type="text" ng-model="supplier.SupplierLastName" placeholder="Lastname" />
+        <br/>
+        <label>Company:</label>
+        <input type="text" ng-model="supplier.SupplierCompany" placeholder="Company" />
+        <br/>
+        <label>Address:</label>
+        <select ng-model="supplier.SupplierAddress">
+            <option ng-repeat="a in addresses track by a.AddressGuid">{{a.AddressDescription}}</option>
+        </select>
+        <br />
+        <label></label>
+        <input type="submit" value="Save Supplier" />
+    </form>
+</div>
+

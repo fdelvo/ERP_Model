@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Customer";
+}
+
+<div class="content-box" ng-controller="AngularAdminController" ng-init="CustomerDetails(GetValueAtIndex(5))">
+    <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Customer</h1>
+    <div ng-hide="customer.CustomerDeleted" class="nav-bar">
+        <a class="button" href="/Administration/EditCustomer/{{customer.CustomerGuid}}">Edit</a>
+        <a class="button" href="" ng-click="RemoveCustomer(customer.CustomerGuid)">Delete</a>
+    </div>
+    <span ng-show="customer.CustomerDeleted" class="label">Old Customer</span>
+    <table>
+        <tr>
+            <td>
+                <b>Forname:</b>
+            </td>
+            <td>{{customer.CustomerForName}}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Lastname:</b>
+            </td>
+            <td>{{customer.CustomerLastName}}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Company:</b>
+            </td>
+            <td>{{customer.CustomerCompany}}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Address:</b>
+            </td>
+            <td>
+                <ul>
+                    <li>Company: {{customer.CustomerAddress.AddressCompany}}</li>
+                    <li>Forename: {{customer.CustomerAddress.AddressForName}}</li>
+                    <li>Lastname: {{customer.CustomerAddress.AddressLastName}}</li>
+                    <li>Street: {{customer.CustomerAddress.AddressStreet}}</li>
+                    <li>Zipcode | City: {{customer.CustomerAddress.AddressZipCode}} | {{customer.CustomerAddress.AddressCity}}</li>
+                    <li>Country: {{customer.CustomerAddress.AddressCountry}}</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+</div>
+

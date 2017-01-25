@@ -23,7 +23,7 @@
             <td>
                 <a href="/Orders/OrderItems/{{o.OrderGuid}}">{{o.OrderGuid}}</a>
             </td>
-            <td>{{o.OrderCustomer.Alias}}</td>
+            <td><a href="/Administration/Customer/{{o.OrderCustomer.CustomerGuid}}">{{o.OrderCustomer.CustomerLastName || " "}} {{o.OrderCustomer.CustomerForName || " "}} {{o.OrderCustomer.CustomerCompany || " "}}</a></td>
             <td>{{o.OrderDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
             <td>{{o.OrderDeliveryDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
             <td>{{o.OrderValue}}</td>

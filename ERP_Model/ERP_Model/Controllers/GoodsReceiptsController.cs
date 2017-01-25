@@ -2,7 +2,7 @@
 
 namespace ERP_Model.Controllers
 {
-    public class GoodReceiptsController : Controller
+    public class GoodsReceiptsController : Controller
     {
         // GET: GoodReceipts
         public ActionResult Index()
@@ -20,7 +20,7 @@ namespace ERP_Model.Controllers
             return View();
         }
 
-        public ActionResult GoodReceiptItems()
+        public ActionResult GoodsReceiptItems()
         {
             return View();
         }

@@ -19,9 +19,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="supplyItem in supplyItems.DataObject track by supply.SupplyItemGuid">
+            <tr ng-repeat="supplyItem in supplyItems.DataObject track by supplyItem.SupplyItemGuid">
                 <td hidden="hidden">
-                    <input ng-model="supplyItem[$index].GoodsReceiptItemSupplyItem" ng-init="supplyItem[$index].GoodsReceiptItemSupplyItem = supplyItems.SupplyItemGuid" disabled="disabled"/>
+                    <input ng-model="goodsReceiptItem[$index].GoodsReceiptItemSupplyItem" ng-init="goodsReceiptItems[$index].GoodsReceiptItemSupplyItem = supplyItem.SupplyItemGuid" disabled="disabled"/>
                 </td>
                 <td>
                     <a href="/ProductManagement/ProductDetails/{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductName}}</a>
