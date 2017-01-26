@@ -23,10 +23,10 @@
             <td>
                 <a href="/Supplys/SupplyItems/{{s.SupplyGuid}}">{{s.SupplyGuid}}</a>
             </td>
-            <td><a href="/Administration/Supplier/{{s.SupplySupplier.SupplierGuid}}">{{s.SupplySupplier.SupplierLastName || " "}} {{s.SupplySupplier.SupplierForName || " "}} {{s.SupplySupplier.SupplierCompany || " "}}</a></td>
-            <td>{{s.SupplyDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
-            <td>{{s.SupplyDeliveryDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
-            <td>{{s.SupplyValue}}</td>
+            <td data-th="Supplier"><a href="/Administration/Supplier/{{s.SupplySupplier.SupplierGuid}}">{{s.SupplySupplier.SupplierLastName || " "}} {{s.SupplySupplier.SupplierForName || " "}} {{s.SupplySupplier.SupplierCompany || " "}}</a></td>
+            <td data-th="Creation Date">{{s.SupplyDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+            <td data-th="Delivery Date">{{s.SupplyDeliveryDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+            <td data-th="Value">{{s.SupplyValue}}</td>
             <td>
                 <a href="/GoodsReceipts/New/{{s.SupplyGuid}}">Create Goods Receipt</a>
             </td>

@@ -4,9 +4,16 @@
 
 <div class="content-box" ng-controller="AngularOrdersController">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Edit Order</h1>
     <form ng-init="OrderDetails(GetValueAtIndex(5))" ng-submit="EditOrder()">
         <label>Order:</label>
         <input ng-model="order.Order.OrderGuid" disabled="disabled"/>
+        <br/>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
+        <input type="submit" value="Save Order"/>
         <br/>
         <table>
             <thead>
@@ -21,19 +28,22 @@
             <tbody>
             <tr ng-repeat="oI in order.OrderItems track by oI.OrderItemGuid">
                 <td>{{oI.OrderItemStockItem.StockItemProduct.ProductGuid}}</td>
-                <td>
+                <td data-th="Product">
                     <a href="/ProductManagement/ProductDetails/{{oI.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{oI.OrderItemStockItem.StockItemProduct.ProductName}}</a>
                 </td>
-                <td>{{oI.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-                <td>
+                <td data-th="Unit Price">{{oI.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td data-th="Quantity">
                     <input ng-model="oI.OrderQuantity" type="number"/>
                 </td>
-                <td>{{oI.OrderQuantity * oI.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td data-th="Total Price">{{oI.OrderQuantity * oI.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
             </tr>
             </tbody>
         </table>
         <br/>
-        <label></label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
         <input type="submit" value="Save Order"/>
     </form>
 </div>

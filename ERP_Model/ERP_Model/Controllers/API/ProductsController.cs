@@ -64,6 +64,17 @@ namespace ERP_Model.Controllers.API
             //verify data
             if (!ModelState.IsValid)
             {
+                foreach (var v in ModelState.Values)
+                {
+                    foreach (var e in v.Errors)
+                    {
+                        if (e.Exception != null)
+                        {
+                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
+                        }
+                    }
+                }
+
                 return BadRequest(ModelState);
             }
 
@@ -97,11 +108,22 @@ namespace ERP_Model.Controllers.API
 
         //create new product
         [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product, Guid stockGuid)
+        public async Task<IHttpActionResult> PostProduct(Product product, Guid stockGuid, int maxQuantity = 0, int minQuantity = 0)
         {
             //verify data
             if (!ModelState.IsValid)
             {
+                foreach (var v in ModelState.Values)
+                {
+                    foreach (var e in v.Errors)
+                    {
+                        if (e.Exception != null)
+                        {
+                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
+                        }
+                    }
+                }
+
                 return BadRequest(ModelState);
             }
 
@@ -127,7 +149,10 @@ namespace ERP_Model.Controllers.API
                 throw;
             }
 
-            await stockController.CreateStockItem(stockGuid, product);
+            if (stockGuid != new Guid("00000000-0000-0000-0000-000000000000"))
+            {
+                await stockController.CreateStockItem(stockGuid, product, maxQuantity, minQuantity);
+            }           
 
             return CreatedAtRoute("DefaultApi", new {id = product.ProductGuid}, product);
         }

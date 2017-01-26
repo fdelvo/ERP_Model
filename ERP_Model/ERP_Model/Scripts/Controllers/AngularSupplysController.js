@@ -24,6 +24,7 @@ function AngularSupplysController($scope,
     };
     $scope.newSupply = new AngularSupplysService();
     $scope.newGoodsReceipt = new AngularGoodsReceiptsService();
+    $scope.errorMessages = [];
 
     $scope.Next = function (currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
@@ -94,8 +95,20 @@ function AngularSupplysController($scope,
                 console.log("Success");
                 location.href = "/GoodsReceipts/Index";
             },
-            function (error) {
-                console.log("Fail");
+            function (response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -107,8 +120,20 @@ function AngularSupplysController($scope,
                 console.log("Success");
                 location.href = "/Supplys/Index";
             },
-            function (error) {
-                console.log("Fail");
+            function (response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -138,14 +163,26 @@ function AngularSupplysController($scope,
 
     $scope.CreateSupply = function () {
         $scope.newSupply.SupplyItems = $scope.supplyItems;
-        $scope.newSupply.SupplyDeliveryDate = new Date($scope.newSupply.SupplyDeliveryDate);
+        //$scope.newSupply.SupplyDeliveryDate = new Date($scope.newSupply.SupplyDeliveryDate);
         $scope.newSupply.$PostSupply(
             function (response) {
                 console.log("Success");
                 location.href = "/Supplys/Index";
             },
-            function (error) {
-                console.log("Fail");
+            function (response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -167,8 +204,20 @@ function AngularSupplysController($scope,
                 console.log("Success");
                 location.href = "/GoodsReceipts/Index";
             },
-            function (error) {
-                console.log("Fail");
+            function (response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 

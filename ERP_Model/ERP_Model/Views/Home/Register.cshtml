@@ -23,7 +23,10 @@
         <label>Confirm Password</label>
         <input type="password" ng-model="model.ConfirmPassword" placeholder="Confirm Password"/>
         <br/>
-        <label></label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br/>
         <input type="submit" value="Register"/>
     </form>
 </div>

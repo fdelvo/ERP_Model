@@ -4,7 +4,7 @@
 
 <div class="content-box" ng-controller="AngularAdminController" ng-init="UserDetails(GetValueAtIndex(5))">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
-    <h1>{{user.Alias}}</h1>
+    <h1>Edit User</h1>
     <form ng-submit="EditUser()">
         <label>Email:</label>
         <input type="email" ng-model="user.Email" placeholder="Email"/>
@@ -12,7 +12,10 @@
         <label>Alias:</label>
         <input type="text" ng-model="user.Alias" placeholder="Alias"/>
         <br/>
-        <label></label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
         <input type="submit" value="Save User"/>
     </form>
     <form ng-submit="ChangeUserPassword(GetValueAtIndex(5));">
@@ -22,7 +25,10 @@
         <label>Confirm Password:</label>
         <input type="password" ng-model="model.ConfirmPassword"/>
         <br/>
-        <label></label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
         <input type="submit" value="Change Password"/>
     </form>
 </div>

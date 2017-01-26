@@ -209,6 +209,17 @@ namespace ERP_Model.Controllers.API
             //verify data
             if (!ModelState.IsValid)
             {
+                foreach (var v in ModelState.Values)
+                {
+                    foreach (var e in v.Errors)
+                    {
+                        if (e.Exception != null)
+                        {
+                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
+                        }
+                    }
+                }
+
                 return BadRequest(ModelState);
             }
 
@@ -270,6 +281,17 @@ namespace ERP_Model.Controllers.API
             //verify data
             if (!ModelState.IsValid)
             {
+                foreach (var v in ModelState.Values)
+                {
+                    foreach (var e in v.Errors)
+                    {
+                        if (e.Exception != null)
+                        {
+                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
+                        }
+                    }
+                }
+
                 return BadRequest(ModelState);
             }
 
@@ -410,6 +432,27 @@ namespace ERP_Model.Controllers.API
         [HttpPost]
         public async Task<IHttpActionResult> CreateStockTransaction(StockItemViewModel stockItem)
         {
+            if (!ModelState.IsValid)
+            {
+                foreach (var v in ModelState.Values)
+                {
+                    foreach (var e in v.Errors)
+                    {
+                        if (e.Exception != null)
+                        {
+                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
+                        }
+                    }
+                }
+
+                return BadRequest(ModelState);
+            }
+
+            if (stockItem.StockItemQuantity == 0)
+            {
+                return BadRequest("You can't add a quantity of 0.");
+            }
+
             var stockTransaction = new StockTransaction
             {
                 StockTransactionItem = db.StockItems.FirstOrDefault(g => g.StockItemGuid == stockItem.StockItemGuid),

@@ -18,6 +18,7 @@
             <th>Quantity</th>
             <th>Maximum Quantity</th>
             <th>Minimum Quantity</th>
+            <th>Remarks</th>
         </tr>
         </thead>
         <tbody>
@@ -25,14 +26,23 @@
             <td>
                 <a href="/ProductManagement/ProductDetails/{{si.StockItemProduct.ProductGuid}}">{{si.StockItemProduct.ProductName}}</a>
             </td>
-            <td>{{si.StockItemProduct.ProductPrice}}</td>
-            <td>{{si.StockItemQuantity}}</td>
-            <td>{{si.StockItemMaximumQuantity}}</td>
-            <td>{{si.StockItemMinimumQuantity}}</td>
+            <td data-th="Price">{{si.StockItemProduct.ProductPrice}}</td>
+            <td data-th="Quantity">{{si.StockItemQuantity}}</td>
+            <td data-th="Max. Quantity">{{si.StockItemMaximumQuantity}}</td>
+            <td data-th="Min. Quantity">{{si.StockItemMinimumQuantity}}</td>
+            <td data-th="Remarks">
+                <span ng-show="si.StockItemMinimumQuantity + 6 > si.StockItemQuantity" class="label">Check Minimum Quantity</span>
+                <span ng-show="si.StockItemMaximumQuantity - 6 < si.StockItemQuantity" class="label">Check Maximum Quantity</span>
+            </td>
             <td>
                 <form ng-submit="StockTransaction($index)">
                     <input hidden="hidden" ng-model="newStockTransaction[$index].StockItemGuid" ng-init="newStockTransaction[$index].StockItemGuid = si.StockItemGuid"/>
                     <input ng-model="newStockTransaction[$index].StockItemQuantity" type="number"/>
+                    <br/>
+                    <ul ng-show="error" class="error-ul">
+                        <li ng-repeat="e in errorMessages">{{e}}</li>
+                    </ul>
+                    <br/>
                     <input type="submit" value="Submit Stock Transaction"/>
                 </form>
             </td>

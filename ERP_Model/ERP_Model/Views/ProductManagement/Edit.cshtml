@@ -4,6 +4,7 @@
 
 <div class="content-box" ng-controller="AngularProductsController" ng-init="ProductDetails(GetValueAtIndex(5)); StockList();">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Edit Product</h1>
     <form ng-submit="EditProduct()">
         <label>Product Name:</label>
         <input type="text" ng-model="product.ProductName"/>
@@ -17,7 +18,16 @@
         <label>Stock:</label>
         <select ng-options="stock.StockName for stock in stocks.DataObject track by stock.StockGuid" ng-model="stock"></select>
         <br/>
-        <label></label>
+        <label>Minimum Stock Quantity:</label>
+        <input type="number" ng-model="minQuantity" />
+        <br />
+        <label>Maximum Stock Quantity:</label>
+        <input type="number" ng-model="maxQuantity" />
+        <br />
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
         <input type="submit" value="Save Product"/>
     </form>
 </div>

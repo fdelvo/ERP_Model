@@ -17,6 +17,14 @@ function AngularOrdersController($scope,
 
     var page = 0;
     $scope.pageSize = 20;
+    $scope.orderItems = [];
+    $scope.deliveryItems = [];
+    $scope.orderQuantity = {
+        value: 0
+    };
+    $scope.newOrder = new AngularOrdersService();
+    $scope.newDeliveryNote = new AngularDeliveryNotesService();
+    $scope.errorMessages = [];
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
@@ -50,14 +58,6 @@ function AngularOrdersController($scope,
 
         fnc();
     };
-
-    $scope.orderItems = [];
-    $scope.deliveryItems = [];
-    $scope.orderQuantity = {
-        value: 0
-    };
-    $scope.newOrder = new AngularOrdersService();
-    $scope.newDeliveryNote = new AngularDeliveryNotesService();
 
     $scope.OrdersList = function() {
         $scope.orders = AngularOrdersService.GetOrders({
@@ -95,8 +95,20 @@ function AngularOrdersController($scope,
                 console.log("Success");
                 location.href = "/DeliveryNotes/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -108,8 +120,20 @@ function AngularOrdersController($scope,
                 console.log("Success");
                 location.href = "/Orders/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -139,14 +163,26 @@ function AngularOrdersController($scope,
 
     $scope.CreateOrder = function() {
         $scope.newOrder.OrderItems = $scope.orderItems;
-        $scope.newOrder.OrderDeliveryDate = new Date($scope.newOrder.OrderDeliveryDate);
+        //$scope.newOrder.OrderDeliveryDate = new Date($scope.newOrder.OrderDeliveryDate);
         $scope.newOrder.$PostOrder(
             function(response) {
                 console.log("Success");
                 location.href = "/Orders/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -168,8 +204,20 @@ function AngularOrdersController($scope,
                 console.log("Success");
                 location.href = "/DeliveryNotes/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -184,8 +232,20 @@ function AngularOrdersController($scope,
                 console.log("Success");
                 location.href = "/Stock/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 

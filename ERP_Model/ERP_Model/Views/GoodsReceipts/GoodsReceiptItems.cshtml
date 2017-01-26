@@ -6,10 +6,13 @@
     <a class="back-link" href="javascript: window.history.back();">Back</a>
     <h1>Goods Receipt: {{GetValueAtIndex(5)}}</h1>
     <p>Supply: {{goodsReceipt.GoodsReceipt.GoodsReceiptSupply.SupplyGuid}}</p>
+    <div class="nav-bar">
+        <a class="button" href="/GoodsReceipts/Edit/{{goodsReceipt.GoodsReceipt.GoodsReceiptGuid}}">Edit</a>
+        <a class="button" href="" ng-click="RemoveGoodsReceipt(goodsReceipt.GoodsReceipt.GoodsReceiptGuid)">Delete</a>
+    </div>
     <table>
         <thead>
         <tr>
-            <th>Product Guid</th>
             <th>Product</th>
             <th>Unit Price</th>
             <th>Supply Quantity</th>
@@ -19,14 +22,13 @@
         </thead>
         <tbody>
         <tr ng-repeat="goodsReceiptItem in goodsReceipt.GoodsReceiptItems track by goodsReceiptItem.GoodsReceiptItemGuid">
-            <td>{{goodsReceiptItem.GoodsReceiptItemGuid}}</td>
             <td>
                 <a href="/ProductManagement/ProductDetails/{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductName}}</a>
             </td>
-            <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
-            <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity}}</td>
-            <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity * goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
-            <td>{{goodsReceiptItem.GoodsReceiptItemQuantity}}</td>
+            <td data-th="Unit Price">{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td data-th="Supply Quantity">{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity}}</td>
+            <td data-th="Total Price">{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity * goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td data-th="GR Quantity">{{goodsReceiptItem.GoodsReceiptItemQuantity}}</td>
         </tr>
         </tbody>
     </table>

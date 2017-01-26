@@ -7,11 +7,15 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid AddressGuid { get; set; }
-
+        [Required]
         public string AddressDescription { get; set; }
+        [Required]
         public string AddressStreet { get; set; }
+        [Required]
         public string AddressZipCode { get; set; }
+        [Required]
         public string AddressCity { get; set; }
+        [Required]
         public string AddressCountry { get; set; }
 
         [EmailAddress]

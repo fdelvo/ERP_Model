@@ -9,8 +9,9 @@ namespace ERP_Model.ViewModels
     {
         [Key]
         public Guid DeliveryGuid { get; set; }
-
+        [Required]
         public Guid DeliveryOrder { get; set; }
+        [Required]
         public List<DeliveryItemViewModel> DeliveryItems { get; set; }
     }
 

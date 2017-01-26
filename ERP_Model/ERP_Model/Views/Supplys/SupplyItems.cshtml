@@ -13,23 +13,22 @@
     <table>
         <thead>
         <tr>
-            <th>Product ID</th>
             <th>Product</th>
             <th>Unit Price</th>
             <th>Quantity</th>
             <th>Total Price</th>
+            <th>Remarks</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="supplyItem in supply.SupplyItems track by supplyItem.SupplyItemGuid">
-            <td>{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}</td>
             <td>
-                <a href="/ProductManagement/ProductDetails/{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{orderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a>
+                <a href="/ProductManagement/ProductDetails/{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductName}}</a>
             </td>
-            <td>{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
-            <td>{{supplyItem.SupplyQuantity}}</td>
-            <td>{{supplyItem.SupplyQuantity * supplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
-            <td ng-show="supplyItem.SupplyItemStockItem.StockItemProduct.ProductDeleted">Old Product</td>
+            <td data-th="Unit Price">{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td data-th="Quantity">{{supplyItem.SupplyQuantity}}</td>
+            <td data-th="Total Price">{{supplyItem.SupplyQuantity * supplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td data-th="Remarks"><span ng-show="supplyItem.SupplyItemStockItem.StockItemProduct.ProductDeleted">Old Product</span></td>
         </tr>
         </tbody>
         <tfoot>

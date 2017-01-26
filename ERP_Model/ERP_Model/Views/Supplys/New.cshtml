@@ -4,14 +4,21 @@
 
 <div class="content-box" ng-controller="AngularSupplysController">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Create Supply</h1>
     <form ng-init="SupplierList(0); ProductList();" ng-submit="CreateSupply()">
         <label>Supplier:</label>
         <select ng-options="supplier.SupplierLastName || supplier.SupplierCompany for supplier in suppliers.DataObject track by supplier.SupplierGuid" ng-model="newSupply.SupplySupplier"></select>
         <br/>
         <label>Delivery Date:</label>
-        <input type="text" ng-model="newSupply.SupplyDeliveryDate"/>
+        <input type="date" ng-model="newSupply.SupplyDeliveryDate"/>
         <br/>
-        <label>Products:</label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br/>
+        <input type="submit" value="Create Supply"/>
+        <br/>
+        <h3>Products To Supply:</h3>
         <table>
             <thead>
             <tr>
@@ -23,8 +30,8 @@
             <tbody>
             <tr ng-repeat="sI in supplyItems track by sI.ProductGuid">
                 <td>{{sI.ProductName}}</td>
-                <td>{{sI.ProductPrice}}</td>
-                <td>
+                <td data-th="Price">{{sI.ProductPrice}}</td>
+                <td data-th="Quantity">
                     <input ng-model="sI.SupplyQuantity" type="number"/>
                 </td>
                 <td>
@@ -33,6 +40,7 @@
             </tr>
             </tbody>
         </table>
+        <h3>Available Products:</h3>
         <table>
             <thead>
             <tr>
@@ -44,8 +52,8 @@
             <tbody>
             <tr ng-repeat="p in products.DataObject track by p.ProductGuid">
                 <td>{{p.ProductName}}</td>
-                <td>{{p.ProductPrice}}</td>
-                <td>
+                <td data-th="Price">{{p.ProductPrice}}</td>
+                <td data-th="Quantity">
                     <input ng-model="supplyQuantity[$index].value" type="number"/>
                 </td>
                 <td>
@@ -60,7 +68,10 @@
             </tfoot>
         </table>
         <br/>
-        <label></label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
         <input type="submit" value="Create Supply"/>
     </form>
 </div>

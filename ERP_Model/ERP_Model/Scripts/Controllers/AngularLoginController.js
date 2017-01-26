@@ -5,8 +5,14 @@ LoginController.$inject = [
 ];
 
 function LoginController($scope, $http, $rootScope) {
+    if (localStorage.getItem("tokenKey") === null) {
+        $scope.loggedIn = false;
+    } else {
+        $scope.loggedIn = true;
+    }
+
     $scope.model = {};
-    $scope.registerStatus = [];
+    $scope.errorMessages = [];
 
     $scope.Register = function() {
         $http({
@@ -21,19 +27,23 @@ function LoginController($scope, $http, $rootScope) {
                 },
                 function(response) {
                     $scope.error = true;
-                    $scope.registerStatus = [];
+                    $scope.errorMessages = [];
                     for (var key in response.data.ModelState) {
                         if (response.data.ModelState.hasOwnProperty(key)) {
                             response.data.ModelState[key].forEach(
                                 function(element) {
-                                    $scope.registerStatus.push(element);
+                                    $scope.errorMessages.push(element);
                                 });
                         }
                     };
+                    if (response.data.Message) {
+                        $scope.errorMessages.push(response.data.Message);
+                    }
                 });
     };
 
-    $scope.LogIn = function() {
+    $scope.LogIn = function () {
+        $scope.errorMessages = [];
         $http({
                 method: "POST",
                 url: "/Token",
@@ -50,7 +60,11 @@ function LoginController($scope, $http, $rootScope) {
                 function(response) {
                     $scope.error = true;
                     console.log(response);
-                    $scope.loginStatus = response.data.error_description;
+                    $scope.errorMessages.push(response.data.error_description);
                 });
+    };
+
+    $scope.LogOut = function () {
+        localStorage.removeItem("tokenKey");
     };
 }

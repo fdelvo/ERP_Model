@@ -7,8 +7,9 @@ namespace ERP_Model.Models
     {
         [Key]
         public Guid StockGuid { get; set; }
-
+        [Required]
         public string StockName { get; set; }
+        [Required]
         public virtual Address StockAddress { get; set; }
         public string StockMethod { get; set; }
         public bool StockDeleted { get; set; }

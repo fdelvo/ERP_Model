@@ -13,7 +13,6 @@
     <table>
         <thead>
         <tr>
-            <th>Product Guid</th>
             <th>Product</th>
             <th>Unit Price</th>
             <th>Order Quantity</th>
@@ -23,14 +22,13 @@
         </thead>
         <tbody>
         <tr ng-repeat="deliveryItem in deliveryNote.DeliveryItems track by deliveryItem.DeliveryItemGuid">
-            <td>{{deliveryItem.DeliveryItemGuid}}</td>
-            <td>
+            <td data-th="Product">
                 <a href="/ProductManagement/ProductDetails/{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a>
             </td>
-            <td>{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-            <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity}}</td>
-            <td>{{deliveryItem.DeliveryItemOrderItem.OrderQuantity * deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-            <td>{{deliveryItem.DeliveryItemQuantity}}</td>
+            <td data-th="Unit Price">{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td data-th="Order Quantity">{{deliveryItem.DeliveryItemOrderItem.OrderQuantity}}</td>
+            <td data-th="Total Price">{{deliveryItem.DeliveryItemOrderItem.OrderQuantity * deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td data-th="Delivery Note Quantity">{{deliveryItem.DeliveryItemQuantity}}</td>
         </tr>
         </tbody>
     </table>

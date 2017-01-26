@@ -11,8 +11,9 @@ namespace ERP_Model.ViewModels
     {
         [Key]
         public Guid GoodsReceiptGuid { get; set; }
-
+        [Required]
         public Guid GoodsReceiptSupply { get; set; }
+        [Required]
         public List<GoodsReceiptItemViewModel> GoodsReceiptItems { get; set; }
     }
 

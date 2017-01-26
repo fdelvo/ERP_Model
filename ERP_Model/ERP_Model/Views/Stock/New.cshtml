@@ -4,19 +4,23 @@
 
 <div class="content-box" ng-controller="AngularStocksController" ng-init="AddressList(0);">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Create Stock</h1>
     <form ng-submit="CreateStock()">
         <label>Stock Name:</label>
         <input type="text" ng-model="newStock.StockName"/>
         <br/>
         <label>Stock Address:</label>
         <select ng-model="newStock.StockAddress.AddressGuid">
-            <option ng-repeat="a in addresses track by a.AddressGuid" value="{{a.AddressGuid}}">{{a.AddressDescription}}</option>
+            <option ng-repeat="a in addresses.DataObject track by a.AddressGuid" value="{{a.AddressGuid}}">{{a.AddressDescription}}</option>
         </select>
         <br/>
         <label>Stock Method:</label>
         <input type="text" ng-model="newStock.StockMethod"/>
         <br/>
-        <label></label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
         <input type="submit" value="Create Stock"/>
     </form>
 </div>

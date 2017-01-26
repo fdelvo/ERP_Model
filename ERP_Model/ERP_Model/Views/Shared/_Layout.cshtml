@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width"/>
     <title>@ViewBag.Title</title>
+    <script src="https://use.fontawesome.com/0e2b5d40eb.js"></script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/angular")
@@ -11,6 +12,7 @@
 <body ng-app="ERPModelApp">
 <nav>
     <span class="nav-icon"><a href="/Home/Index">ERP-Model</a></span>
+    <i ng-click="showMobileNav = !showMobileNav" ng-class="showMobileNav ? 'fa fa-chevron-down menu-open' : 'fa fa-chevron-up menu-open'" aria-hidden="true"></i>
     <ul class="nav-ul">
         <li>
             <a href="/ProductManagement/Index">Product Managment</a>
@@ -26,6 +28,29 @@
         </li>
         <li>
             <a href="/Administration/Index">Administration</a>
+        </li>
+        <li>
+            <a href="/Home/Authors">Authors</a>
+        </li>
+    </ul>
+    <ul ng-show="showMobileNav" class="mobile-nav-ul">
+        <li>
+            <a href="/ProductManagement/Index">Product Managment</a>
+        </li>
+        <li>
+            <a href="/Stock/Index">Stock</a>
+        </li>
+        <li>
+            <a href="/Orders/Index">Orders</a>
+        </li>
+        <li>
+            <a href="/Supplys/Index">Supplies</a>
+        </li>
+        <li>
+            <a href="/Administration/Index">Administration</a>
+        </li>
+        <li>
+            <a href="/Home/Authors">Authors</a>
         </li>
     </ul>
 </nav>

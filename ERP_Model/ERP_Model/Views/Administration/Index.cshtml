@@ -24,7 +24,7 @@
             <tbody>
             <tr ng-repeat="address in addresses.DataObject track by address.AddressGuid">
                 <td>{{address.AddressDescription}}</td>
-                <td>
+                <td data-th="Details">
                     <ul>
                         <li>Company: {{address.AddressCompany}}</li>
                         <li>Forename: {{address.AddressForName}}</li>
@@ -58,12 +58,16 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Forname</th>
+                <th>Lastname</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="u in users.DataObject track by u.Id">
                 <td>{{u.Alias}}</td>
-                <td>{{u.Email}}</td>
+                <td data-th="Email">{{u.Email}}</td>
+                <td data-th="Forname">{{u.ForName}}</td>
+                <td data-th="Lastname">{{u.LastName}}</td>
                 <td>
                     <a href="/Administration/EditUser/{{u.Id}}">Edit</a>
                 </td>
@@ -74,7 +78,7 @@
             </tbody>
             <tfoot>
             <tr>
-                <td colspan="4"><a class="button" href="" ng-click="Previous(users.CurrentPage, users.PageAmount, UserList)">Previous</a> {{users.CurrentPage+1}} / {{users.PageAmount}} <a class="button" href="" ng-click="Next(users.CurrentPage, users.PageAmount, UserList)">Next</a></td>
+                <td colspan="6"><a class="button" href="" ng-click="Previous(users.CurrentPage, users.PageAmount, UserList)">Previous</a> {{users.CurrentPage+1}} / {{users.PageAmount}} <a class="button" href="" ng-click="Next(users.CurrentPage, users.PageAmount, UserList)">Next</a></td>
             </tr>
             </tfoot>
         </table>
@@ -86,18 +90,14 @@
         <table>
             <thead>
             <tr>
-                <th>Company</th>
-                <th>Forname</th>
-                <th>Lastname</th>
+                <th>Company, Forname, Lastname</th>
                 <th>Address</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="c in customers.DataObject track by c.CustomerGuid">
-                <td>{{c.CustomerCompany}}</td>
-                <td>{{c.CustomerForName}}</td>
-                <td>{{c.CustomerLastName}}</td>
-                <td>
+                <td>{{c.CustomerCompany}}, {{c.CustomerForName}}, {{c.CustomerLastName}}</td>
+                <td data-th="Address">
                     <ul>
                         <li>Company: {{c.CustomerAddress.AddressCompany}}</li>
                         <li>Forename: {{c.CustomerAddress.AddressForName}}</li>
@@ -129,18 +129,14 @@
         <table>
             <thead>
             <tr>
-                <th>Company</th>
-                <th>Forname</th>
-                <th>Lastname</th>
+                <th>Company, Forname, Lastname</th>
                 <th>Address</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="s in suppliers.DataObject track by s.SupplierGuid">
-                <td>{{s.SupplierCompany}}</td>
-                <td>{{s.SupplierForName}}</td>
-                <td>{{s.SupplierLastName}}</td>
-                <td>
+                <td>{{s.SupplierCompany}}, {{s.SupplierForName}}, {{s.SupplierLastName}}</td>
+                <td data-th="Address">
                     <ul>
                         <li>Company: {{s.SupplierAddress.AddressCompany}}</li>
                         <li>Forename: {{s.SupplierAddress.AddressForName}}</li>

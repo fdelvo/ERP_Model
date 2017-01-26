@@ -4,14 +4,20 @@
 
 <div class="content-box" ng-controller="AngularSupplysController">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Edit Goods Receipt</h1>
     <form ng-init="GoodsReceiptDetails(GetValueAtIndex(5))" ng-submit="EditGoodsReceipt()">
         <label>Supply:</label>
         <input ng-model="goodsReceipt.GoodsReceipt.GoodsReceiptGuid" disabled="disabled"/>
         <br/>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
+        <input type="submit" value="Save Goods Receipt"/>
+        <br/>
         <table>
             <thead>
             <tr>
-                <th>Product Guid</th>
                 <th>Product</th>
                 <th>Unit Price</th>
                 <th>Supply Quantity</th>
@@ -21,21 +27,23 @@
             </thead>
             <tbody>
             <tr ng-repeat="goodsReceiptItem in goodsReceipt.GoodsReceiptItems track by goodsReceiptItem.GoodsReceiptItemGuid">
-                <td>{{goodsReceiptItem.GoodsReceiptItemGuid}}</td>
                 <td>
-                    <a href="/ProductManagement/ProductDetails/{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{deliveryItem.DeliveryItemOrderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a>
+                    <a href="/ProductManagement/ProductDetails/{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductGuid}}">{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductName}}</a>
                 </td>
-                <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
-                <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity}}</td>
-                <td>{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity * goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
-                <td>
+                <td data-th="Unit Price">{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td data-th="Supply Quantity">{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity}}</td>
+                <td data-th="Total Price">{{goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyQuantity * goodsReceiptItem.GoodsReceiptItemSupplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
+                <td data-th="GR Quantity">
                     <input ng-model="goodsReceiptItem.GoodsReceiptItemQuantity" type="number"/>
                 </td>
             </tr>
             </tbody>
         </table>
         <br/>
-        <label></label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
         <input type="submit" value="Save Goods Receipt"/>
     </form>
 </div>

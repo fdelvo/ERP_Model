@@ -20,10 +20,12 @@ namespace ERP_Model.ViewModels
     {
         [Key]
         public Guid OrderGuid { get; set; }
-
+        [Required]
         public virtual Customer OrderCustomer { get; set; }
         public DateTime OrderDate { get; set; }
+        [Required]
         public DateTime OrderDeliveryDate { get; set; }
+        [Required]
         public List<OrderItemProductViewModel> OrderItems { get; set; }
     }
 

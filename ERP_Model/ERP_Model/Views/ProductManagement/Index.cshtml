@@ -17,9 +17,9 @@
         </thead>
         <tbody>
         <tr ng-repeat="p in products.DataObject track by p.ProductGuid">
-            <td>{{p.ProductName}}</td>
-            <td>{{p.ProductDescription}}</td>
-            <td>{{p.ProductPrice}}</td>
+            <td data-th="Product Name">{{p.ProductName}}</td>
+            <td data-th="Product Description">{{p.ProductDescription}}</td>
+            <td data-th="Product Price">{{p.ProductPrice}}</td>
             <td>
                 <a href="/ProductManagement/Edit/{{p.ProductGuid}}">Edit</a>
             </td>

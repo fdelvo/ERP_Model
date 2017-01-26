@@ -15,5 +15,10 @@ namespace ERP_Model.Controllers
         {
             return View();
         }
+
+        public ActionResult Authors()
+        {
+            return View();
+        }
     }
 }

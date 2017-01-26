@@ -13,24 +13,23 @@
     <table>
         <thead>
         <tr>
-            <th>Product ID</th>
             <th>Product</th>
             <th>Unit Price</th>
             <th>Quantity</th>
             <th>Total Price</th>
+            <th>Remarks</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="orderItem in order.OrderItems track by orderItem.OrderItemGuid">
-            <td>{{orderItem.OrderItemStockItem.StockItemProduct.ProductGuid}}</td>
-            <td>
+            <td data-th="Product">
                 <a href="/ProductManagement/ProductDetails/{{orderItem.OrderItemStockItem.StockItemProduct.ProductGuid}}">{{orderItem.OrderItemStockItem.StockItemProduct.ProductName}}</a>
             </td>
-            <td>{{orderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-            <td>{{orderItem.OrderQuantity}}</td>
-            <td>{{orderItem.OrderQuantity * orderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
-            <td ng-show="orderItem.OrderItemStockItem.StockItemProduct.ProductDeleted">
-                <span class="label">Old Product</span></td>
+            <td data-th="Unit Price">{{orderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td data-th="Quantity">{{orderItem.OrderQuantity}}</td>
+            <td data-th="Total Price">{{orderItem.OrderQuantity * orderItem.OrderItemStockItem.StockItemProduct.ProductPrice}}</td>
+            <td data-th="Remarks">
+                <span ng-show="orderItem.OrderItemStockItem.StockItemProduct.ProductDeleted" class="label">Old Product</span></td>
         </tr>
         </tbody>
     </table>

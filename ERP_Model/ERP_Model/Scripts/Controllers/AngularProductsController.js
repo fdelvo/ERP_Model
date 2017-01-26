@@ -10,9 +10,9 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
     }
 
     $scope.newProduct = new AngularProductsService();
-
     var page = 0;
     $scope.pageSize = 20;
+    $scope.errorMessages = [];
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
@@ -57,18 +57,35 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
         $scope.product = AngularProductsService.GetProduct({ id: guid });
     };
 
-    $scope.CreateProduct = function() {
+    $scope.CreateProduct = function () {
+        if ($scope.stock === undefined) {
+            $scope.stock = {
+                StockGuid: "00000000-0000-0000-0000-000000000000"
+            };
+        }
         $scope.newProduct.$PostProduct({
-                stockGuid: $scope.stock.StockGuid,
-                maxQuantity: $scope.maxQuantity,
-                minQuantity: $scope.minQuantity
+            stockGuid: $scope.stock.StockGuid,
+            maxQuantity: $scope.maxQuantity,
+            minQuantity: $scope.minQuantity
             },
             function(response) {
                 console.log("Success");
                 location.href = "/ProductManagement/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -78,8 +95,20 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
                 console.log("Success");
                 location.href = "/ProductManagement/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 

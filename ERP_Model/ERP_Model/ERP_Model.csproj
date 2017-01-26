@@ -229,6 +229,10 @@
     <Compile Include="Migrations\201701251634280_one.Designer.cs">
       <DependentUpon>201701251634280_one.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701261653124_data_annotations_added.cs" />
+    <Compile Include="Migrations\201701261653124_data_annotations_added.Designer.cs">
+      <DependentUpon>201701261653124_data_annotations_added.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -1138,10 +1142,14 @@
     <Content Include="Views\Administration\EditSupplier.cshtml" />
     <Content Include="Views\Administration\Supplier.cshtml" />
     <Content Include="Views\Administration\Customer.cshtml" />
+    <Content Include="Views\Home\Authors.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201701251634280_one.resx">
       <DependentUpon>201701251634280_one.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701261653124_data_annotations_added.resx">
+      <DependentUpon>201701261653124_data_annotations_added.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

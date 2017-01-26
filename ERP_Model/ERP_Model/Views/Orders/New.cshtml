@@ -4,14 +4,21 @@
 
 <div class="content-box" ng-controller="AngularOrdersController">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Create Order</h1>
     <form ng-init="CustomerList(0); ProductList();" ng-submit="CreateOrder()">
         <label>Customer:</label>
         <select ng-options="customer.CustomerLastName || customer.CustomerCompany for customer in customers.DataObject track by customer.CustomerGuid" ng-model="newOrder.OrderCustomer"></select>
         <br/>
         <label>Delivery Date:</label>
-        <input type="text" ng-model="newOrder.OrderDeliveryDate"/>
+        <input type="date" ng-model="newOrder.OrderDeliveryDate"/>
         <br/>
-        <label>Products:</label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
+        <input type="submit" value="Create Order"/>
+        <br/>
+        <h3>Products To Order:</h3>
         <table>
             <thead>
             <tr>
@@ -22,9 +29,9 @@
             </thead>
             <tbody>
             <tr ng-repeat="oI in orderItems track by oI.ProductGuid">
-                <td>{{oI.ProductName}}</td>
-                <td>{{oI.ProductPrice}}</td>
-                <td>
+                <td data-th="Name">{{oI.ProductName}}</td>
+                <td data-th="Price">{{oI.ProductPrice}}</td>
+                <td data-th="Quantity">
                     <input ng-model="oI.OrderQuantity" type="number"/>
                 </td>
                 <td>
@@ -33,6 +40,7 @@
             </tr>
             </tbody>
         </table>
+        <h3>Available Products:</h3>
         <table>
             <thead>
             <tr>
@@ -43,9 +51,9 @@
             </thead>
             <tbody>
             <tr ng-repeat="p in products.DataObject track by p.ProductGuid">
-                <td>{{p.ProductName}}</td>
-                <td>{{p.ProductPrice}}</td>
-                <td>
+                <td data-th="Name">{{p.ProductName}}</td>
+                <td data-th="Price">{{p.ProductPrice}}</td>
+                <td data-th="Quantity">
                     <input ng-model="orderQuantity[$index].value" type="number"/>
                 </td>
                 <td>
@@ -60,7 +68,10 @@
             </tfoot>
         </table>
         <br/>
-        <label></label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
         <input type="submit" value="Create Order"/>
     </form>
 </div>

@@ -1,6 +1,6 @@
 ﻿<div class="content-box" ng-controller="AngularLoginController">
     <h1>Login</h1>
-    <form ng-submit="LogIn()">
+    <form ng-hide="loggedIn" ng-submit="LogIn()">
         <label>Email:</label>
         <input ng-model="loginData.username"/>
         <br/>
@@ -10,7 +10,13 @@
         <label></label>
         <input type="submit" value="Login"/>
         <br/>
-        <label></label>
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br/>
         <a href="/Home/Register">Register</a>
     </form>
+    <div ng-show="loggedIn">
+        <a class="button" href="/" ng-click="LogOut()">Logout</a>
+    </div>
 </div>

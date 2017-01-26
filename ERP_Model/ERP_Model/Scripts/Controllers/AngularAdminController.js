@@ -11,6 +11,11 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
 
     var page = 0;
     $scope.pageSize = 20;
+    $scope.errorMessages = [];
+    $scope.newAddress = new AngularAdminService();
+    $scope.newCustomer = new AngularAdminService();
+    $scope.newSupplier = new AngularAdminService();
+    $scope.model = new AngularAdminService();
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
@@ -31,11 +36,6 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
 
         fnc();
     };
-
-    $scope.newAddress = new AngularAdminService();
-    $scope.newCustomer = new AngularAdminService();
-    $scope.newSupplier = new AngularAdminService();
-    $scope.model = new AngularAdminService();
 
     $scope.AddressList = function (pageSize) {
         if (pageSize) {
@@ -94,8 +94,20 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -105,8 +117,20 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function (error) {
-                console.log("Fail");
+            function (response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -116,8 +140,20 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function (error) {
-                console.log("Fail");
+            function (response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -127,8 +163,20 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -138,8 +186,20 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function (error) {
-                console.log("Fail");
+            function (response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -149,8 +209,20 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function (error) {
-                console.log("Fail");
+            function (response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -207,8 +279,20 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -218,8 +302,20 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -229,8 +325,20 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
                 console.log("Success");
                 location.href = "/Administration/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 

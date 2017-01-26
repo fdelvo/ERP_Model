@@ -138,6 +138,17 @@ namespace ERP_Model.Controllers.API
         {
             if (!ModelState.IsValid)
             {
+                foreach (var v in ModelState.Values)
+                {
+                    foreach (var e in v.Errors)
+                    {
+                        if (e.Exception != null)
+                        {
+                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
+                        }
+                    }
+                }
+
                 return BadRequest(ModelState);
             }
 
@@ -192,6 +203,17 @@ namespace ERP_Model.Controllers.API
         {
             if (!ModelState.IsValid)
             {
+                foreach (var v in ModelState.Values)
+                {
+                    foreach (var e in v.Errors)
+                    {
+                        if (e.Exception != null)
+                        {
+                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
+                        }
+                    }
+                }
+
                 return BadRequest(ModelState);
             }
 

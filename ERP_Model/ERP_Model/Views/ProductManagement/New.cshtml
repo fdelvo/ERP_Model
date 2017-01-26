@@ -4,6 +4,7 @@
 
 <div class="content-box" ng-controller="AngularProductsController">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
+    <h1>Create Product</h1>
     <form ng-init="StockList()" ng-submit="CreateProduct()">
         <label>Product Name:</label>
         <input type="text" ng-model="newProduct.ProductName"/>
@@ -17,7 +18,16 @@
         <label>Stock:</label>
         <select ng-options="stock.StockName for stock in stocks.DataObject track by stock.StockGuid" ng-model="stock"></select>
         <br/>
-        <label></label>
+        <label>Minimum Stock Quantity:</label>
+        <input type="number" ng-model="minQuantity"/>
+        <br/>
+        <label>Maximum Stock Quantity:</label>
+        <input type="number" ng-model="maxQuantity" />
+        <br />
+        <ul ng-show="error" class="error-ul">
+            <li ng-repeat="e in errorMessages">{{e}}</li>
+        </ul>
+        <br />
         <input type="submit" value="Create Product"/>
     </form>
 </div>

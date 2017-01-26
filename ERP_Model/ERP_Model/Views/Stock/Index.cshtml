@@ -21,7 +21,7 @@
             <td>
                 <a href="/Stock/StockItems/{{s.StockGuid}}">{{s.StockName}}</a>
             </td>
-            <td>
+            <td data-th="Stock Address">
                 <ul>
                     <li>Company: {{s.StockAddress.AddressCompany}}</li>
                     <li>Forename: {{s.StockAddress.AddressForName}}</li>
@@ -31,8 +31,8 @@
                     <li>Country: {{s.StockAddress.AddressCountry}}</li>
                 </ul>
             </td>
-            <td>{{s.StockMethod}}</td>
-            <td>{{s.StockValue}}</td>
+            <td data-th="Stock Method">{{s.StockMethod}}</td>
+            <td data-th="Stock Value">{{s.StockValue}}</td>
             <td>
                 <a href="/Stock/Edit/{{s.StockGuid}}">Edit</a>
             </td>

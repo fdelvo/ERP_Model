@@ -11,6 +11,9 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
 
     var page = 0;
     $scope.pageSize = 20;
+    $scope.newStock = new AngularStocksService();
+    $scope.newStockTransaction = [];
+    $scope.errorMessages = [];
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
@@ -41,9 +44,6 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
                 console.log($scope.addresses);
             });
     };
-
-    $scope.newStock = new AngularStocksService();
-    $scope.newStockTransaction = [];
 
     $scope.StockList = function() {
         $scope.stocks = AngularStocksService.GetStocks({
@@ -92,8 +92,20 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
                 console.log("Success");
                 location.href = "/Stock/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -103,8 +115,20 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
                 console.log("Success");
                 location.href = "/Stock/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
@@ -126,8 +150,20 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
                 console.log("Success");
                 location.href = "/Stock/Index";
             },
-            function(error) {
-                console.log("Fail");
+            function(response) {
+                $scope.error = true;
+                $scope.errorMessages = [];
+                for (var key in response.data.ModelState) {
+                    if (response.data.ModelState.hasOwnProperty(key)) {
+                        response.data.ModelState[key].forEach(
+                            function (element) {
+                                $scope.errorMessages.push(element);
+                            });
+                    }                   
+                };
+                if (response.data.Message) {
+                    $scope.errorMessages.push(response.data.Message);
+                }
             });
     };
 
