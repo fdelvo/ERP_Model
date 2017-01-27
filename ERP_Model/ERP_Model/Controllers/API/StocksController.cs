@@ -29,6 +29,27 @@ namespace ERP_Model.Controllers.API
             return manager;
         }
 
+        [HttpGet]
+        public async Task<IHttpActionResult> SearchStock(int page, int pageSize, string searchString)
+        {
+            searchString.Trim();
+            var stocks = await db.Stock
+                .Where(d => d.StockDeleted == false && (d.StockGuid.ToString() == searchString || d.StockName.Contains(searchString) || d.StockMethod.Contains(searchString)))
+                .OrderByDescending(o => o.StockName)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = stocks,
+                PageAmount = (db.Stock.Count(d => d.StockDeleted == false && (d.StockGuid.ToString() == searchString || d.StockName.Contains(searchString) || d.StockMethod.Contains(searchString))) + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
+        }
+
         //returns all stocks
         public async Task<IHttpActionResult> GetStocks(int page = 0, int pageSize = 0)
         {

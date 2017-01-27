@@ -6,6 +6,11 @@ function AngularOrdersService($resource) {
     return $resource("/api/orders/",
         null,
         {
+            SearchOrder: {
+                method: "GET",
+                url: "/api/orders/searchorder",
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
             GetOrders: {
                 method: "GET",
                 url: "/api/orders/getorders",

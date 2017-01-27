@@ -1,10 +1,10 @@
 ﻿angular.module("ERPModelApp").controller("AngularStocksController", AngularStocksController);
 
 AngularStocksController.$inject = [
-    "$scope", "AngularStocksService", "AngularAdminService", "$rootScope"
+    "$scope", "AngularStocksService", "AngularAdminService", "$timeout"
 ];
 
-function AngularStocksController($scope, AngularStocksService, AngularAdminService, $rootScope) {
+function AngularStocksController($scope, AngularStocksService, AngularAdminService, $timeout) {
     if (localStorage.getItem("tokenKey") === null) {
         location.href = "/Home/Index";
     }
@@ -14,6 +14,17 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
     $scope.newStock = new AngularStocksService();
     $scope.newStockTransaction = [];
     $scope.errorMessages = [];
+    $scope.addresses = {};
+
+    $scope.StockSearch = function () {
+        $scope.stocks = AngularStocksService.SearchStock({
+            page: page,
+            pageSize: $scope.pageSize,
+            searchString: $scope.searchString
+        }, function () {
+            console.log("Success");
+        });
+    };
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
@@ -35,12 +46,16 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
         fnc();
     };
 
-    $scope.AddressList = function() {
-        $scope.addresses = AngularAdminService.GetAddresses({
+    $scope.AddressList = function () {
+        $scope.addressesTemp = AngularAdminService.GetAddresses({
                 page: page,
                 pageSize: $scope.pageSize
             },
-            function() {
+            function () {
+                if (Object.keys($scope.addresses).length === 0 && $scope.addresses.constructor === Object || $scope.addresses.DataObject.length !== $scope.addressesTemp.DataObject.length) {
+                    $scope.addresses = $scope.addressesTemp;
+                }
+                $timeout($scope.AddressList, 1000);
                 console.log($scope.addresses);
             });
     };

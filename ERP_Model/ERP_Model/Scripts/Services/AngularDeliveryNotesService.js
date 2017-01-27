@@ -6,6 +6,11 @@ function AngularDeliveryNotesService($resource) {
     return $resource("/api/deliverynotes/",
         null,
         {
+            SearchDeliveryNote: {
+                method: "GET",
+                url: "/api/deliverynotes/searchdeliverynote",
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
             GetDeliveryNotes: {
                 method: "GET",
                 url: "/api/deliverynotes/getdeliverynotes",

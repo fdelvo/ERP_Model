@@ -25,6 +25,27 @@ namespace ERP_Model.Controllers.API
             private set { _userManager = value; }
         }
 
+        [HttpGet]
+        public async Task<IHttpActionResult> SearchOrder(int page, int pageSize, string searchString)
+        {
+            searchString.Trim();
+            var orders = await db.Orders
+                .Where(d => d.OrderDeleted == false && (d.OrderGuid.ToString() == searchString || d.OrderCustomer.CustomerCompany.Contains(searchString) || d.OrderCustomer.CustomerForName.Contains(searchString) || d.OrderCustomer.CustomerLastName.Contains(searchString)))
+                .OrderByDescending(o => o.OrderDate)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = orders,
+                PageAmount = (db.Orders.Count(d => d.OrderDeleted == false && (d.OrderGuid.ToString() == searchString || d.OrderCustomer.CustomerCompany.Contains(searchString) || d.OrderCustomer.CustomerForName.Contains(searchString) || d.OrderCustomer.CustomerLastName.Contains(searchString))) + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
+        }
+
         // GET: api/Orders
         public async Task<IHttpActionResult> GetOrders(int page, int pageSize)
         {

@@ -25,6 +25,27 @@ namespace ERP_Model.Controllers.API
             private set { _userManager = value; }
         }
 
+        [HttpGet]
+        public async Task<IHttpActionResult> SearchGoodsReceipt(int page, int pageSize, string searchString)
+        {
+            searchString.Trim();
+            var goodsReceipts = await _db.GoodsReceipts
+                .Where(d => d.GoodsReceiptDeleted == false && (d.GoodsReceiptSupply.SupplyGuid.ToString() == searchString || d.GoodsReceiptGuid.ToString() == searchString))
+                .OrderByDescending(o => o.GoodsReceiptGuid)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = goodsReceipts,
+                PageAmount = (_db.GoodsReceipts.Count(d => d.GoodsReceiptDeleted == false && (d.GoodsReceiptSupply.SupplyGuid.ToString() == searchString || d.GoodsReceiptGuid.ToString() == searchString)) + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
+        }
+
         // GET: api/DeliverNotes
         public async Task<IHttpActionResult> GetGoodsReceipts(int page, int pageSize)
         {

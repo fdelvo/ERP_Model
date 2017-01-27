@@ -6,6 +6,11 @@ function AngularSupplysService($resource) {
     return $resource("/api/supplys/",
         null,
         {
+            SearchSupply: {
+                method: "GET",
+                url: "/api/supplys/searchsupply",
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
             GetSupplys: {
                 method: "GET",
                 url: "/api/supplys/getsupplys",

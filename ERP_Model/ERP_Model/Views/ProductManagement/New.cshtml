@@ -17,7 +17,10 @@
         <br/>
         <label>Stock:</label>
         <select ng-options="stock.StockName for stock in stocks.DataObject track by stock.StockGuid" ng-model="stock"></select>
+        <br />
+        <a href="/Stock/New" target="_blank">Create Stock</a>
         <br/>
+        <br />
         <label>Minimum Stock Quantity:</label>
         <input type="number" ng-model="minQuantity"/>
         <br/>

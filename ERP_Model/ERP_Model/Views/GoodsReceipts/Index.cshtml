@@ -7,6 +7,11 @@
     <h1>Goods Receipts</h1>
     <div class="nav-bar">
     </div>
+    <form class="search-form" ng-submit="GoodsReceiptSearch()">
+        <input type="text" ng-model="searchString" />
+        <input type="submit" value="Search" />
+        <input type="button" value="Reset" ng-click="GoodsReceiptList()" />
+    </form>
     <table ng-init="GoodsReceiptList()">
         <thead>
         <tr>

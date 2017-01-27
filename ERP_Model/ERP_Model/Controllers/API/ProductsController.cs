@@ -21,6 +21,27 @@ namespace ERP_Model.Controllers.API
         //db context
         private readonly ApplicationDbContext db = new ApplicationDbContext();
 
+        [HttpGet]
+        public async Task<IHttpActionResult> SearchProduct(int page, int pageSize, string searchString)
+        {
+            searchString.Trim();
+            var products = await db.Products
+                .Where(d => d.ProductDeleted == false && (d.ProductName.Contains(searchString) || d.ProductDescription.Contains(searchString) || d.ProductGuid.ToString() == searchString))
+                .OrderByDescending(o => o.ProductName)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = products,
+                PageAmount = (db.Products.Count(d => d.ProductDeleted == false && (d.ProductName.Contains(searchString) || d.ProductDescription.Contains(searchString) || d.ProductGuid.ToString() == searchString)) + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
+        }
+
         //returns all products
         public async Task<IHttpActionResult> GetProducts(int page, int pageSize)
         {

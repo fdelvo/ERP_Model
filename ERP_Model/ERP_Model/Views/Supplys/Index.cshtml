@@ -8,6 +8,11 @@
         <a class="button" href="/Supplys/New">New Supply</a>
         <a class="button" href="/GoodsReceipts/Index">Goods Receipts</a>
     </div>
+    <form class="search-form" ng-submit="SupplySearch()">
+        <input type="text" ng-model="searchString" />
+        <input type="submit" value="Search" />
+        <input type="button" value="Reset" ng-click="SupplyList()" />
+    </form>
     <table ng-init="SupplyList()">
         <thead>
         <tr>

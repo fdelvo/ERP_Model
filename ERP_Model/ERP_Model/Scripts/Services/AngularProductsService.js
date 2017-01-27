@@ -6,6 +6,11 @@ function AngularProductsService($resource) {
     return $resource("/api/works/",
         null,
         {
+            SearchProduct: {
+                method: "GET",
+                url: "/api/products/searchproduct",
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
             GetProducts: {
                 method: "GET",
                 url: "/api/products/getproducts",

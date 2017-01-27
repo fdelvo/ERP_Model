@@ -25,6 +25,27 @@ namespace ERP_Model.Controllers.API
             private set { _userManager = value; }
         }
 
+        [HttpGet]
+        public async Task<IHttpActionResult> SearchSupply(int page, int pageSize, string searchString)
+        {
+            searchString.Trim();
+            var supplys = await _db.Supplys
+                .Where(d => d.SupplyDeleted == false && (d.SupplyGuid.ToString() == searchString || d.SupplySupplier.SupplierCompany.Contains(searchString) || d.SupplySupplier.SupplierForName.Contains(searchString) || d.SupplySupplier.SupplierLastName.Contains(searchString)))
+                .OrderByDescending(o => o.SupplyDate)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = supplys,
+                PageAmount = (_db.Supplys.Count(d => d.SupplyDeleted == false && (d.SupplyGuid.ToString() == searchString || d.SupplySupplier.SupplierCompany.Contains(searchString) || d.SupplySupplier.SupplierForName.Contains(searchString) || d.SupplySupplier.SupplierLastName.Contains(searchString))) + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
+        }
+
         // GET: api/Supplys
         public async Task<IHttpActionResult> GetSupplys(int page, int pageSize)
         {

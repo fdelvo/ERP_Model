@@ -6,6 +6,11 @@ function AngularGoodsReceiptsService($resource) {
     return $resource("/api/goodsreceipts/",
         null,
         {
+            SearchGoodsReceipt: {
+                method: "GET",
+                url: "/api/goodsreceipts/searchgoodsreceipt",
+                headers: { "Authorization": "Bearer " + localStorage.getItem("tokenKey") }
+            },
             GetGoodsReceipts: {
                 method: "GET",
                 url: "/api/goodsreceipts/getgoodsreceipts",

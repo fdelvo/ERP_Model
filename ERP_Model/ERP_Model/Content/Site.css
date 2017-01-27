@@ -19,6 +19,10 @@ input,
 select,
 textarea { max-width: 280px; }
 
+.search-form {
+    text-align: left;
+}
+
 .error-ul {
     color: red;
     font-weight: 700;
@@ -105,9 +109,9 @@ input, select {
     width: 100%;
 }
 
-input[type=submit]:hover { opacity: 0.8; }
+input[type=submit]:hover, input[type=button]:hover { opacity: 0.8; }
 
-input[type=submit] {
+input[type=submit], input[type=button] {
     background-color: lightgrey;
     background-color: #708D81;
     color: #F2EFEA;

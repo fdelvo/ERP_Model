@@ -8,6 +8,11 @@
         <a class="button" href="/Orders/New">New Order</a>
         <a class="button" href="/DeliveryNotes/Index">Delivery Notes</a>
     </div>
+    <form class="search-form" ng-submit="OrderSearch()">
+        <input type="text" ng-model="searchString" />
+        <input type="submit" value="Search" />
+        <input type="button" value="Reset" ng-click="OrdersList()" />
+    </form>
     <table ng-init="OrdersList()">
         <thead>
         <tr>

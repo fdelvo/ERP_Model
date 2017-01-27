@@ -26,6 +26,26 @@ function AngularOrdersController($scope,
     $scope.newDeliveryNote = new AngularDeliveryNotesService();
     $scope.errorMessages = [];
 
+    $scope.OrderSearch = function () {
+        $scope.orders = AngularOrdersService.SearchOrder({
+            page: page,
+            pageSize: $scope.pageSize,
+            searchString: $scope.searchString
+        }, function () {
+            console.log("Success");
+        });
+    };
+
+    $scope.DeliveryNoteSearch = function () {
+        $scope.deliveryNotes = AngularDeliveryNotesService.SearchDeliveryNote({
+            page: page,
+            pageSize: $scope.pageSize,
+            searchString: $scope.searchString
+        }, function () {
+            console.log("Success");
+        });
+    };
+
     $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
             page = currentPage;

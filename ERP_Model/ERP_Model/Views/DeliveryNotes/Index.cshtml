@@ -7,6 +7,11 @@
     <h1>Delivery Notes</h1>
     <div class="nav-bar">
     </div>
+    <form class="search-form" ng-submit="DeliveryNoteSearch()">
+        <input type="text" ng-model="searchString" />
+        <input type="submit" value="Search" />
+        <input type="button" value="Reset" ng-click="DeliveryNotesList()" />
+    </form>
     <table ng-init="DeliveryNotesList()">
         <thead>
         <tr>

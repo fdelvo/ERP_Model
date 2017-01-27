@@ -26,6 +26,26 @@ function AngularSupplysController($scope,
     $scope.newGoodsReceipt = new AngularGoodsReceiptsService();
     $scope.errorMessages = [];
 
+    $scope.SupplySearch = function () {
+        $scope.supplys = AngularSupplysService.SearchSupply({
+            page: page,
+            pageSize: $scope.pageSize,
+            searchString: $scope.searchString
+        }, function () {
+            console.log("Success");
+        });
+    };
+
+    $scope.GoodsReceiptSearch = function () {
+        $scope.goodsReceipts = AngularGoodsReceiptsService.SearchGoodsReceipt({
+            page: page,
+            pageSize: $scope.pageSize,
+            searchString: $scope.searchString
+        }, function () {
+            console.log("Success");
+        });
+    };
+
     $scope.Next = function (currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
             page = currentPage;

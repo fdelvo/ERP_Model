@@ -25,6 +25,27 @@ namespace ERP_Model.Controllers.API
             private set { _userManager = value; }
         }
 
+        [HttpGet]
+        public async Task<IHttpActionResult> SearchDeliveryNote(int page, int pageSize, string searchString)
+        {
+            searchString.Trim();
+            var deliveryNotes = await _db.Deliveries
+                .Where(d => d.DeliveryDeleted == false && (d.DeliveryOrder.OrderGuid.ToString() == searchString || d.DeliveryGuid.ToString() == searchString))
+                .OrderByDescending(o => o.DeliveryGuid)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var dataVm = new PaginationViewModel
+            {
+                DataObject = deliveryNotes,
+                PageAmount = (_db.Deliveries.Count(d => d.DeliveryDeleted == false && (d.DeliveryOrder.OrderGuid.ToString() == searchString || d.DeliveryGuid.ToString() == searchString)) + pageSize - 1) / pageSize,
+                CurrentPage = page
+            };
+
+            return Ok(dataVm);
+        }
+
         // GET: api/DeliverNotes
         public async Task<IHttpActionResult> GetDeliveryNotes(int page, int pageSize)
         {

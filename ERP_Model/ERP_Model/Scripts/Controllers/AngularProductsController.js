@@ -1,10 +1,10 @@
 ﻿angular.module("ERPModelApp").controller("AngularProductsController", AngularProductsController);
 
 AngularProductsController.$inject = [
-    "$scope", "AngularProductsService", "AngularStocksService", "$rootScope"
+    "$scope", "AngularProductsService", "AngularStocksService", "$timeout"
 ];
 
-function AngularProductsController($scope, AngularProductsService, AngularStocksService, $rootScope) {
+function AngularProductsController($scope, AngularProductsService, AngularStocksService, $timeout) {
     if (localStorage.getItem("tokenKey") === null) {
         location.href = "/Home/Index";
     }
@@ -13,6 +13,17 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
     var page = 0;
     $scope.pageSize = 20;
     $scope.errorMessages = [];
+    $scope.stocks = {};
+
+    $scope.ProductSearch = function () {
+        $scope.products = AngularProductsService.SearchProduct({
+            page: page,
+            pageSize: $scope.pageSize,
+            searchString: $scope.searchString
+        }, function () {
+            console.log("Success");
+        });
+    };
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
         if (currentPage + 1 === pageAmount) {
@@ -35,12 +46,23 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
     };
 
     $scope.StockList = function() {
-        $scope.stocks = AngularStocksService.GetStocks({
+        $scope.stocksTemp = AngularStocksService.GetStocks({
         
             },
-            function() {
+            function () {
+                if (Object.keys($scope.stocks).length === 0 && $scope.stocks.constructor === Object || $scope.stocks.DataObject.length !== $scope.stocksTemp.DataObject.length) {
+                    $scope.stocks = $scope.stocksTemp;
+                }
+                $timeout($scope.StockList, 1000);
                 console.log($scope.stocks);
             });
+    };
+
+    $scope.poll = function(fnc) {
+        $timeout(function() {
+            $scope.value++;
+            poll();
+        }, 1000);
     };
 
     $scope.ProductList = function() {
