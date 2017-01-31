@@ -15,9 +15,7 @@ namespace ERP_Model.Providers
         public ApplicationOAuthProvider(string publicClientId)
         {
             if (publicClientId == null)
-            {
                 throw new ArgumentNullException("publicClientId");
-            }
 
             _publicClientId = publicClientId;
         }
@@ -48,9 +46,7 @@ namespace ERP_Model.Providers
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
         {
             foreach (var property in context.Properties.Dictionary)
-            {
                 context.AdditionalResponseParameters.Add(property.Key, property.Value);
-            }
 
             return Task.FromResult<object>(null);
         }
@@ -59,9 +55,7 @@ namespace ERP_Model.Providers
         {
             // Resource owner password credentials does not provide a client ID.
             if (context.ClientId == null)
-            {
                 context.Validated();
-            }
 
             return Task.FromResult<object>(null);
         }
@@ -73,9 +67,7 @@ namespace ERP_Model.Providers
                 var expectedRootUri = new Uri(context.Request.Uri, "/");
 
                 if (expectedRootUri.AbsoluteUri == context.RedirectUri)
-                {
                     context.Validated();
-                }
             }
 
             return Task.FromResult<object>(null);

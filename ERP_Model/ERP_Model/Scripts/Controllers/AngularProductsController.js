@@ -15,14 +15,15 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
     $scope.errorMessages = [];
     $scope.stocks = {};
 
-    $scope.ProductSearch = function () {
+    $scope.ProductSearch = function() {
         $scope.products = AngularProductsService.SearchProduct({
-            page: page,
-            pageSize: $scope.pageSize,
-            searchString: $scope.searchString
-        }, function () {
-            console.log("Success");
-        });
+                page: page,
+                pageSize: $scope.pageSize,
+                searchString: $scope.searchString
+            },
+            function() {
+                console.log("Success");
+            });
     };
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
@@ -47,10 +48,11 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
 
     $scope.StockList = function() {
         $scope.stocksTemp = AngularStocksService.GetStocks({
-        
+            
             },
-            function () {
-                if (Object.keys($scope.stocks).length === 0 && $scope.stocks.constructor === Object || $scope.stocks.DataObject.length !== $scope.stocksTemp.DataObject.length) {
+            function() {
+                if (Object.keys($scope.stocks).length === 0 && $scope.stocks.constructor === Object ||
+                    $scope.stocks.DataObject.length !== $scope.stocksTemp.DataObject.length) {
                     $scope.stocks = $scope.stocksTemp;
                 }
                 $timeout($scope.StockList, 1000);
@@ -60,9 +62,10 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
 
     $scope.poll = function(fnc) {
         $timeout(function() {
-            $scope.value++;
-            poll();
-        }, 1000);
+                $scope.value++;
+                poll();
+            },
+            1000);
     };
 
     $scope.ProductList = function() {
@@ -79,16 +82,16 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
         $scope.product = AngularProductsService.GetProduct({ id: $scope.GetValueAtIndex(5) });
     };
 
-    $scope.CreateProduct = function () {
+    $scope.CreateProduct = function() {
         if ($scope.stock === undefined) {
             $scope.stock = {
                 StockGuid: "00000000-0000-0000-0000-000000000000"
             };
         }
         $scope.newProduct.$PostProduct({
-            stockGuid: $scope.stock.StockGuid,
-            maxQuantity: $scope.maxQuantity,
-            minQuantity: $scope.minQuantity
+                stockGuid: $scope.stock.StockGuid,
+                maxQuantity: $scope.maxQuantity,
+                minQuantity: $scope.minQuantity
             },
             function(response) {
                 console.log("Success");
@@ -100,7 +103,7 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
                 for (var key in response.data.ModelState) {
                     if (response.data.ModelState.hasOwnProperty(key)) {
                         response.data.ModelState[key].forEach(
-                            function (element) {
+                            function(element) {
                                 $scope.errorMessages.push(element);
                             });
                     }
@@ -123,7 +126,7 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
                 for (var key in response.data.ModelState) {
                     if (response.data.ModelState.hasOwnProperty(key)) {
                         response.data.ModelState[key].forEach(
-                            function (element) {
+                            function(element) {
                                 $scope.errorMessages.push(element);
                             });
                     }

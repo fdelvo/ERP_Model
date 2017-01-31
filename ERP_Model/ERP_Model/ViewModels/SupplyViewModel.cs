@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 using ERP_Model.Models;
 
 namespace ERP_Model.ViewModels
@@ -22,11 +20,15 @@ namespace ERP_Model.ViewModels
     {
         [Key]
         public Guid SupplyGuid { get; set; }
+
         [Required]
         public virtual Supplier SupplySupplier { get; set; }
+
         public DateTime SupplyDate { get; set; }
+
         [Required]
         public DateTime SupplyDeliveryDate { get; set; }
+
         [Required]
         public List<SupplyItemProductViewModel> SupplyItems { get; set; }
     }

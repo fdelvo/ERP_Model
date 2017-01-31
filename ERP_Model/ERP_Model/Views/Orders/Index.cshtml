@@ -9,9 +9,9 @@
         <a class="button" href="/DeliveryNotes/Index">Delivery Notes</a>
     </div>
     <form class="search-form" ng-submit="OrderSearch()">
-        <input type="text" ng-model="searchString" />
-        <input type="submit" value="Search" />
-        <input type="button" value="Reset" ng-click="OrdersList()" />
+        <input type="text" ng-model="searchString"/>
+        <input type="submit" value="Search"/>
+        <input type="button" value="Reset" ng-click="OrdersList()"/>
     </form>
     <table ng-init="OrdersList()">
         <thead>
@@ -28,7 +28,9 @@
             <td>
                 <a href="/Orders/OrderItems/{{o.OrderGuid}}">{{o.OrderGuid}}</a>
             </td>
-            <td data-th="Customer"><a href="/Administration/Customer/{{o.OrderCustomer.CustomerGuid}}">{{o.OrderCustomer.CustomerLastName || " "}} {{o.OrderCustomer.CustomerForName || " "}} {{o.OrderCustomer.CustomerCompany || " "}}</a></td>
+            <td data-th="Customer">
+                <a href="/Administration/Customer/{{o.OrderCustomer.CustomerGuid}}">{{o.OrderCustomer.CustomerLastName || " "}} {{o.OrderCustomer.CustomerForName || " "}} {{o.OrderCustomer.CustomerCompany || " "}}</a>
+            </td>
             <td data-th="Creation Date">{{o.OrderDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
             <td data-th="Delivery Date">{{o.OrderDeliveryDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
             <td data-th="Value">{{o.OrderValue}}</td>

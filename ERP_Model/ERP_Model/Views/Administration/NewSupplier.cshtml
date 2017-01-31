@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "NewSupplier";
 }
 
@@ -8,22 +7,21 @@
     <h1>Create Supplier</h1>
     <form ng-init="AddressList(0)" ng-submit="CreateSupplier()">
         <label>ForName:</label>
-        <input type="text" ng-model="newSupplier.SupplierForName" placeholder="Forname" />
-        <br />
+        <input type="text" ng-model="newSupplier.SupplierForName" placeholder="Forname"/>
+        <br/>
         <label>LastName:</label>
-        <input type="text" ng-model="newSupplier.SupplierLastName" placeholder="Lastname" />
+        <input type="text" ng-model="newSupplier.SupplierLastName" placeholder="Lastname"/>
         <br/>
         <label>Company:</label>
-        <input type="text" ng-model="newSupplier.SupplierCompany" placeholder="Company" />
-        <br />
+        <input type="text" ng-model="newSupplier.SupplierCompany" placeholder="Company"/>
+        <br/>
         <label>Address:</label>
         <select ng-options="address.AddressDescription for address in addresses.DataObject track by address.AddressGuid" ng-model="newSupplier.SupplierAddress"></select>
-        <br />
+        <br/>
         <ul ng-show="error" class="error-ul">
             <li ng-repeat="e in errorMessages">{{e}}</li>
         </ul>
-        <br />
-        <input type="submit" value="Create Supplier" />
+        <br/>
+        <input type="submit" value="Create Supplier"/>
     </form>
 </div>
-

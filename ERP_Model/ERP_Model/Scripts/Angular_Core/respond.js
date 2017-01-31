@@ -200,7 +200,7 @@ window.matchMedia = window.matchMedia ||
                 body = doc.body,
                 fakeUsed = false;
 
-            div.style.cssText = "position:absolute;font-size:1em;width:1em";
+            div.style.cssText = "font-size:1em;position:absolute;width:1em";
 
             if (!body) {
                 body = fakeUsed = doc.createElement("body");
@@ -263,7 +263,7 @@ window.matchMedia = window.matchMedia ||
 
                 // if there's no media query at all (the () part), or min or max is not null, and if either is present, they're true
                 if (!thisstyle.hasquery ||
-                (!minnull || !maxnull) && (minnull || currWidth >= min) && (maxnull || currWidth <= max)) {
+                    (!minnull || !maxnull) && (minnull || currWidth >= min) && (maxnull || currWidth <= max)) {
                     if (!styleBlocks[thisstyle.media]) {
                         styleBlocks[thisstyle.media] = [];
                     }

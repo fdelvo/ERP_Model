@@ -28,7 +28,9 @@
             <td data-th="Unit Price">{{supplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
             <td data-th="Quantity">{{supplyItem.SupplyQuantity}}</td>
             <td data-th="Total Price">{{supplyItem.SupplyQuantity * supplyItem.SupplyItemStockItem.StockItemProduct.ProductPrice}}</td>
-            <td data-th="Remarks"><span ng-show="supplyItem.SupplyItemStockItem.StockItemProduct.ProductDeleted">Old Product</span></td>
+            <td data-th="Remarks">
+                <span ng-show="supplyItem.SupplyItemStockItem.StockItemProduct.ProductDeleted">Old Product</span>
+            </td>
         </tr>
         </tbody>
         <tfoot>

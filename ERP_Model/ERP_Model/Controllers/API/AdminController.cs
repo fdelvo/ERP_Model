@@ -20,9 +20,9 @@ namespace ERP_Model.Controllers.API
 {
     public class AdminController : ApiController
     {
-        private ApplicationUserManager _userManager;
         //get database context
         private readonly ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
 
         public ApplicationUserManager UserManager
         {
@@ -34,20 +34,18 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetAddresses(int page = 0, int pageSize = 0)
         {
             if (pageSize == 0)
-            {
                 pageSize = await db.Addresses.CountAsync();
-            }
 
             var addresses = await db.Addresses
                 .OrderByDescending(o => o.AddressLastName)
-                .Skip(page*pageSize)
+                .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             var dataVm = new PaginationViewModel
             {
                 DataObject = addresses,
-                PageAmount = (db.Addresses.Count() + pageSize - 1)/pageSize,
+                PageAmount = (db.Addresses.Count() + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -57,9 +55,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetCustomers(int page = 0, int pageSize = 0)
         {
             if (pageSize == 0)
-            {
                 pageSize = await db.Customers.CountAsync();
-            }
 
             var customers = await db.Customers
                 .OrderByDescending(o => o.CustomerLastName)
@@ -80,9 +76,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetSuppliers(int page = 0, int pageSize = 0)
         {
             if (pageSize == 0)
-            {
                 pageSize = await db.Suppliers.CountAsync();
-            }
 
             var suppliers = await db.Suppliers
                 .OrderByDescending(o => o.SupplierLastName)
@@ -106,9 +100,7 @@ namespace ERP_Model.Controllers.API
         {
             var address = await db.Addresses.FindAsync(id);
             if (address == null)
-            {
                 return NotFound();
-            }
 
             return Ok(address);
         }
@@ -117,9 +109,7 @@ namespace ERP_Model.Controllers.API
         {
             var customer = await db.Customers.FindAsync(id);
             if (customer == null)
-            {
                 return NotFound();
-            }
 
             return Ok(customer);
         }
@@ -128,9 +118,7 @@ namespace ERP_Model.Controllers.API
         {
             var supplier = await db.Suppliers.FindAsync(id);
             if (supplier == null)
-            {
                 return NotFound();
-            }
 
             return Ok(supplier);
         }
@@ -143,23 +131,17 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (id != address.AddressGuid)
-            {
                 return BadRequest();
-            }
 
             db.Entry(address).State = EntityState.Modified;
 
@@ -171,9 +153,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!AddressExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -187,29 +167,24 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (id != customer.CustomerGuid)
-            {
                 return BadRequest();
-            }
 
             var customerToUpdate = await db.Customers.FirstOrDefaultAsync(g => g.CustomerGuid == customer.CustomerGuid);
             customerToUpdate.CustomerCompany = customer.CustomerCompany;
             customerToUpdate.CustomerForName = customer.CustomerForName;
             customerToUpdate.CustomerLastName = customer.CustomerLastName;
-            customerToUpdate.CustomerAddress = await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == customer.CustomerAddress.AddressGuid);
+            customerToUpdate.CustomerAddress =
+                await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == customer.CustomerAddress.AddressGuid);
 
             db.Entry(customerToUpdate).State = EntityState.Modified;
 
@@ -221,9 +196,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!AddressExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -237,29 +210,24 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (id != supplier.SupplierGuid)
-            {
                 return BadRequest();
-            }
 
             var supplierToUpdate = await db.Suppliers.FirstOrDefaultAsync(g => g.SupplierGuid == supplier.SupplierGuid);
             supplierToUpdate.SupplierCompany = supplier.SupplierCompany;
             supplierToUpdate.SupplierForName = supplier.SupplierForName;
             supplierToUpdate.SupplierLastName = supplier.SupplierLastName;
-            supplierToUpdate.SupplierAddress = await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == supplier.SupplierAddress.AddressGuid);
+            supplierToUpdate.SupplierAddress =
+                await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == supplier.SupplierAddress.AddressGuid);
             db.Entry(supplierToUpdate).State = EntityState.Modified;
 
             //save changes to the address
@@ -270,9 +238,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!AddressExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -287,15 +253,11 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
@@ -314,9 +276,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateException)
             {
                 if (AddressExists(address.AddressGuid))
-                {
                     return Conflict();
-                }
                 throw;
             }
 
@@ -330,22 +290,19 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             //generate new guid for the address
             customer.CustomerGuid = Guid.NewGuid();
-            customer.CustomerAddress = await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == customer.CustomerAddress.AddressGuid);
+            customer.CustomerAddress =
+                await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == customer.CustomerAddress.AddressGuid);
 
             //add address to db context
             db.Customers.Add(customer);
@@ -358,13 +315,11 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateException)
             {
                 if (CustomerExists(customer.CustomerGuid))
-                {
                     return Conflict();
-                }
                 throw;
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = customer.CustomerGuid }, customer);
+            return CreatedAtRoute("DefaultApi", new {id = customer.CustomerGuid}, customer);
         }
 
         [ResponseType(typeof(Supplier))]
@@ -374,22 +329,19 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             //generate new guid for the address
             supplier.SupplierGuid = Guid.NewGuid();
-            supplier.SupplierAddress = await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == supplier.SupplierAddress.AddressGuid);
+            supplier.SupplierAddress =
+                await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == supplier.SupplierAddress.AddressGuid);
 
             //add address to db context
             db.Suppliers.Add(supplier);
@@ -402,13 +354,11 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateException)
             {
                 if (SupplierExists(supplier.SupplierGuid))
-                {
                     return Conflict();
-                }
                 throw;
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = supplier.SupplierGuid }, supplier);
+            return CreatedAtRoute("DefaultApi", new {id = supplier.SupplierGuid}, supplier);
         }
 
         //deletes an address
@@ -420,9 +370,7 @@ namespace ERP_Model.Controllers.API
 
             //check if address exists
             if (address == null)
-            {
                 return NotFound();
-            }
 
             //remove address from db context
             db.Addresses.Remove(address);
@@ -441,9 +389,7 @@ namespace ERP_Model.Controllers.API
 
             //check if address exists
             if (customer == null)
-            {
                 return NotFound();
-            }
 
             //remove address from db context
             db.Customers.Remove(customer);
@@ -462,9 +408,7 @@ namespace ERP_Model.Controllers.API
 
             //check if address exists
             if (supplier == null)
-            {
                 return NotFound();
-            }
 
             //remove address from db context
             db.Suppliers.Remove(supplier);
@@ -480,14 +424,14 @@ namespace ERP_Model.Controllers.API
         {
             var users = await db.Users
                 .OrderByDescending(o => o.Alias)
-                .Skip(page*pageSize)
+                .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             var dataVm = new PaginationViewModel
             {
                 DataObject = users,
-                PageAmount = (db.Users.Count() + pageSize - 1)/pageSize,
+                PageAmount = (db.Users.Count() + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
             return Ok(dataVm);
@@ -509,9 +453,7 @@ namespace ERP_Model.Controllers.API
             var result = await UserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
-            {
                 return GetErrorResult(result);
-            }
 
             return Ok();
         }
@@ -523,23 +465,17 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (id.ToString() != user.Id)
-            {
                 return BadRequest();
-            }
 
             db.Entry(user).State = EntityState.Modified;
 
@@ -551,9 +487,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!UserExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -565,32 +499,24 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (!UserExists(id))
-            {
                 return Conflict();
-            }
 
             await UserManager.RemovePasswordAsync(id.ToString());
 
             var result = await UserManager.AddPasswordAsync(id.ToString(), model.NewPassword);
 
             if (!result.Succeeded)
-            {
                 return GetErrorResult(result);
-            }
 
             return Ok();
         }
@@ -602,9 +528,7 @@ namespace ERP_Model.Controllers.API
 
             //check if user exists
             if (user == null)
-            {
                 return NotFound();
-            }
 
             //remove user from db context
             db.Users.Remove(user);
@@ -618,9 +542,7 @@ namespace ERP_Model.Controllers.API
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
 
@@ -649,25 +571,16 @@ namespace ERP_Model.Controllers.API
         private IHttpActionResult GetErrorResult(IdentityResult result)
         {
             if (result == null)
-            {
                 return InternalServerError();
-            }
 
             if (!result.Succeeded)
             {
                 if (result.Errors != null)
-                {
                     foreach (var error in result.Errors)
-                    {
                         ModelState.AddModelError("", error);
-                    }
-                }
 
                 if (ModelState.IsValid)
-                {
-                    // No ModelState errors are available to send, so just return an empty BadRequest.
                     return BadRequest();
-                }
 
                 return BadRequest(ModelState);
             }

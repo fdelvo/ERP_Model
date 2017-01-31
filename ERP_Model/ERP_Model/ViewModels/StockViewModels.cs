@@ -19,10 +19,13 @@ namespace ERP_Model.ViewModels
     public class StockViewModel
     {
         public Guid StockGuid { get; set; }
+
         [Required]
         public string StockName { get; set; }
+
         [Required]
         public virtual Address StockAddress { get; set; }
+
         public string StockMethod { get; set; }
         public float StockValue { get; set; }
     }

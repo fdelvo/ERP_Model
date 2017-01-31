@@ -30,7 +30,11 @@ namespace ERP_Model.Controllers.API
         {
             searchString.Trim();
             var goodsReceipts = await _db.GoodsReceipts
-                .Where(d => d.GoodsReceiptDeleted == false && (d.GoodsReceiptSupply.SupplyGuid.ToString() == searchString || d.GoodsReceiptGuid.ToString() == searchString))
+                .Where(
+                    d =>
+                        d.GoodsReceiptDeleted == false &&
+                        (d.GoodsReceiptSupply.SupplyGuid.ToString() == searchString ||
+                         d.GoodsReceiptGuid.ToString() == searchString))
                 .OrderByDescending(o => o.GoodsReceiptGuid)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -39,7 +43,12 @@ namespace ERP_Model.Controllers.API
             var dataVm = new PaginationViewModel
             {
                 DataObject = goodsReceipts,
-                PageAmount = (_db.GoodsReceipts.Count(d => d.GoodsReceiptDeleted == false && (d.GoodsReceiptSupply.SupplyGuid.ToString() == searchString || d.GoodsReceiptGuid.ToString() == searchString)) + pageSize - 1) / pageSize,
+                PageAmount =
+                (_db.GoodsReceipts.Count(
+                     d =>
+                         d.GoodsReceiptDeleted == false &&
+                         (d.GoodsReceiptSupply.SupplyGuid.ToString() == searchString ||
+                          d.GoodsReceiptGuid.ToString() == searchString)) + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -88,9 +97,7 @@ namespace ERP_Model.Controllers.API
             };
 
             if (goodsReceiptItems == null)
-            {
                 return NotFound();
-            }
 
             return Ok(goodsReceiptViewModel);
         }
@@ -102,29 +109,24 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (id != goodsReceiptDetailsVm.GoodsReceipt.GoodsReceiptGuid)
-            {
                 return BadRequest();
-            }
 
 
             foreach (var d in goodsReceiptDetailsVm.GoodsReceiptItems)
             {
                 var deliveryItem =
-                    await _db.GoodsReceiptItems.FirstOrDefaultAsync(g => g.GoodsReceiptItemGuid == d.GoodsReceiptItemGuid);
+                    await _db.GoodsReceiptItems.FirstOrDefaultAsync(
+                        g => g.GoodsReceiptItemGuid == d.GoodsReceiptItemGuid);
                 deliveryItem.GoodsReceiptItemQuantity = d.GoodsReceiptItemQuantity;
                 _db.Entry(deliveryItem).State = EntityState.Modified;
             }
@@ -136,9 +138,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!GoodsReceiptExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -152,31 +152,27 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             var supply =
-                await _db.GoodsReceipts.FirstOrDefaultAsync(d => d.GoodsReceiptSupply.SupplyGuid == goodsReceiptVm.GoodsReceiptSupply);
+                await _db.GoodsReceipts.FirstOrDefaultAsync(
+                    d => d.GoodsReceiptSupply.SupplyGuid == goodsReceiptVm.GoodsReceiptSupply);
 
             if (supply != null)
-            {
                 return BadRequest($"GoodsReceipt Note for Supply {supply.GoodsReceiptSupply.SupplyGuid} already exists.");
-            }
 
             var goodsReceipt = new GoodsReceipt
             {
                 GoodsReceiptGuid = Guid.NewGuid(),
-                GoodsReceiptSupply = await _db.Supplys.FirstOrDefaultAsync(o => o.SupplyGuid == goodsReceiptVm.GoodsReceiptSupply)
+                GoodsReceiptSupply =
+                    await _db.Supplys.FirstOrDefaultAsync(o => o.SupplyGuid == goodsReceiptVm.GoodsReceiptSupply)
             };
 
             _db.GoodsReceipts.Add(goodsReceipt);
@@ -188,15 +184,13 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateException)
             {
                 if (GoodsReceiptExists(goodsReceipt.GoodsReceiptGuid))
-                {
                     return Conflict();
-                }
                 throw;
             }
 
             await PostGoodsReceiptItems(goodsReceiptVm.GoodsReceiptItems, goodsReceipt.GoodsReceiptGuid);
 
-            return CreatedAtRoute("DefaultApi", new { id = goodsReceipt.GoodsReceiptGuid }, goodsReceipt);
+            return CreatedAtRoute("DefaultApi", new {id = goodsReceipt.GoodsReceiptGuid}, goodsReceipt);
         }
 
         [ResponseType(typeof(Order))]
@@ -204,19 +198,19 @@ namespace ERP_Model.Controllers.API
             Guid goodsReceiptGuid)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             //create the orderitems and link them to the order
             foreach (var p in goodsReceiptItems)
             {
                 var goodsReceiptItem = new GoodsReceiptItem
                 {
-                    GoodsReceiptItemGoodsReceipt = await _db.GoodsReceipts.FirstOrDefaultAsync(d => d.GoodsReceiptGuid == goodsReceiptGuid),
+                    GoodsReceiptItemGoodsReceipt =
+                        await _db.GoodsReceipts.FirstOrDefaultAsync(d => d.GoodsReceiptGuid == goodsReceiptGuid),
                     GoodsReceiptItemGuid = Guid.NewGuid(),
                     GoodsReceiptItemSupplyItem =
-                        await _db.SupplyItems.FirstOrDefaultAsync(oi => oi.SupplyItemGuid == p.GoodsReceiptItemSupplyItem),
+                        await _db.SupplyItems.FirstOrDefaultAsync(
+                            oi => oi.SupplyItemGuid == p.GoodsReceiptItemSupplyItem),
                     GoodsReceiptItemQuantity = p.GoodsReceiptItemQuantity
                 };
 
@@ -231,7 +225,7 @@ namespace ERP_Model.Controllers.API
             {
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = goodsReceiptItems }, goodsReceiptItems);
+            return CreatedAtRoute("DefaultApi", new {id = goodsReceiptItems}, goodsReceiptItems);
         }
 
         // DELETE: api/Orders/5
@@ -240,9 +234,7 @@ namespace ERP_Model.Controllers.API
         {
             var goodsReceipt = await _db.GoodsReceipts.FindAsync(id);
             if (goodsReceipt == null)
-            {
                 return NotFound();
-            }
 
             var deliveryItems = await _db.GoodsReceiptItems
                 .Where(d => d.GoodsReceiptItemGoodsReceipt.GoodsReceiptGuid == id)
@@ -259,9 +251,7 @@ namespace ERP_Model.Controllers.API
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 _db.Dispose();
-            }
             base.Dispose(disposing);
         }
 

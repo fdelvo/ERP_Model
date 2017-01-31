@@ -16,8 +16,8 @@ namespace ERP_Model.Controllers.API
 {
     public class OrdersController : ApiController
     {
-        private ApplicationUserManager _userManager;
         private readonly ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
 
         public ApplicationUserManager UserManager
         {
@@ -30,7 +30,13 @@ namespace ERP_Model.Controllers.API
         {
             searchString.Trim();
             var orders = await db.Orders
-                .Where(d => d.OrderDeleted == false && (d.OrderGuid.ToString() == searchString || d.OrderCustomer.CustomerCompany.Contains(searchString) || d.OrderCustomer.CustomerForName.Contains(searchString) || d.OrderCustomer.CustomerLastName.Contains(searchString)))
+                .Where(
+                    d =>
+                        d.OrderDeleted == false &&
+                        (d.OrderGuid.ToString() == searchString ||
+                         d.OrderCustomer.CustomerCompany.Contains(searchString) ||
+                         d.OrderCustomer.CustomerForName.Contains(searchString) ||
+                         d.OrderCustomer.CustomerLastName.Contains(searchString)))
                 .OrderByDescending(o => o.OrderDate)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -39,7 +45,14 @@ namespace ERP_Model.Controllers.API
             var dataVm = new PaginationViewModel
             {
                 DataObject = orders,
-                PageAmount = (db.Orders.Count(d => d.OrderDeleted == false && (d.OrderGuid.ToString() == searchString || d.OrderCustomer.CustomerCompany.Contains(searchString) || d.OrderCustomer.CustomerForName.Contains(searchString) || d.OrderCustomer.CustomerLastName.Contains(searchString))) + pageSize - 1) / pageSize,
+                PageAmount =
+                (db.Orders.Count(
+                     d =>
+                         d.OrderDeleted == false &&
+                         (d.OrderGuid.ToString() == searchString ||
+                          d.OrderCustomer.CustomerCompany.Contains(searchString) ||
+                          d.OrderCustomer.CustomerForName.Contains(searchString) ||
+                          d.OrderCustomer.CustomerLastName.Contains(searchString))) + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -54,7 +67,7 @@ namespace ERP_Model.Controllers.API
                 .Include(u => u.OrderCustomer)
                 .Where(d => d.OrderDeleted == false)
                 .OrderByDescending(o => o.OrderDate)
-                .Skip(page*pageSize)
+                .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -74,7 +87,7 @@ namespace ERP_Model.Controllers.API
             var dataVm = new PaginationViewModel
             {
                 DataObject = ordersViewModelList,
-                PageAmount = (db.Orders.Count() + pageSize - 1)/pageSize,
+                PageAmount = (db.Orders.Count() + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -86,12 +99,10 @@ namespace ERP_Model.Controllers.API
             var orderValue = 0.0F;
 
             if (db.Orders.Any(g => g.OrderGuid == id))
-            {
                 orderValue = db.OrderItems
                     .Include(p => p.OrderItemStockItem.StockItemProduct)
                     .Where(o => o.OrderItemOrder.OrderGuid == id)
-                    .Sum(s => s.OrderQuantity*s.OrderItemStockItem.StockItemProduct.ProductPrice);
-            }
+                    .Sum(s => s.OrderQuantity * s.OrderItemStockItem.StockItemProduct.ProductPrice);
 
             return orderValue;
         }
@@ -100,9 +111,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetOrderItems(Guid id, int page, int pageSize)
         {
             if (pageSize == 0)
-            {
                 pageSize = await db.OrderItems.CountAsync(g => g.OrderItemOrder.OrderGuid == id);
-            }
 
             var orderItems = await db.OrderItems
                 .Include(o => o.OrderItemOrder)
@@ -110,7 +119,7 @@ namespace ERP_Model.Controllers.API
                 .Include(u => u.OrderItemOrder.OrderCustomer)
                 .Where(g => g.OrderItemOrder.OrderGuid == id && g.OrderItemDeleted == false)
                 .OrderByDescending(o => o.OrderItemStockItem.StockItemProduct.ProductName)
-                .Skip(page*pageSize)
+                .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -118,8 +127,8 @@ namespace ERP_Model.Controllers.API
             {
                 DataObject = orderItems,
                 PageAmount =
-                    (db.OrderItems.Include(o => o.OrderItemOrder).Count(g => g.OrderItemOrder.OrderGuid == id) +
-                     pageSize - 1)/pageSize,
+                (db.OrderItems.Include(o => o.OrderItemOrder).Count(g => g.OrderItemOrder.OrderGuid == id) +
+                 pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -146,9 +155,7 @@ namespace ERP_Model.Controllers.API
             };
 
             if (orderItems == null)
-            {
                 return NotFound();
-            }
 
             return Ok(orderViewModel);
         }
@@ -160,28 +167,20 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (id != orderVm.Order.OrderGuid)
-            {
                 return BadRequest();
-            }
 
             if (db.Orders.FirstOrDefault(g => g.OrderGuid == orderVm.Order.OrderGuid).OrderDeleted)
-            {
                 BadRequest("Old orders can't be edited.");
-            }
 
             foreach (var o in orderVm.OrderItems)
             {
@@ -209,9 +208,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!OrderExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -225,16 +222,12 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
-                
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
+
                 return BadRequest(ModelState);
             }
 
@@ -243,16 +236,12 @@ namespace ERP_Model.Controllers.API
             foreach (var o in orderVm.OrderItems)
             {
                 if (!CheckIfStockItemAvailable(o.ProductGuid))
-                {
                     productsOutOfStock.Add(o.ProductName);
-                }
                 ;
             }
 
             if (productsOutOfStock.Any())
-            {
                 return BadRequest($"Following products are out oft stock: {string.Join(", ", productsOutOfStock)}");
-            }
 
             var order = new Order
             {
@@ -271,9 +260,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateException)
             {
                 if (OrderExists(order.OrderGuid))
-                {
                     return Conflict();
-                }
                 throw;
             }
 
@@ -286,9 +273,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> PostOrderItems(List<OrderItemProductViewModel> orderItems, Guid orderGuid)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var stockController = new StocksController();
 
@@ -340,14 +325,10 @@ namespace ERP_Model.Controllers.API
         {
             //verify data
             if (!db.Orders.Any(g => g.OrderGuid == id))
-            {
                 return BadRequest();
-            }
 
             if (db.Orders.FirstOrDefault(g => g.OrderGuid == id).OrderDeleted)
-            {
                 BadRequest("Old orders can't be deleted.");
-            }
 
             var order = await db.Orders.FindAsync(id);
             order.OrderDeleted = true;
@@ -370,9 +351,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!OrderExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -382,9 +361,7 @@ namespace ERP_Model.Controllers.API
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
 

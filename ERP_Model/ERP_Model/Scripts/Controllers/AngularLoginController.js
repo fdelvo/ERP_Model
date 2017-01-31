@@ -42,7 +42,7 @@ function LoginController($scope, $http, $rootScope) {
                 });
     };
 
-    $scope.LogIn = function () {
+    $scope.LogIn = function() {
         $scope.errorMessages = [];
         $http({
                 method: "POST",
@@ -64,7 +64,7 @@ function LoginController($scope, $http, $rootScope) {
                 });
     };
 
-    $scope.LogOut = function () {
+    $scope.LogOut = function() {
         localStorage.removeItem("tokenKey");
     };
 }

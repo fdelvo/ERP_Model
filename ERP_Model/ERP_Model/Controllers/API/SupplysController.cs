@@ -16,8 +16,8 @@ namespace ERP_Model.Controllers.API
 {
     public class SupplysController : ApiController
     {
-        private ApplicationUserManager _userManager;
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
 
         public ApplicationUserManager UserManager
         {
@@ -30,7 +30,13 @@ namespace ERP_Model.Controllers.API
         {
             searchString.Trim();
             var supplys = await _db.Supplys
-                .Where(d => d.SupplyDeleted == false && (d.SupplyGuid.ToString() == searchString || d.SupplySupplier.SupplierCompany.Contains(searchString) || d.SupplySupplier.SupplierForName.Contains(searchString) || d.SupplySupplier.SupplierLastName.Contains(searchString)))
+                .Where(
+                    d =>
+                        d.SupplyDeleted == false &&
+                        (d.SupplyGuid.ToString() == searchString ||
+                         d.SupplySupplier.SupplierCompany.Contains(searchString) ||
+                         d.SupplySupplier.SupplierForName.Contains(searchString) ||
+                         d.SupplySupplier.SupplierLastName.Contains(searchString)))
                 .OrderByDescending(o => o.SupplyDate)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -39,7 +45,14 @@ namespace ERP_Model.Controllers.API
             var dataVm = new PaginationViewModel
             {
                 DataObject = supplys,
-                PageAmount = (_db.Supplys.Count(d => d.SupplyDeleted == false && (d.SupplyGuid.ToString() == searchString || d.SupplySupplier.SupplierCompany.Contains(searchString) || d.SupplySupplier.SupplierForName.Contains(searchString) || d.SupplySupplier.SupplierLastName.Contains(searchString))) + pageSize - 1) / pageSize,
+                PageAmount =
+                (_db.Supplys.Count(
+                     d =>
+                         d.SupplyDeleted == false &&
+                         (d.SupplyGuid.ToString() == searchString ||
+                          d.SupplySupplier.SupplierCompany.Contains(searchString) ||
+                          d.SupplySupplier.SupplierForName.Contains(searchString) ||
+                          d.SupplySupplier.SupplierLastName.Contains(searchString))) + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -86,12 +99,10 @@ namespace ERP_Model.Controllers.API
             var supplyValue = 0.0F;
 
             if (_db.Supplys.Any(g => g.SupplyGuid == id))
-            {
                 supplyValue = _db.SupplyItems
                     .Include(p => p.SupplyItemStockItem.StockItemProduct)
                     .Where(o => o.SupplyItemSupply.SupplyGuid == id)
                     .Sum(s => s.SupplyQuantity * s.SupplyItemStockItem.StockItemProduct.ProductPrice);
-            }
 
             return supplyValue;
         }
@@ -100,9 +111,7 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetSupplyItems(Guid id, int page, int pageSize)
         {
             if (pageSize == 0)
-            {
                 pageSize = await _db.SupplyItems.CountAsync(g => g.SupplyItemSupply.SupplyGuid == id);
-            }
 
             var supplyItems = await _db.SupplyItems
                 .Include(o => o.SupplyItemSupply)
@@ -118,8 +127,8 @@ namespace ERP_Model.Controllers.API
             {
                 DataObject = supplyItems,
                 PageAmount =
-                    (_db.SupplyItems.Include(o => o.SupplyItemSupply).Count(g => g.SupplyItemSupply.SupplyGuid == id) +
-                     pageSize - 1) / pageSize,
+                (_db.SupplyItems.Include(o => o.SupplyItemSupply).Count(g => g.SupplyItemSupply.SupplyGuid == id) +
+                 pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -146,9 +155,7 @@ namespace ERP_Model.Controllers.API
             };
 
             if (supplyItems == null)
-            {
                 return NotFound();
-            }
 
             return Ok(supplyViewModel);
         }
@@ -160,28 +167,20 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (id != supplyVm.Supply.SupplyGuid)
-            {
                 return BadRequest();
-            }
 
             if (_db.Supplys.FirstOrDefault(g => g.SupplyGuid == supplyVm.Supply.SupplyGuid).SupplyDeleted)
-            {
                 BadRequest();
-            }
 
             foreach (var o in supplyVm.SupplyItems)
             {
@@ -209,9 +208,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!SupplyExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -225,15 +222,11 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
@@ -241,7 +234,8 @@ namespace ERP_Model.Controllers.API
             var supply = new Supply
             {
                 SupplyGuid = Guid.NewGuid(),
-                SupplySupplier = _db.Suppliers.FirstOrDefault(g => g.SupplierGuid == supplyVm.SupplySupplier.SupplierGuid),
+                SupplySupplier =
+                    _db.Suppliers.FirstOrDefault(g => g.SupplierGuid == supplyVm.SupplySupplier.SupplierGuid),
                 SupplyDate = DateTime.Now,
                 SupplyDeliveryDate = supplyVm.SupplyDeliveryDate
             };
@@ -255,24 +249,21 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateException)
             {
                 if (SupplyExists(supply.SupplyGuid))
-                {
                     return Conflict();
-                }
                 throw;
             }
 
             await PostSupplyItems(supplyVm.SupplyItems, supply.SupplyGuid);
 
-            return CreatedAtRoute("DefaultApi", new { id = supply.SupplyGuid }, supply);
+            return CreatedAtRoute("DefaultApi", new {id = supply.SupplyGuid}, supply);
         }
 
         [ResponseType(typeof(Supply))]
-        public async Task<IHttpActionResult> PostSupplyItems(List<SupplyItemProductViewModel> supplyItems, Guid supplyGuid)
+        public async Task<IHttpActionResult> PostSupplyItems(List<SupplyItemProductViewModel> supplyItems,
+            Guid supplyGuid)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var stockController = new StocksController();
 
@@ -307,7 +298,7 @@ namespace ERP_Model.Controllers.API
                 });
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = supplyItems }, supplyItems);
+            return CreatedAtRoute("DefaultApi", new {id = supplyItems}, supplyItems);
         }
 
         private bool CheckIfStockItemAvailable(Guid productGuid)
@@ -324,14 +315,10 @@ namespace ERP_Model.Controllers.API
         {
             //verify data
             if (!_db.Supplys.Any(g => g.SupplyGuid == id))
-            {
                 return BadRequest();
-            }
 
             if (_db.Supplys.FirstOrDefault(g => g.SupplyGuid == id).SupplyDeleted)
-            {
                 BadRequest("Old supplys can't be deleted.");
-            }
 
             var supply = await _db.Supplys.FindAsync(id);
             supply.SupplyDeleted = true;
@@ -354,9 +341,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!SupplyExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -366,9 +351,7 @@ namespace ERP_Model.Controllers.API
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 _db.Dispose();
-            }
             base.Dispose(disposing);
         }
 

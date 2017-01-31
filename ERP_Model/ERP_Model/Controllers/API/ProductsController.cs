@@ -26,7 +26,11 @@ namespace ERP_Model.Controllers.API
         {
             searchString.Trim();
             var products = await db.Products
-                .Where(d => d.ProductDeleted == false && (d.ProductName.Contains(searchString) || d.ProductDescription.Contains(searchString) || d.ProductGuid.ToString() == searchString))
+                .Where(
+                    d =>
+                        d.ProductDeleted == false &&
+                        (d.ProductName.Contains(searchString) || d.ProductDescription.Contains(searchString) ||
+                         d.ProductGuid.ToString() == searchString))
                 .OrderByDescending(o => o.ProductName)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -35,7 +39,12 @@ namespace ERP_Model.Controllers.API
             var dataVm = new PaginationViewModel
             {
                 DataObject = products,
-                PageAmount = (db.Products.Count(d => d.ProductDeleted == false && (d.ProductName.Contains(searchString) || d.ProductDescription.Contains(searchString) || d.ProductGuid.ToString() == searchString)) + pageSize - 1) / pageSize,
+                PageAmount =
+                (db.Products.Count(
+                     d =>
+                         d.ProductDeleted == false &&
+                         (d.ProductName.Contains(searchString) || d.ProductDescription.Contains(searchString) ||
+                          d.ProductGuid.ToString() == searchString)) + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -48,14 +57,14 @@ namespace ERP_Model.Controllers.API
             var products = await db.Products
                 .Where(d => d.ProductDeleted == false)
                 .OrderByDescending(o => o.ProductName)
-                .Skip(page*pageSize)
+                .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             var dataVm = new PaginationViewModel
             {
                 DataObject = products,
-                PageAmount = (db.Products.Count() + pageSize - 1)/pageSize,
+                PageAmount = (db.Products.Count() + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -82,9 +91,7 @@ namespace ERP_Model.Controllers.API
 
             //check if porduct exists
             if (product == null)
-            {
                 return NotFound();
-            }
 
             return Ok(productVm);
         }
@@ -97,23 +104,17 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (id != product.Product.ProductGuid)
-            {
                 return BadRequest();
-            }
 
             var stockController = new StocksController();
 
@@ -127,9 +128,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!ProductExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -140,21 +139,18 @@ namespace ERP_Model.Controllers.API
 
         //create new product
         [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product, Guid stockGuid, int maxQuantity = 0, int minQuantity = 0)
+        public async Task<IHttpActionResult> PostProduct(Product product, Guid stockGuid, int maxQuantity = 0,
+            int minQuantity = 0)
         {
             //verify data
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
@@ -175,16 +171,12 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateException)
             {
                 if (ProductExists(product.ProductGuid))
-                {
                     return Conflict();
-                }
                 throw;
             }
 
             if (stockGuid != new Guid("00000000-0000-0000-0000-000000000000"))
-            {
                 await stockController.CreateStockItem(stockGuid, product, maxQuantity, minQuantity);
-            }           
 
             return CreatedAtRoute("DefaultApi", new {id = product.ProductGuid}, product);
         }
@@ -195,9 +187,7 @@ namespace ERP_Model.Controllers.API
         {
             //verify data
             if (!db.Products.Any(g => g.ProductGuid == id))
-            {
                 return BadRequest();
-            }
 
             var stocksController = new StocksController();
 
@@ -214,9 +204,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!ProductExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -229,9 +217,7 @@ namespace ERP_Model.Controllers.API
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
 

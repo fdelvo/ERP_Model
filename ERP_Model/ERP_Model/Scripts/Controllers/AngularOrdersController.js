@@ -26,24 +26,26 @@ function AngularOrdersController($scope,
     $scope.newDeliveryNote = new AngularDeliveryNotesService();
     $scope.errorMessages = [];
 
-    $scope.OrderSearch = function () {
+    $scope.OrderSearch = function() {
         $scope.orders = AngularOrdersService.SearchOrder({
-            page: page,
-            pageSize: $scope.pageSize,
-            searchString: $scope.searchString
-        }, function () {
-            console.log("Success");
-        });
+                page: page,
+                pageSize: $scope.pageSize,
+                searchString: $scope.searchString
+            },
+            function() {
+                console.log("Success");
+            });
     };
 
-    $scope.DeliveryNoteSearch = function () {
+    $scope.DeliveryNoteSearch = function() {
         $scope.deliveryNotes = AngularDeliveryNotesService.SearchDeliveryNote({
-            page: page,
-            pageSize: $scope.pageSize,
-            searchString: $scope.searchString
-        }, function () {
-            console.log("Success");
-        });
+                page: page,
+                pageSize: $scope.pageSize,
+                searchString: $scope.searchString
+            },
+            function() {
+                console.log("Success");
+            });
     };
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
@@ -56,15 +58,15 @@ function AngularOrdersController($scope,
         fnc();
     };
 
-    $scope.CustomerList = function (pageSize) {
+    $scope.CustomerList = function(pageSize) {
         if (pageSize) {
             $scope.pageSize = pageSize;
         }
         $scope.customers = AngularAdminService.GetCustomers({
-            page: page,
-            pageSize: $scope.pageSize
-        },
-            function () {
+                page: page,
+                pageSize: $scope.pageSize
+            },
+            function() {
                 console.log($scope.customers);
             });
     };
@@ -91,7 +93,7 @@ function AngularOrdersController($scope,
 
     $scope.DeliveryNoteDetails = function(guid) {
         $scope.deliveryNote = AngularDeliveryNotesService.GetDeliveryNote({
-            id: $scope.GetValueAtIndex(5)
+                id: $scope.GetValueAtIndex(5)
             },
             function() {
                 console.log($scope.deliveryNote);
@@ -100,7 +102,7 @@ function AngularOrdersController($scope,
 
     $scope.OrderDetails = function(guid) {
         $scope.order = AngularOrdersService.GetOrder({
-            id: $scope.GetValueAtIndex(5)
+                id: $scope.GetValueAtIndex(5)
             },
             function() {
                 console.log($scope.order);
@@ -121,7 +123,7 @@ function AngularOrdersController($scope,
                 for (var key in response.data.ModelState) {
                     if (response.data.ModelState.hasOwnProperty(key)) {
                         response.data.ModelState[key].forEach(
-                            function (element) {
+                            function(element) {
                                 $scope.errorMessages.push(element);
                             });
                     }
@@ -146,7 +148,7 @@ function AngularOrdersController($scope,
                 for (var key in response.data.ModelState) {
                     if (response.data.ModelState.hasOwnProperty(key)) {
                         response.data.ModelState[key].forEach(
-                            function (element) {
+                            function(element) {
                                 $scope.errorMessages.push(element);
                             });
                     }
@@ -195,7 +197,7 @@ function AngularOrdersController($scope,
                 for (var key in response.data.ModelState) {
                     if (response.data.ModelState.hasOwnProperty(key)) {
                         response.data.ModelState[key].forEach(
-                            function (element) {
+                            function(element) {
                                 $scope.errorMessages.push(element);
                             });
                     }
@@ -230,7 +232,7 @@ function AngularOrdersController($scope,
                 for (var key in response.data.ModelState) {
                     if (response.data.ModelState.hasOwnProperty(key)) {
                         response.data.ModelState[key].forEach(
-                            function (element) {
+                            function(element) {
                                 $scope.errorMessages.push(element);
                             });
                     }
@@ -258,7 +260,7 @@ function AngularOrdersController($scope,
                 for (var key in response.data.ModelState) {
                     if (response.data.ModelState.hasOwnProperty(key)) {
                         response.data.ModelState[key].forEach(
-                            function (element) {
+                            function(element) {
                                 $scope.errorMessages.push(element);
                             });
                     }

@@ -74,29 +74,23 @@ namespace ERP_Model.Controllers
             IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
             if (user == null)
-            {
                 return null;
-            }
 
             var logins = new List<UserLoginInfoViewModel>();
 
             foreach (var linkedAccount in user.Logins)
-            {
                 logins.Add(new UserLoginInfoViewModel
                 {
                     LoginProvider = linkedAccount.LoginProvider,
                     ProviderKey = linkedAccount.ProviderKey
                 });
-            }
 
             if (user.PasswordHash != null)
-            {
                 logins.Add(new UserLoginInfoViewModel
                 {
                     LoginProvider = LocalLoginProvider,
                     ProviderKey = user.UserName
                 });
-            }
 
             return new ManageInfoViewModel
             {
@@ -112,17 +106,13 @@ namespace ERP_Model.Controllers
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
 
             if (!result.Succeeded)
-            {
                 return GetErrorResult(result);
-            }
 
             return Ok();
         }
@@ -132,16 +122,12 @@ namespace ERP_Model.Controllers
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
 
             if (!result.Succeeded)
-            {
                 return GetErrorResult(result);
-            }
 
             return Ok();
         }
@@ -151,36 +137,28 @@ namespace ERP_Model.Controllers
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
 
             var ticket = AccessTokenFormat.Unprotect(model.ExternalAccessToken);
 
-            if (ticket == null || ticket.Identity == null || (ticket.Properties != null
-                                                              && ticket.Properties.ExpiresUtc.HasValue
-                                                              &&
-                                                              ticket.Properties.ExpiresUtc.Value < DateTimeOffset.UtcNow))
-            {
+            if (ticket == null || ticket.Identity == null || ticket.Properties != null
+                && ticket.Properties.ExpiresUtc.HasValue
+                &&
+                ticket.Properties.ExpiresUtc.Value < DateTimeOffset.UtcNow)
                 return BadRequest("External login failure.");
-            }
 
             var externalData = ExternalLoginData.FromIdentity(ticket.Identity);
 
             if (externalData == null)
-            {
                 return BadRequest("The external login is already associated with an account.");
-            }
 
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(),
                 new UserLoginInfo(externalData.LoginProvider, externalData.ProviderKey));
 
             if (!result.Succeeded)
-            {
                 return GetErrorResult(result);
-            }
 
             return Ok();
         }
@@ -190,26 +168,18 @@ namespace ERP_Model.Controllers
         public async Task<IHttpActionResult> RemoveLogin(RemoveLoginBindingModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             IdentityResult result;
 
             if (model.LoginProvider == LocalLoginProvider)
-            {
                 result = await UserManager.RemovePasswordAsync(User.Identity.GetUserId());
-            }
             else
-            {
                 result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(),
                     new UserLoginInfo(model.LoginProvider, model.ProviderKey));
-            }
 
             if (!result.Succeeded)
-            {
                 return GetErrorResult(result);
-            }
 
             return Ok();
         }
@@ -222,21 +192,15 @@ namespace ERP_Model.Controllers
         public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
         {
             if (error != null)
-            {
                 return Redirect(Url.Content("~/") + "#error=" + Uri.EscapeDataString(error));
-            }
 
             if (!User.Identity.IsAuthenticated)
-            {
                 return new ChallengeResult(provider, this);
-            }
 
             var externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
             if (externalLogin == null)
-            {
                 return InternalServerError();
-            }
 
             if (externalLogin.LoginProvider != provider)
             {
@@ -318,9 +282,7 @@ namespace ERP_Model.Controllers
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var user = new ApplicationUser
             {
@@ -334,9 +296,7 @@ namespace ERP_Model.Controllers
             var result = await UserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
-            {
                 return GetErrorResult(result);
-            }
 
             return Ok();
         }
@@ -348,29 +308,21 @@ namespace ERP_Model.Controllers
         public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var info = await Authentication.GetExternalLoginInfoAsync();
             if (info == null)
-            {
                 return InternalServerError();
-            }
 
             var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
 
             var result = await UserManager.CreateAsync(user);
             if (!result.Succeeded)
-            {
                 return GetErrorResult(result);
-            }
 
             result = await UserManager.AddLoginAsync(user.Id, info.Login);
             if (!result.Succeeded)
-            {
                 return GetErrorResult(result);
-            }
             return Ok();
         }
 
@@ -395,25 +347,16 @@ namespace ERP_Model.Controllers
         private IHttpActionResult GetErrorResult(IdentityResult result)
         {
             if (result == null)
-            {
                 return InternalServerError();
-            }
 
             if (!result.Succeeded)
             {
                 if (result.Errors != null)
-                {
                     foreach (var error in result.Errors)
-                    {
                         ModelState.AddModelError("", error);
-                    }
-                }
 
                 if (ModelState.IsValid)
-                {
-                    // No ModelState errors are available to send, so just return an empty BadRequest.
                     return BadRequest();
-                }
 
                 return BadRequest(ModelState);
             }
@@ -433,9 +376,7 @@ namespace ERP_Model.Controllers
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, ProviderKey, null, LoginProvider));
 
                 if (UserName != null)
-                {
                     claims.Add(new Claim(ClaimTypes.Name, UserName, null, LoginProvider));
-                }
 
                 return claims;
             }
@@ -443,22 +384,16 @@ namespace ERP_Model.Controllers
             public static ExternalLoginData FromIdentity(ClaimsIdentity identity)
             {
                 if (identity == null)
-                {
                     return null;
-                }
 
                 var providerKeyClaim = identity.FindFirst(ClaimTypes.NameIdentifier);
 
                 if (providerKeyClaim == null || string.IsNullOrEmpty(providerKeyClaim.Issuer)
                     || string.IsNullOrEmpty(providerKeyClaim.Value))
-                {
                     return null;
-                }
 
                 if (providerKeyClaim.Issuer == ClaimsIdentity.DefaultIssuer)
-                {
                     return null;
-                }
 
                 return new ExternalLoginData
                 {
@@ -477,12 +412,10 @@ namespace ERP_Model.Controllers
             {
                 const int bitsPerByte = 8;
 
-                if (strengthInBits%bitsPerByte != 0)
-                {
+                if (strengthInBits % bitsPerByte != 0)
                     throw new ArgumentException("strengthInBits must be evenly divisible by 8.", "strengthInBits");
-                }
 
-                var strengthInBytes = strengthInBits/bitsPerByte;
+                var strengthInBytes = strengthInBits / bitsPerByte;
 
                 var data = new byte[strengthInBytes];
                 _random.GetBytes(data);

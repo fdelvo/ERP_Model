@@ -30,7 +30,11 @@ namespace ERP_Model.Controllers.API
         {
             searchString.Trim();
             var deliveryNotes = await _db.Deliveries
-                .Where(d => d.DeliveryDeleted == false && (d.DeliveryOrder.OrderGuid.ToString() == searchString || d.DeliveryGuid.ToString() == searchString))
+                .Where(
+                    d =>
+                        d.DeliveryDeleted == false &&
+                        (d.DeliveryOrder.OrderGuid.ToString() == searchString ||
+                         d.DeliveryGuid.ToString() == searchString))
                 .OrderByDescending(o => o.DeliveryGuid)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -39,7 +43,12 @@ namespace ERP_Model.Controllers.API
             var dataVm = new PaginationViewModel
             {
                 DataObject = deliveryNotes,
-                PageAmount = (_db.Deliveries.Count(d => d.DeliveryDeleted == false && (d.DeliveryOrder.OrderGuid.ToString() == searchString || d.DeliveryGuid.ToString() == searchString)) + pageSize - 1) / pageSize,
+                PageAmount =
+                (_db.Deliveries.Count(
+                     d =>
+                         d.DeliveryDeleted == false &&
+                         (d.DeliveryOrder.OrderGuid.ToString() == searchString ||
+                          d.DeliveryGuid.ToString() == searchString)) + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -53,14 +62,14 @@ namespace ERP_Model.Controllers.API
             var deliveryNotes = await _db.Deliveries
                 .Include(o => o.DeliveryOrder)
                 .OrderByDescending(o => o.DeliveryGuid)
-                .Skip(page*pageSize)
+                .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             var dataVm = new PaginationViewModel
             {
                 DataObject = deliveryNotes,
-                PageAmount = (_db.Deliveries.Count() + pageSize - 1)/pageSize,
+                PageAmount = (_db.Deliveries.Count() + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -88,9 +97,7 @@ namespace ERP_Model.Controllers.API
             };
 
             if (deliveryNoteItems == null)
-            {
                 return NotFound();
-            }
 
             return Ok(deliveryNoteViewModel);
         }
@@ -102,23 +109,17 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (id != deliveryNoteDetailsVm.DeliveryNote.DeliveryGuid)
-            {
                 return BadRequest();
-            }
 
 
             foreach (var d in deliveryNoteDetailsVm.DeliveryItems)
@@ -136,9 +137,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!DeliveryExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -152,15 +151,11 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
@@ -169,9 +164,7 @@ namespace ERP_Model.Controllers.API
                 await _db.Deliveries.FirstOrDefaultAsync(d => d.DeliveryOrder.OrderGuid == deliveryNoteVm.DeliveryOrder);
 
             if (order != null)
-            {
                 return BadRequest($"Delivery Note for Order {order.DeliveryOrder.OrderGuid} already exists.");
-            }
 
             var deliveryNote = new Delivery
             {
@@ -188,9 +181,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateException)
             {
                 if (DeliveryExists(deliveryNote.DeliveryGuid))
-                {
                     return Conflict();
-                }
                 throw;
             }
 
@@ -204,9 +195,7 @@ namespace ERP_Model.Controllers.API
             Guid deliveryGuid)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             //create the orderitems and link them to the order
             foreach (var p in deliveryItems)
@@ -240,9 +229,7 @@ namespace ERP_Model.Controllers.API
         {
             var deliveryNote = await _db.Deliveries.FindAsync(id);
             if (deliveryNote == null)
-            {
                 return NotFound();
-            }
 
             var deliveryItems = await _db.DeliveryItems
                 .Where(d => d.DeliveryItemDelivery.DeliveryGuid == id)
@@ -259,9 +246,7 @@ namespace ERP_Model.Controllers.API
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 _db.Dispose();
-            }
             base.Dispose(disposing);
         }
 

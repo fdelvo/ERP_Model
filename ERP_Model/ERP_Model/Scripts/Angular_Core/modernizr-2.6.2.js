@@ -538,7 +538,7 @@ window.Modernizr = (function(window, document, undefined) {
     //   which false positives.
     tests["hashchange"] = function() {
         return isEventSupported("hashchange", window) &&
-        (document.documentMode === undefined || document.documentMode > 7);
+            (document.documentMode === undefined || document.documentMode > 7);
     };
 
     // Per 1.6:

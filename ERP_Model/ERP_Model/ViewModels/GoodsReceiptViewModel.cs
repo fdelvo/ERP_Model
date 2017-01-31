@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 using ERP_Model.Models;
 
 namespace ERP_Model.ViewModels
@@ -11,8 +9,10 @@ namespace ERP_Model.ViewModels
     {
         [Key]
         public Guid GoodsReceiptGuid { get; set; }
+
         [Required]
         public Guid GoodsReceiptSupply { get; set; }
+
         [Required]
         public List<GoodsReceiptItemViewModel> GoodsReceiptItems { get; set; }
     }

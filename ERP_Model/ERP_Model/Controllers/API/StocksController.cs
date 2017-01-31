@@ -34,7 +34,11 @@ namespace ERP_Model.Controllers.API
         {
             searchString.Trim();
             var stocks = await db.Stock
-                .Where(d => d.StockDeleted == false && (d.StockGuid.ToString() == searchString || d.StockName.Contains(searchString) || d.StockMethod.Contains(searchString)))
+                .Where(
+                    d =>
+                        d.StockDeleted == false &&
+                        (d.StockGuid.ToString() == searchString || d.StockName.Contains(searchString) ||
+                         d.StockMethod.Contains(searchString)))
                 .OrderByDescending(o => o.StockName)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -43,7 +47,12 @@ namespace ERP_Model.Controllers.API
             var dataVm = new PaginationViewModel
             {
                 DataObject = stocks,
-                PageAmount = (db.Stock.Count(d => d.StockDeleted == false && (d.StockGuid.ToString() == searchString || d.StockName.Contains(searchString) || d.StockMethod.Contains(searchString))) + pageSize - 1) / pageSize,
+                PageAmount =
+                (db.Stock.Count(
+                     d =>
+                         d.StockDeleted == false &&
+                         (d.StockGuid.ToString() == searchString || d.StockName.Contains(searchString) ||
+                          d.StockMethod.Contains(searchString))) + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -54,16 +63,14 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetStocks(int page = 0, int pageSize = 0)
         {
             if (pageSize == 0)
-            {
                 pageSize = await db.Stock.CountAsync();
-            }
 
             //get stocks including the stock addresses
             var stocks = await db.Stock
                 .Include(a => a.StockAddress)
                 .Where(d => d.StockDeleted == false)
                 .OrderByDescending(o => o.StockName)
-                .Skip(page*pageSize)
+                .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -84,7 +91,7 @@ namespace ERP_Model.Controllers.API
             var dataVm = new PaginationViewModel
             {
                 DataObject = stockViewModelList,
-                PageAmount = (db.Stock.Count() + pageSize - 1)/pageSize,
+                PageAmount = (db.Stock.Count() + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -101,9 +108,7 @@ namespace ERP_Model.Controllers.API
 
             //check if stock exists
             if (stock == null)
-            {
                 return NotFound();
-            }
 
             return Ok(stock);
         }
@@ -126,12 +131,9 @@ namespace ERP_Model.Controllers.API
 
             //check if there are items/transactions in a stock
             if (db.StockTransactions.Any(s => s.StockTransactionItem.StockItemStock.StockGuid == id))
-            {
-                //get all stock transactions and sum the prices
                 stockValue = db.StockTransactions
                     .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id)
-                    .Sum(p => p.StockTransactionItem.StockItemProduct.ProductPrice*p.StockTransactionQuantity);
-            }
+                    .Sum(p => p.StockTransactionItem.StockItemProduct.ProductPrice * p.StockTransactionQuantity);
 
 
             return stockValue;
@@ -146,7 +148,7 @@ namespace ERP_Model.Controllers.API
                 .Include(p => p.StockItemProduct)
                 .Where(s => s.StockItemStock.StockGuid == id && s.StockItemDeleted == false)
                 .OrderByDescending(o => o.StockItemProduct.ProductName)
-                .Skip(page*pageSize)
+                .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -169,8 +171,8 @@ namespace ERP_Model.Controllers.API
             {
                 DataObject = stockItemsViewList,
                 PageAmount =
-                    (db.StockItems.Include(s => s.StockItemStock).Count(s => s.StockItemStock.StockGuid == id) +
-                     pageSize - 1)/pageSize,
+                (db.StockItems.Include(s => s.StockItemStock).Count(s => s.StockItemStock.StockGuid == id) +
+                 pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -186,12 +188,10 @@ namespace ERP_Model.Controllers.API
             if (db.StockTransactions
                 .Include(si => si.StockTransactionItem)
                 .Any(si => si.StockTransactionItem.StockItemGuid == id))
-            {
                 stockItemQuantity = db.StockTransactions
                     .Include(si => si.StockTransactionItem)
                     .Where(si => si.StockTransactionItem.StockItemGuid == id)
                     .Sum(q => q.StockTransactionQuantity);
-            }
 
 
             return stockItemQuantity;
@@ -207,7 +207,7 @@ namespace ERP_Model.Controllers.API
                 .Include(s => s.StockTransactionSupply)
                 .Where(s => s.StockTransactionItem.StockItemStock.StockGuid == id && s.StockTransactionDeleted == false)
                 .OrderByDescending(o => o.StockTransactionDate)
-                .Skip(page*pageSize)
+                .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -215,8 +215,8 @@ namespace ERP_Model.Controllers.API
             {
                 DataObject = stockTransactions,
                 PageAmount =
-                    (db.StockTransactions.Include(p => p.StockTransactionItem.StockItemProduct)
-                        .Count(s => s.StockTransactionItem.StockItemStock.StockGuid == id) + pageSize - 1)/pageSize,
+                (db.StockTransactions.Include(p => p.StockTransactionItem.StockItemProduct)
+                     .Count(s => s.StockTransactionItem.StockItemStock.StockGuid == id) + pageSize - 1) / pageSize,
                 CurrentPage = page
             };
 
@@ -231,23 +231,17 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (id != stockVm.StockGuid)
-            {
                 return BadRequest();
-            }
 
             var stock = await db.Stock.FindAsync(stockVm.StockGuid);
             stock.StockMethod = stockVm.StockMethod;
@@ -264,9 +258,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!StockExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -275,20 +267,22 @@ namespace ERP_Model.Controllers.API
 
         public async Task UpdateStockItem(StockItem stockItem, Product product)
         {
-            var stockItemToUpdate = await db.StockItems.FirstOrDefaultAsync(g => g.StockItemGuid == stockItem.StockItemGuid);
+            var stockItemToUpdate =
+                await db.StockItems.FirstOrDefaultAsync(g => g.StockItemGuid == stockItem.StockItemGuid);
             stockItemToUpdate.StockItemMaximumQuantity = stockItem.StockItemMaximumQuantity;
             stockItemToUpdate.StockItemMinimumQuantity = stockItem.StockItemMinimumQuantity;
-            stockItemToUpdate.StockItemStock = db.Stock.FirstOrDefault(g => g.StockGuid == stockItem.StockItemStock.StockGuid);
-                db.Entry(stockItemToUpdate).State = EntityState.Modified;
+            stockItemToUpdate.StockItemStock =
+                db.Stock.FirstOrDefault(g => g.StockGuid == stockItem.StockItemStock.StockGuid);
+            db.Entry(stockItemToUpdate).State = EntityState.Modified;
 
-                //save changes
-                try
-                {
-                    await db.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                }
+            //save changes
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+            }
         }
 
         //create a new stock
@@ -299,15 +293,11 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
@@ -329,9 +319,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateException)
             {
                 if (StockExists(stock.StockGuid))
-                {
                     return Conflict();
-                }
                 throw;
             }
 
@@ -344,9 +332,7 @@ namespace ERP_Model.Controllers.API
         {
             //verify data
             if (!db.Stock.Any(g => g.StockGuid == id))
-            {
                 return BadRequest();
-            }
 
             var stock = await db.Stock.FindAsync(id);
             stock.StockDeleted = true;
@@ -379,9 +365,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!StockExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -394,9 +378,7 @@ namespace ERP_Model.Controllers.API
         {
             //verify data
             if (!db.StockItems.Any(g => g.StockItemGuid == id))
-            {
                 return BadRequest();
-            }
 
             var stockItem = await db.StockItems.FindAsync(id);
             stockItem.StockItemDeleted = true;
@@ -421,9 +403,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateConcurrencyException)
             {
                 if (!StockExists(id))
-                {
                     return NotFound();
-                }
                 throw;
             }
 
@@ -452,23 +432,17 @@ namespace ERP_Model.Controllers.API
             if (!ModelState.IsValid)
             {
                 foreach (var v in ModelState.Values)
-                {
-                    foreach (var e in v.Errors)
-                    {
-                        if (e.Exception != null)
-                        {
-                            return BadRequest("Something went wrong. Please check your form fields for disallowed or missing values.");
-                        }
-                    }
-                }
+                foreach (var e in v.Errors)
+                    if (e.Exception != null)
+                        return
+                            BadRequest(
+                                "Something went wrong. Please check your form fields for disallowed or missing values.");
 
                 return BadRequest(ModelState);
             }
 
             if (stockItem.StockItemQuantity == 0)
-            {
                 return BadRequest("You can't add a quantity of 0.");
-            }
 
             var stockTransaction = new StockTransaction
             {
@@ -496,9 +470,7 @@ namespace ERP_Model.Controllers.API
             catch (DbUpdateException)
             {
                 if (StockExists(stockTransaction.StockTransactionItem.StockItemStock.StockGuid))
-                {
                     return Conflict();
-                }
                 throw;
             }
 
@@ -508,9 +480,7 @@ namespace ERP_Model.Controllers.API
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
 

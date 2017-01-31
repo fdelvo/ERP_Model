@@ -16,14 +16,15 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
     $scope.errorMessages = [];
     $scope.addresses = {};
 
-    $scope.StockSearch = function () {
+    $scope.StockSearch = function() {
         $scope.stocks = AngularStocksService.SearchStock({
-            page: page,
-            pageSize: $scope.pageSize,
-            searchString: $scope.searchString
-        }, function () {
-            console.log("Success");
-        });
+                page: page,
+                pageSize: $scope.pageSize,
+                searchString: $scope.searchString
+            },
+            function() {
+                console.log("Success");
+            });
     };
 
     $scope.Next = function(currentPage, pageAmount, fnc) {
@@ -46,13 +47,14 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
         fnc();
     };
 
-    $scope.AddressList = function () {
+    $scope.AddressList = function() {
         $scope.addressesTemp = AngularAdminService.GetAddresses({
                 page: page,
                 pageSize: $scope.pageSize
             },
-            function () {
-                if (Object.keys($scope.addresses).length === 0 && $scope.addresses.constructor === Object || $scope.addresses.DataObject.length !== $scope.addressesTemp.DataObject.length) {
+            function() {
+                if (Object.keys($scope.addresses).length === 0 && $scope.addresses.constructor === Object ||
+                    $scope.addresses.DataObject.length !== $scope.addressesTemp.DataObject.length) {
                     $scope.addresses = $scope.addressesTemp;
                 }
                 $timeout($scope.AddressList, 1000);
@@ -72,7 +74,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
 
     $scope.StockDetails = function(guid) {
         $scope.stock = AngularStocksService.GetStock({
-            id: $scope.GetValueAtIndex(5)
+                id: $scope.GetValueAtIndex(5)
             },
             function() {
                 console.log($scope.stock);
@@ -92,7 +94,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
 
     $scope.StockTransactionList = function(guid) {
         $scope.stockTransactions = AngularStocksService.GetStockTransactions({
-            id: $scope.GetValueAtIndex(5),
+                id: $scope.GetValueAtIndex(5),
                 page: page,
                 pageSize: $scope.pageSize
             },
@@ -113,7 +115,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
                 for (var key in response.data.ModelState) {
                     if (response.data.ModelState.hasOwnProperty(key)) {
                         response.data.ModelState[key].forEach(
-                            function (element) {
+                            function(element) {
                                 $scope.errorMessages.push(element);
                             });
                     }
@@ -136,7 +138,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
                 for (var key in response.data.ModelState) {
                     if (response.data.ModelState.hasOwnProperty(key)) {
                         response.data.ModelState[key].forEach(
-                            function (element) {
+                            function(element) {
                                 $scope.errorMessages.push(element);
                             });
                     }
@@ -171,10 +173,10 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
                 for (var key in response.data.ModelState) {
                     if (response.data.ModelState.hasOwnProperty(key)) {
                         response.data.ModelState[key].forEach(
-                            function (element) {
+                            function(element) {
                                 $scope.errorMessages.push(element);
                             });
-                    }                   
+                    }
                 };
                 if (response.data.Message) {
                     $scope.errorMessages.push(response.data.Message);

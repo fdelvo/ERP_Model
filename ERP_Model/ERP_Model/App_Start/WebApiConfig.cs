@@ -19,7 +19,7 @@ namespace ERP_Model
                 "DefaultApi",
                 "api/{controller}/{action}/{id}",
                 new {id = RouteParameter.Optional}
-                );
+            );
         }
     }
 }
