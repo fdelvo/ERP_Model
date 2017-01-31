@@ -17,9 +17,7 @@
         <input type="text" ng-model="supplier.SupplierCompany" placeholder="Company" />
         <br/>
         <label>Address:</label>
-        <select ng-model="supplier.SupplierAddress">
-            <option ng-repeat="a in addresses track by a.AddressGuid">{{a.AddressDescription}}</option>
-        </select>
+        <select ng-options="address.AddressDescription for address in addresses.DataObject track by address.AddressGuid" ng-model="supplier.SupplierAddress"></select>
         <br />
         <ul ng-show="error" class="error-ul">
             <li ng-repeat="e in errorMessages">{{e}}</li>

@@ -7,22 +7,22 @@
     <h1>Edit Product</h1>
     <form ng-submit="EditProduct()">
         <label>Product Name:</label>
-        <input type="text" ng-model="product.ProductName"/>
+        <input type="text" ng-model="product.Product.ProductName"/>
         <br/>
         <label>Product Description:</label>
-        <input type="text" ng-model="product.ProductDescription"/>
+        <input type="text" ng-model="product.Product.ProductDescription"/>
         <br/>
         <label>Product Price:</label>
-        <input type="number" ng-model="product.ProductPrice"/>
+        <input type="number" ng-model="product.Product.ProductPrice"/>
         <br/>
         <label>Stock:</label>
-        <select ng-options="stock.StockName for stock in stocks.DataObject track by stock.StockGuid" ng-model="stock"></select>
+        <select ng-options="stock.StockName for stock in stocks.DataObject track by stock.StockGuid" ng-model="product.ProductStockItem.StockItemStock"></select>
         <br/>
         <label>Minimum Stock Quantity:</label>
-        <input type="number" ng-model="minQuantity" />
+        <input type="number" ng-model="product.ProductStockItem.StockItemMinimumQuantity" />
         <br />
         <label>Maximum Stock Quantity:</label>
-        <input type="number" ng-model="maxQuantity" />
+        <input type="number" ng-model="product.ProductStockItem.StockItemMaximumQuantity" />
         <br />
         <ul ng-show="error" class="error-ul">
             <li ng-repeat="e in errorMessages">{{e}}</li>

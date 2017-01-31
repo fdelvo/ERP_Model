@@ -91,7 +91,7 @@ function AngularOrdersController($scope,
 
     $scope.DeliveryNoteDetails = function(guid) {
         $scope.deliveryNote = AngularDeliveryNotesService.GetDeliveryNote({
-                id: guid
+            id: $scope.GetValueAtIndex(5)
             },
             function() {
                 console.log($scope.deliveryNote);
@@ -100,7 +100,7 @@ function AngularOrdersController($scope,
 
     $scope.OrderDetails = function(guid) {
         $scope.order = AngularOrdersService.GetOrder({
-                id: guid
+            id: $scope.GetValueAtIndex(5)
             },
             function() {
                 console.log($scope.order);
@@ -172,7 +172,7 @@ function AngularOrdersController($scope,
             $scope.pageSize = pageSize;
         }
         $scope.orderItems = AngularOrdersService.GetOrderItems({
-                id: guid,
+                id: $scope.GetValueAtIndex(5),
                 page: page,
                 pageSize: $scope.pageSize
             },

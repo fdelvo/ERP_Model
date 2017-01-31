@@ -76,7 +76,7 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
     };
 
     $scope.ProductDetails = function(guid) {
-        $scope.product = AngularProductsService.GetProduct({ id: guid });
+        $scope.product = AngularProductsService.GetProduct({ id: $scope.GetValueAtIndex(5) });
     };
 
     $scope.CreateProduct = function () {
@@ -112,7 +112,7 @@ function AngularProductsController($scope, AngularProductsService, AngularStocks
     };
 
     $scope.EditProduct = function() {
-        $scope.product.$PutProduct({ id: $scope.product.ProductGuid, stockGuid: $scope.stock.StockGuid },
+        $scope.product.$PutProduct({ id: $scope.product.Product.ProductGuid },
             function(response) {
                 console.log("Success");
                 location.href = "/ProductManagement/Index";

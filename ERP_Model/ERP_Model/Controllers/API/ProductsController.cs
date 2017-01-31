@@ -67,7 +67,18 @@ namespace ERP_Model.Controllers.API
         public async Task<IHttpActionResult> GetProduct(Guid id)
         {
             //get the product from db.context
-            var product = await db.Products.FindAsync(id);
+            var product = await db.Products
+                .FindAsync(id);
+
+            var productStockItem = await db.StockItems
+                .Include(s => s.StockItemStock)
+                .FirstOrDefaultAsync(g => g.StockItemProduct.ProductGuid == product.ProductGuid);
+
+            var productVm = new ProductDetailsViewModel
+            {
+                Product = product,
+                ProductStockItem = productStockItem
+            };
 
             //check if porduct exists
             if (product == null)
@@ -75,12 +86,12 @@ namespace ERP_Model.Controllers.API
                 return NotFound();
             }
 
-            return Ok(product);
+            return Ok(productVm);
         }
 
         //updates a product
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(Guid id, Product product, Guid stockGuid)
+        public async Task<IHttpActionResult> PutProduct(Guid id, ProductDetailsViewModel product)
         {
             //verify data
             if (!ModelState.IsValid)
@@ -99,14 +110,14 @@ namespace ERP_Model.Controllers.API
                 return BadRequest(ModelState);
             }
 
-            if (id != product.ProductGuid)
+            if (id != product.Product.ProductGuid)
             {
                 return BadRequest();
             }
 
             var stockController = new StocksController();
 
-            db.Entry(product).State = EntityState.Modified;
+            db.Entry(product.Product).State = EntityState.Modified;
 
             //save data
             try
@@ -122,7 +133,7 @@ namespace ERP_Model.Controllers.API
                 throw;
             }
 
-            await stockController.UpdateStockItem(stockGuid, product);
+            await stockController.UpdateStockItem(product.ProductStockItem, product.Product);
 
             return StatusCode(HttpStatusCode.NoContent);
         }

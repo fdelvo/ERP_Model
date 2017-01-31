@@ -233,6 +233,10 @@
     <Compile Include="Migrations\201701261653124_data_annotations_added.Designer.cs">
       <DependentUpon>201701261653124_data_annotations_added.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701311348480_seeding.cs" />
+    <Compile Include="Migrations\201701311348480_seeding.Designer.cs">
+      <DependentUpon>201701311348480_seeding.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -254,6 +258,7 @@
     <Compile Include="ViewModels\GoodsReceiptViewModel.cs" />
     <Compile Include="ViewModels\OrderViewModels.cs" />
     <Compile Include="ViewModels\PaginationViewModels.cs" />
+    <Compile Include="ViewModels\ProductViewModel.cs" />
     <Compile Include="ViewModels\StockViewModels.cs" />
     <Compile Include="ViewModels\SupplyViewModel.cs" />
   </ItemGroup>
@@ -1150,6 +1155,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701261653124_data_annotations_added.resx">
       <DependentUpon>201701261653124_data_annotations_added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701311348480_seeding.resx">
+      <DependentUpon>201701311348480_seeding.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

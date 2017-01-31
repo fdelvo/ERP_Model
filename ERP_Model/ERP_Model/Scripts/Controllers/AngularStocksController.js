@@ -72,7 +72,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
 
     $scope.StockDetails = function(guid) {
         $scope.stock = AngularStocksService.GetStock({
-                id: guid
+            id: $scope.GetValueAtIndex(5)
             },
             function() {
                 console.log($scope.stock);
@@ -81,7 +81,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
 
     $scope.StockItemList = function(guid) {
         $scope.stockItems = AngularStocksService.GetStockItems({
-                id: guid,
+                id: $scope.GetValueAtIndex(5),
                 page: page,
                 pageSize: $scope.pageSize
             },
@@ -92,7 +92,7 @@ function AngularStocksController($scope, AngularStocksService, AngularAdminServi
 
     $scope.StockTransactionList = function(guid) {
         $scope.stockTransactions = AngularStocksService.GetStockTransactions({
-                id: guid,
+            id: $scope.GetValueAtIndex(5),
                 page: page,
                 pageSize: $scope.pageSize
             },

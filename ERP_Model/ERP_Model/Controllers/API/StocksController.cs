@@ -273,16 +273,13 @@ namespace ERP_Model.Controllers.API
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        public async Task UpdateStockItem(Guid stockGuid, Product product)
+        public async Task UpdateStockItem(StockItem stockItem, Product product)
         {
-            var stockItem =
-                await db.StockItems.FirstOrDefaultAsync(g => g.StockItemProduct.ProductGuid == product.ProductGuid);
-
-            if (stockItem.StockItemStock.StockGuid != stockGuid)
-            {
-                stockItem.StockItemStock = await db.Stock.FirstOrDefaultAsync(g => g.StockGuid == stockGuid);
-
-                db.Entry(stockItem).State = EntityState.Modified;
+            var stockItemToUpdate = await db.StockItems.FirstOrDefaultAsync(g => g.StockItemGuid == stockItem.StockItemGuid);
+            stockItemToUpdate.StockItemMaximumQuantity = stockItem.StockItemMaximumQuantity;
+            stockItemToUpdate.StockItemMinimumQuantity = stockItem.StockItemMinimumQuantity;
+            stockItemToUpdate.StockItemStock = db.Stock.FirstOrDefault(g => g.StockGuid == stockItem.StockItemStock.StockGuid);
+                db.Entry(stockItemToUpdate).State = EntityState.Modified;
 
                 //save changes
                 try
@@ -292,7 +289,6 @@ namespace ERP_Model.Controllers.API
                 catch (DbUpdateConcurrencyException)
                 {
                 }
-            }
         }
 
         //create a new stock

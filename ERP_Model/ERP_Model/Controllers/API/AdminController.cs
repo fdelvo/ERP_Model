@@ -205,7 +205,13 @@ namespace ERP_Model.Controllers.API
                 return BadRequest();
             }
 
-            db.Entry(customer).State = EntityState.Modified;
+            var customerToUpdate = await db.Customers.FirstOrDefaultAsync(g => g.CustomerGuid == customer.CustomerGuid);
+            customerToUpdate.CustomerCompany = customer.CustomerCompany;
+            customerToUpdate.CustomerForName = customer.CustomerForName;
+            customerToUpdate.CustomerLastName = customer.CustomerLastName;
+            customerToUpdate.CustomerAddress = await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == customer.CustomerAddress.AddressGuid);
+
+            db.Entry(customerToUpdate).State = EntityState.Modified;
 
             //save changes to the address
             try
@@ -249,7 +255,12 @@ namespace ERP_Model.Controllers.API
                 return BadRequest();
             }
 
-            db.Entry(supplier).State = EntityState.Modified;
+            var supplierToUpdate = await db.Suppliers.FirstOrDefaultAsync(g => g.SupplierGuid == supplier.SupplierGuid);
+            supplierToUpdate.SupplierCompany = supplier.SupplierCompany;
+            supplierToUpdate.SupplierForName = supplier.SupplierForName;
+            supplierToUpdate.SupplierLastName = supplier.SupplierLastName;
+            supplierToUpdate.SupplierAddress = await db.Addresses.FirstOrDefaultAsync(g => g.AddressGuid == supplier.SupplierAddress.AddressGuid);
+            db.Entry(supplierToUpdate).State = EntityState.Modified;
 
             //save changes to the address
             try

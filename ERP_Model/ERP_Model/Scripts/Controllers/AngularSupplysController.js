@@ -91,7 +91,7 @@ function AngularSupplysController($scope,
 
     $scope.GoodsReceiptDetails = function (guid) {
         $scope.goodsReceipt = AngularGoodsReceiptsService.GetGoodsReceipt({
-            id: guid
+            id: $scope.GetValueAtIndex(5)
         },
             function () {
                 console.log($scope.goodsReceipt);
@@ -100,7 +100,7 @@ function AngularSupplysController($scope,
 
     $scope.SupplyDetails = function (guid) {
         $scope.supply = AngularSupplysService.GetSupply({
-            id: guid
+            id: $scope.GetValueAtIndex(5)
         },
             function () {
                 console.log($scope.supply);
@@ -172,7 +172,7 @@ function AngularSupplysController($scope,
             $scope.pageSize = pageSize;
         }
         $scope.supplyItems = AngularSupplysService.GetSupplyItems({
-            id: guid,
+            id: $scope.GetValueAtIndex(5),
             page: page,
             pageSize: $scope.pageSize
         },

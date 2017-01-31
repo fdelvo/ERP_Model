@@ -77,15 +77,15 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
     };
 
     $scope.AddressDetails = function(guid) {
-        $scope.address = AngularAdminService.GetAddress({ id: guid });
+        $scope.address = AngularAdminService.GetAddress({ id: $scope.GetValueAtIndex(5) });
     };
 
     $scope.CustomerDetails = function (guid) {
-        $scope.customer = AngularAdminService.GetCustomer({ id: guid });
+        $scope.customer = AngularAdminService.GetCustomer({ id: $scope.GetValueAtIndex(5) });
     };
 
     $scope.SupplierDetails = function (guid) {
-        $scope.supplier = AngularAdminService.GetSupplier({ id: guid });
+        $scope.supplier = AngularAdminService.GetSupplier({ id: $scope.GetValueAtIndex(5) });
     };
 
     $scope.CreateAddress = function() {
@@ -270,7 +270,7 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
     };
 
     $scope.UserDetails = function(guid) {
-        $scope.user = AngularAdminService.GetUser({ id: guid });
+        $scope.user = AngularAdminService.GetUser({ id: $scope.GetValueAtIndex(5) });
     };
 
     $scope.CreateUser = function() {
@@ -320,7 +320,7 @@ function AngularAdminController($scope, AngularAdminService, $rootScope) {
     };
 
     $scope.ChangeUserPassword = function(guid) {
-        $scope.model.$ChangePasswordForUser({ id: guid },
+        $scope.model.$ChangePasswordForUser({ id: $scope.GetValueAtIndex(5) },
             function(response) {
                 console.log("Success");
                 location.href = "/Administration/Index";

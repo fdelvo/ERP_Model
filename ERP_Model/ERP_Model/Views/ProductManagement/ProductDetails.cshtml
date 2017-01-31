@@ -5,29 +5,29 @@
 <div class="content-box" ng-controller="AngularProductsController" ng-init="ProductDetails(GetValueAtIndex(5))">
     <a class="back-link" href="javascript: window.history.back();">Back</a>
     <h1>Product Details</h1>
-    <div ng-hide="product.ProductDeleted" class="nav-bar">
-        <a class="button" href="/ProductManagement/Edit/{{product.ProductGuid}}">Edit</a>
-        <a class="button" href="" ng-click="RemoveProduct(product.ProductGuid)">Delete</a>
+    <div ng-hide="product.Product.ProductDeleted" class="nav-bar">
+        <a class="button" href="/ProductManagement/Edit/{{product.Product.ProductGuid}}">Edit</a>
+        <a class="button" href="" ng-click="RemoveProduct(product.Product.ProductGuid)">Delete</a>
     </div>
-    <span ng-show="product.ProductDeleted" class="label">Old Product</span>
+    <span ng-show="product.Product.ProductDeleted" class="label">Old Product</span>
     <table>
         <tr>
             <td>
                 <b>Name:</b>
             </td>
-            <td>{{product.ProductName}}</td>
+            <td>{{product.Product.ProductName}}</td>
         </tr>
         <tr>
             <td>
                 <b>Price:</b>
             </td>
-            <td>{{product.ProductPrice}}</td>
+            <td>{{product.Product.ProductPrice}}</td>
         </tr>
         <tr>
             <td>
                 <b>Description:</b>
             </td>
-            <td>{{product.ProductDescription}}</td>
+            <td>{{product.Product.ProductDescription}}</td>
         </tr>
     </table>
 </div>
